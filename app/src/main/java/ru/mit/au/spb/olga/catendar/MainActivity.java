@@ -1,9 +1,15 @@
 package ru.mit.au.spb.olga.catendar;
 
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.ArrayAdapter;
+import android.widget.ListView;
+
+import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -33,5 +39,31 @@ public class MainActivity extends AppCompatActivity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    static final private int CREATE_EVENT = 0;
+    public void onCreateEventClick(View view) {
+        Intent intent = new Intent(MainActivity.this, CreateEventActivity.class);
+
+        startActivityForResult(intent, CREATE_EVENT);
+    }
+
+    private ArrayList<String> eventList = new ArrayList<>();
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        ListView listOfEvent = (ListView) findViewById(R.id.listView);
+
+        if (requestCode == CREATE_EVENT) {
+            if (resultCode == RESULT_OK) {
+                eventList.add(data.getStringExtra(CreateEventActivity.EVENT_NAME));
+
+                ArrayAdapter<String> adapter = new ArrayAdapter<>(this,
+                        android.R.layout.simple_list_item_1, eventList);
+
+                listOfEvent.setAdapter(adapter);
+            }
+        }
     }
 }
