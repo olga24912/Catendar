@@ -34,9 +34,9 @@ public class MainActivity extends AppCompatActivity {
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
+        /*if (id == R.id.action_settings) {
             return true;
-        }
+        }*/
 
         return super.onOptionsItemSelected(item);
     }
@@ -49,6 +49,13 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private ArrayList<String> eventList = new ArrayList<>();
+
+    public void onTaskListClick(View view) {
+        Intent intent = new Intent(MainActivity.this, TaskListActivity.class);
+
+        intent.putStringArrayListExtra("eventList", eventList);
+        startActivity(intent);
+    }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {

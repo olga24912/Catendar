@@ -20,6 +20,7 @@
             android:name=".CreateEventActivity"
             android:label="@string/create_event_title">
         </activity>
-    </application>
+        <activity android:name=".TaskListActivity"></activity>
+       </application>
 
 </manifest>

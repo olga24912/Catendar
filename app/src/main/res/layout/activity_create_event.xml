@@ -81,4 +81,5 @@
         android:layout_toLeftOf="@+id/OKinCreateEvent"
         android:layout_toStartOf="@+id/OKinCreateEvent"
         android:onClick="onCancelClick"/>
+
 </RelativeLayout>

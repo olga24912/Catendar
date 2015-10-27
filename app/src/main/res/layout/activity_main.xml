@@ -26,4 +26,14 @@
         android:layout_alignRight="@+id/createEventButton"
         android:layout_alignEnd="@+id/createEventButton" />
 
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/task_list"
+        android:id="@+id/taskListButton"
+        android:layout_alignBottom="@+id/createEventButton"
+        android:layout_toLeftOf="@+id/createEventButton"
+        android:onClick="onTaskListClick"
+        android:nestedScrollingEnabled="true" />
+
 </RelativeLayout>
