@@ -15,4 +15,8 @@
 
     <string name="task_list">Task List</string>
     <string name="add_task">Create task</string>
+
+    <string name="choose_event">Choose Event</string>
+    <string name="name_of_task">Task name</string>
+    <string name="default_event">Other</string>
 </resources>

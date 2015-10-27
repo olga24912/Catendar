@@ -2,6 +2,7 @@ package ru.mit.au.spb.olga.catendar;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ExpandableListAdapter;
@@ -50,7 +51,7 @@ public class TaskListActivity extends AppCompatActivity {
             сhildDataItemList = new ArrayList<>();
             сhildDataList.add(сhildDataItemList);
         }
-        String childFrom[] = new String[] { "monthName" };
+        String childFrom[] = new String[] { "eventName" };
         int childTo[] = new int[] { android.R.id.text1 };
 
         SimpleExpandableListAdapter adapter = new SimpleExpandableListAdapter(
@@ -60,5 +61,10 @@ public class TaskListActivity extends AppCompatActivity {
                 childFrom, childTo);
 
         listOfEvent.setAdapter(adapter);
+    }
+
+    public void onCancelTaskListClick(View view) {
+        setResult(RESULT_CANCELED);
+        finish();
     }
 }
