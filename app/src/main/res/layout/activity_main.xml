@@ -26,4 +26,14 @@
         android:layout_alignRight="@+id/createEventButton"
         android:layout_alignEnd="@+id/createEventButton" />
 
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Calendar"
+        android:id="@+id/calendarButton"
+        android:layout_alignTop="@+id/createEventButton"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:onClick="onCalendarClick"/>
+
 </RelativeLayout>
