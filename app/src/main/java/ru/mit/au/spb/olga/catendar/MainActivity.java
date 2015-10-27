@@ -37,7 +37,7 @@ public class MainActivity extends AppCompatActivity {
 //        calendarButton.setOnClickListener(oclCalendarButton);
 
         //LinearLayout playgroundLayout = (LinearLayout) findViewById(R.id.playgroundLayout);
-        LinearLayout verticalLayout = new LinearLayout(this);
+/*        LinearLayout verticalLayout = new LinearLayout(this);
         verticalLayout.setOrientation(LinearLayout.VERTICAL);
         Button newButton = new Button(MainActivity.this); // 'this' works as well
         newButton.setText("I'm a brand new button");
@@ -53,8 +53,35 @@ public class MainActivity extends AppCompatActivity {
         v.setText("Hello playground!");
         verticalLayout.addView(v);
 
-        new TableRow(this);
+        new TableRow(this);*/
         //setTitle("Котендарь");
+
+
+        LinearLayout playground = new LinearLayout(this);
+        playground.setOrientation(LinearLayout.VERTICAL);
+        for(int j = 0; j < 10; j++) {
+            LinearLayout playgroundItem = new LinearLayout(this);
+            for (int i = 0; i < 10; i++) {
+                final Integer a = i;
+                final Integer b = j;
+                Button simpleButton = new Button(this);
+                simpleButton.setText(((Integer) (i * j)).toString());
+                simpleButton.setOnClickListener(new Button.OnClickListener() {
+
+                    @Override
+                    public void onClick(View v) {
+                        if (((Button) v).getText() == "=P") {
+                            ((Button) v).setText(((Integer) (a * b)).toString());
+                        } else {
+                            ((Button) v).setText("=P");
+                        }
+                    }
+                });
+                playgroundItem.addView(simpleButton);
+            }
+            playground.addView(playgroundItem);
+        }
+        setContentView(playground);
     }
 
     @Override
