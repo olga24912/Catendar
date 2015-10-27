@@ -41,6 +41,11 @@ public class MainActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
+    public void onCalendarButtonClick(View view) {
+        Intent intent = new Intent(MainActivity.this, CalendarActivity.class);
+        startActivity(intent);
+    }
+
     static final private int CREATE_EVENT = 0;
     public void onCreateEventClick(View view) {
         Intent intent = new Intent(MainActivity.this, CreateEventActivity.class);

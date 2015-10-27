@@ -36,4 +36,14 @@
         android:onClick="onTaskListClick"
         android:nestedScrollingEnabled="true" />
 
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Calendar"
+        android:id="@+id/button"
+        android:layout_alignTop="@+id/taskListButton"
+        android:layout_toLeftOf="@+id/taskListButton"
+        android:layout_toStartOf="@+id/taskListButton"
+        android:onClick="onCalendarButtonClick" />
+
 </RelativeLayout>

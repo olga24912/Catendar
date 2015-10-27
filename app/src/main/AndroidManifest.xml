@@ -18,9 +18,13 @@
         </activity>
         <activity
             android:name=".CreateEventActivity"
-            android:label="@string/create_event_title">
+            android:label="@string/create_event_title" >
         </activity>
-        <activity android:name=".TaskListActivity"></activity>
-       </application>
+        <activity android:name=".TaskListActivity" />
+        <activity
+            android:name=".CalendarActivity"
+            android:label="@string/title_activity_calendar" >
+        </activity>
+    </application>
 
 </manifest>
