@@ -1,5 +1,6 @@
 package ru.mit.au.spb.olga.catendar;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
@@ -66,5 +67,10 @@ public class TaskListActivity extends AppCompatActivity {
     public void onCancelTaskListClick(View view) {
         setResult(RESULT_CANCELED);
         finish();
+    }
+
+    public void onCreateTaskClick(View view) {
+        Intent intent = new Intent(TaskListActivity.this, CreateTaskActivity.class);
+        startActivity(intent);
     }
 }

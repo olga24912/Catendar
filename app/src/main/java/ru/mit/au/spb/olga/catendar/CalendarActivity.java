@@ -16,7 +16,7 @@ public class CalendarActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        //setContentView(R.layout.activity_calendar);
+        setContentView(R.layout.activity_calendar);
 
         TableLayout calendar = new TableLayout(this);
         for(int i = 0; i < HOURS_PER_DAY; i++) {
@@ -34,7 +34,7 @@ public class CalendarActivity extends AppCompatActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_calendar, menu);
+        //getMenuInflater().inflate(R.menu.menu_calendar, menu);
         return true;
     }
 

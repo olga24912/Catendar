@@ -25,6 +25,8 @@
             android:name=".CalendarActivity"
             android:label="@string/title_activity_calendar" >
         </activity>
+        <activity android:name=".CreateTaskActivity"
+            android:label="Create task"></activity>
     </application>
 
 </manifest>
