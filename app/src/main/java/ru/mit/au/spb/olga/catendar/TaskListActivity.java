@@ -147,6 +147,7 @@ public class TaskListActivity extends AppCompatActivity implements CompoundButto
     @Override
     public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
         showAll = isChecked;
+        synchronizedWithDateBase();
         drawTaskList();
     }
 }

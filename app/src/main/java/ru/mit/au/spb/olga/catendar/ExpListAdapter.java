@@ -101,11 +101,12 @@ public class ExpListAdapter extends BaseExpandableListAdapter {
             @Override
             public void onClick(View view) {
                 String currentTask = mGroups.get(groupPosition).getTaskList().get(childPosition).getTaskText();
+                Boolean isDone = mGroups.get(groupPosition).getTaskList().get(childPosition).getIsDone();
 
                 Cursor cursor = mSQLiteDatabase.query("tasks", new String[]{DatabaseHelper._ID, DatabaseHelper.TASK_NAME_COLUMN,
                                 DatabaseHelper.TASK_PARENT_EVENT_ID, DatabaseHelper.TASK_IS_DONE},
                         null, null,
-                        null, null, null) ;
+                        null, null, null);
 
                 while (cursor.moveToNext()) {
                     int id = cursor.getInt(cursor.getColumnIndex(DatabaseHelper._ID));
@@ -116,7 +117,7 @@ public class ExpListAdapter extends BaseExpandableListAdapter {
                         ContentValues cv = new ContentValues();
                         cv.put(DatabaseHelper.TASK_NAME_COLUMN, currentTask);
                         cv.put(DatabaseHelper.TASK_PARENT_EVENT_ID, parentId);
-                        cv.put(DatabaseHelper.TASK_IS_DONE, 1);
+                        cv.put(DatabaseHelper.TASK_IS_DONE, !isDone);
 
                         mSQLiteDatabase.update("tasks", cv, "_id " + "=" + id, null);
                     }
