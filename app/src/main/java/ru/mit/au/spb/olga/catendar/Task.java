@@ -14,4 +14,12 @@ public class Task {
     public void changeText(String text) {
         taskText = text;
     }
+
+    public void changeIsDone(Boolean fl) {
+        isDone = fl;
+    }
+
+    public Boolean getIsDone() {
+        return isDone;
+    }
 }

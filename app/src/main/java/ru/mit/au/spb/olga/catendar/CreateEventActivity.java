@@ -26,7 +26,7 @@ public class CreateEventActivity extends AppCompatActivity {
 
         eventText = (EditText)findViewById(R.id.editEventText);
 
-        mDatabaseHelper = new DatabaseHelper(this, "mydatabase.db", null, 1);
+        mDatabaseHelper = new DatabaseHelper(this, "mydatabase2.db", null, 1);
         mSQLiteDatabase = mDatabaseHelper.getWritableDatabase();
     }
 

@@ -1,6 +1,10 @@
 package ru.mit.au.spb.olga.catendar;
 
+import android.content.ContentValues;
 import android.content.Context;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
+import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,9 +21,14 @@ public class ExpListAdapter extends BaseExpandableListAdapter {
     private ArrayList<Event> mGroups;
     private Context mContext;
 
-    public ExpListAdapter (Context context, ArrayList<Event> groups) {
+    private SQLiteDatabase mSQLiteDatabase;
+
+
+    public ExpListAdapter (Context context, ArrayList<Event> groups, SQLiteDatabase sQLiteDatabase) {
         mContext = context;
         mGroups = groups;
+
+        mSQLiteDatabase = sQLiteDatabase;
     }
 
     @Override
@@ -78,7 +87,7 @@ public class ExpListAdapter extends BaseExpandableListAdapter {
     }
 
     @Override
-    public View getChildView(int groupPosition, int childPosition, boolean isLastChild, View convertView, ViewGroup parent) {
+    public View getChildView(final int groupPosition, final int childPosition, boolean isLastChild, View convertView, ViewGroup parent) {
         if (convertView == null) {
             LayoutInflater inflater = (LayoutInflater) mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             convertView = inflater.inflate(R.layout.child_view, null);
@@ -88,10 +97,33 @@ public class ExpListAdapter extends BaseExpandableListAdapter {
         textChild.setText(mGroups.get(groupPosition).getTaskList().get(childPosition).getTaskText());
 
         Button button = (Button)convertView.findViewById(R.id.buttonChild);
+
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                String currentTask = mGroups.get(groupPosition).getTaskList().get(childPosition).getTaskText();
 
+                Cursor cursor = mSQLiteDatabase.query("tasks", new String[]{DatabaseHelper._ID, DatabaseHelper.TASK_NAME_COLUMN,
+                                DatabaseHelper.TASK_PARENT_EVENT_ID, DatabaseHelper.TASK_IS_DONE},
+                        null, null,
+                        null, null, null) ;
+
+                while (cursor.moveToNext()) {
+                    int id = cursor.getInt(cursor.getColumnIndex(DatabaseHelper._ID));
+                    String name = cursor.getString(cursor
+                            .getColumnIndex(DatabaseHelper.TASK_NAME_COLUMN));
+                    int parentId = cursor.getInt(cursor.getColumnIndex(DatabaseHelper.TASK_PARENT_EVENT_ID));
+                    if (name.equals(currentTask)) {
+                        ContentValues cv = new ContentValues();
+                        cv.put(DatabaseHelper.TASK_NAME_COLUMN, currentTask);
+                        cv.put(DatabaseHelper.TASK_PARENT_EVENT_ID, parentId);
+                        cv.put(DatabaseHelper.TASK_IS_DONE, 1);
+
+                        mSQLiteDatabase.update("tasks", cv, "_id " + "=" + id, null);
+                    }
+                }
+
+                cursor.close();
             }
         });
 

@@ -29,7 +29,20 @@ public class TaskListActivity extends AppCompatActivity {
     private ExpandableListView listOfEvent;
 
     private void drawTaskList() {
-        ExpListAdapter adapter = new ExpListAdapter(getApplicationContext(), eventList);
+        ArrayList<Event> eventListWithTasks = new ArrayList<>();
+        for (Event ev : eventList) {
+            int cnt = 0;
+            for (Task tk : ev.getTaskList()) {
+                if (tk.getIsDone() == false) {
+                    ++cnt;
+                }
+            }
+            if (cnt > 0) {
+                eventListWithTasks.add(ev);
+            }
+        }
+
+        ExpListAdapter adapter = new ExpListAdapter(getApplicationContext(), eventListWithTasks, mSQLiteDatabase);
         listOfEvent.setAdapter(adapter);
     }
 
@@ -55,7 +68,7 @@ public class TaskListActivity extends AppCompatActivity {
         cursor.close();
 
         cursor = mSQLiteDatabase.query("tasks", new String[]{DatabaseHelper._ID, DatabaseHelper.TASK_NAME_COLUMN,
-                        DatabaseHelper.TASK_PARENT_EVENT_ID},
+                        DatabaseHelper.TASK_PARENT_EVENT_ID,DatabaseHelper.TASK_IS_DONE},
                 null, null,
                 null, null, null);
 
@@ -63,6 +76,11 @@ public class TaskListActivity extends AppCompatActivity {
             Task currentTask = new Task();
             int parentEventId = cursor.getInt(cursor.getColumnIndex(DatabaseHelper.TASK_PARENT_EVENT_ID));
             currentTask.changeText(cursor.getString(cursor.getColumnIndex(DatabaseHelper.TASK_NAME_COLUMN)));
+            currentTask.changeIsDone(cursor.getInt(cursor.getColumnIndex(DatabaseHelper.TASK_IS_DONE)) == 1);
+
+            if (currentTask.getIsDone()) {
+                continue;
+            }
 
             Event eventOfThisTask = giveEventById.get(parentEventId);
             if (eventOfThisTask != null) {
@@ -86,7 +104,7 @@ public class TaskListActivity extends AppCompatActivity {
 
         listOfEvent = (ExpandableListView) findViewById(R.id.expandableListView);
 
-        mDatabaseHelper = new DatabaseHelper(this, "mydatabase.db", null, 1);
+        mDatabaseHelper = new DatabaseHelper(this, "mydatabase2.db", null, 1);
         mSQLiteDatabase = mDatabaseHelper.getWritableDatabase();
 
         synchronizedWithDateBase();

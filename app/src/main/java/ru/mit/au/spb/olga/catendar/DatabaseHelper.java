@@ -5,12 +5,13 @@ import android.database.DatabaseErrorHandler;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.provider.BaseColumns;
+import android.util.Log;
 
 /**
  * Created by olga on 31.10.15.
  */
 public class DatabaseHelper extends SQLiteOpenHelper implements BaseColumns {
-    private static final String DATABASE_NAME = "mydatabase.db";
+    private static final String DATABASE_NAME = "mydatabase2.db";
     private static final int DATABASE_VERSION = 1;
 
     private static final String DATABASE_TABLE_CALENDAR = "calendar";
@@ -24,6 +25,7 @@ public class DatabaseHelper extends SQLiteOpenHelper implements BaseColumns {
 
     public static final String TASK_NAME_COLUMN = "name";
     public static final String TASK_PARENT_EVENT_ID = "event_id";
+    public static final String TASK_IS_DONE = "is_done";
 
     private static final String DATABASE_CREATE_CALENDAR_TABLE_SCRIPT = "create table " +
                     DATABASE_TABLE_CALENDAR + " ("
@@ -40,7 +42,8 @@ public class DatabaseHelper extends SQLiteOpenHelper implements BaseColumns {
             DATABASE_TABLE_TASK + " ("
             + BaseColumns._ID + " integer primary key autoincrement, "
             + TASK_NAME_COLUMN + " text not null, "
-            + TASK_PARENT_EVENT_ID + " integer);";
+            + TASK_PARENT_EVENT_ID + " integer, "
+            + TASK_IS_DONE + " integer);";
 
     DatabaseHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
@@ -64,6 +67,9 @@ public class DatabaseHelper extends SQLiteOpenHelper implements BaseColumns {
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-
+        db.execSQL("DROP TABLE IF IT EXISTS " + DATABASE_TABLE_CALENDAR);
+        db.execSQL("DROP TABLE IF IT EXISTS " + DATABASE_TABLE_EVENT);
+        db.execSQL("DROP TABLE IF IT EXISTS " + DATABASE_TABLE_TASK);
+        onCreate(db);
     }
 }

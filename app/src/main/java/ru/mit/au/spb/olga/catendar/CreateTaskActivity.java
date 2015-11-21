@@ -25,7 +25,7 @@ public class CreateTaskActivity extends AppCompatActivity {
 
         setContentView(R.layout.activity_create_task);
 
-        mDatabaseHelper = new DatabaseHelper(this, "mydatabase.db", null, 1);
+        mDatabaseHelper = new DatabaseHelper(this, "mydatabase2.db", null, 1);
         mSQLiteDatabase = mDatabaseHelper.getWritableDatabase();
 
         taskText = (EditText)findViewById(R.id.editTaskText);
@@ -56,6 +56,7 @@ public class CreateTaskActivity extends AppCompatActivity {
 
         newValues.put(DatabaseHelper.TASK_NAME_COLUMN, String.valueOf(taskText.getText()));
         newValues.put(DatabaseHelper.TASK_PARENT_EVENT_ID, parentID);
+        newValues.put(DatabaseHelper.TASK_IS_DONE, 0);
 
         mSQLiteDatabase.insert("tasks", null, newValues);
 
