@@ -65,7 +65,6 @@ public class MainActivity extends AppCompatActivity {
     public void onTaskListClick(View view) {
         Intent intent = new Intent(MainActivity.this, TaskListActivity.class);
 
-        intent.putStringArrayListExtra("eventList", eventList);
         startActivity(intent);
     }
 

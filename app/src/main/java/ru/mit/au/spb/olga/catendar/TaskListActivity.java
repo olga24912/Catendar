@@ -124,15 +124,7 @@ public class TaskListActivity extends AppCompatActivity {
         mDatabaseHelper = new DatabaseHelper(this, "mydatabase.db", null, 1);
         mSQLiteDatabase = mDatabaseHelper.getWritableDatabase();
 
-        ArrayList<String> helper = new ArrayList<>();
-        helper = getIntent().getExtras().getStringArrayList("eventList");
-
-        for (String cur : helper) {
-            Event ev = new Event();
-            ev.changeText(cur);
-            eventList.add(ev);
-        }
-
+        synchronizedWithDateBase();
         drawTaskList();
     }
 
