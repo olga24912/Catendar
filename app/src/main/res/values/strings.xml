@@ -20,4 +20,6 @@
     <string name="name_of_task">Task name</string>
     <string name="default_event">Other</string>
     <string name="title_activity_calendar">CalendarActivity</string>
+
+    <string name="is_done">Done</string>
 </resources>

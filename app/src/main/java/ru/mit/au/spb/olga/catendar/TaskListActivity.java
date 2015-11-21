@@ -29,42 +29,7 @@ public class TaskListActivity extends AppCompatActivity {
     private ExpandableListView listOfEvent;
 
     private void drawTaskList() {
-        Map<String, String> map;
-
-        ArrayList<Map<String, String>> groupDataList = new ArrayList<>();
-
-        for (Event cur: eventList) {
-            map = new HashMap<>();
-            map.put("groupName", cur.getEventText());
-            groupDataList.add(map);
-        }
-
-        String groupFrom[] = new String[]{"groupName"};
-        int groupTo[] = new int[]{android.R.id.text1};
-
-        ArrayList<ArrayList<Map<String, String>>> сhildDataList = new ArrayList<>();
-
-        ArrayList<Map<String, String>> сhildDataItemList;
-        for (int i = 0; i < eventList.size(); ++i) {
-            сhildDataItemList = new ArrayList<>();
-            Event currentEvent = eventList.get(i);
-            for (Task currentTask : currentEvent.getTaskList()) {
-                map = new HashMap<>();
-                map.put("taskName", currentTask.getTaskText());
-                сhildDataItemList.add(map);
-            }
-            сhildDataList.add(сhildDataItemList);
-        }
-
-        String childFrom[] = new String[]{"taskName"};
-        int childTo[] = new int[]{android.R.id.text1};
-
-        SimpleExpandableListAdapter adapter = new SimpleExpandableListAdapter(
-                this, groupDataList,
-                android.R.layout.simple_expandable_list_item_1, groupFrom,
-                groupTo, сhildDataList, android.R.layout.simple_list_item_1,
-                childFrom, childTo);
-
+        ExpListAdapter adapter = new ExpListAdapter(getApplicationContext(), eventList);
         listOfEvent.setAdapter(adapter);
     }
 
