@@ -22,7 +22,7 @@ public class CalendarActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_calendar);
+        //setContentView(R.layout.activity_calendar);
 
         TableLayout calendar = new TableLayout(this);
         TableLayout.LayoutParams calendarParams = new TableLayout.LayoutParams(TableLayout.LayoutParams.MATCH_PARENT,
@@ -82,9 +82,9 @@ public class CalendarActivity extends AppCompatActivity {
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
+        /*if (id == R.id.action_settings) {
             return true;
-        }
+        }*/
 
         return super.onOptionsItemSelected(item);
     }

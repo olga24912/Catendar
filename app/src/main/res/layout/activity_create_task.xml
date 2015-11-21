@@ -25,7 +25,7 @@
     <EditText
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/editText"
+        android:id="@+id/editTaskText"
         android:layout_alignParentTop="true"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
@@ -48,5 +48,15 @@
         android:textAppearance="?android:attr/textAppearanceLarge"
         android:text="@string/default_event"
         android:id="@+id/textView"
-        android:layout_below="@+id/editText" />
+        android:layout_below="@+id/editTaskText" />
+
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/editParentEventText"
+        android:layout_below="@+id/Choose_event"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_alignRight="@+id/Choose_event"
+        android:layout_alignEnd="@+id/Choose_event" />
 </RelativeLayout>

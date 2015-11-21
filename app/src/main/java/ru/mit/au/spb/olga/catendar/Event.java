@@ -4,13 +4,12 @@ import java.util.ArrayList;
 import java.util.GregorianCalendar;
 
 public class Event {
-    private ArrayList<Task> taskForThisEvent;
+    private ArrayList<Task> taskForThisEvent = new ArrayList<>();
     private String eventText;
     private GregorianCalendar eventStartDate;
     private GregorianCalendar eventEndDate;
 
     public Event() {
-
     }
 
     public void changeText(String newText) {
@@ -19,5 +18,12 @@ public class Event {
 
     public String getEventText() {
         return eventText;
+    }
+    public ArrayList<Task> getTaskList() {
+        return taskForThisEvent;
+    }
+
+    public void addTask(Task t) {
+        taskForThisEvent.add(t);
     }
 }
