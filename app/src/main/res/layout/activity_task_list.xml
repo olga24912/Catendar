@@ -19,7 +19,7 @@
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
         android:layout_alignParentTop="true"
-        android:layout_above="@+id/add_task" />
+        android:layout_above="@+id/switchShowAll" />
 
     <Button
         android:layout_width="wrap_content"
@@ -30,5 +30,18 @@
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
         android:onClick="onCancelTaskListClick" />
+
+    <Switch
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/show_all"
+        android:textOn="@string/show_all"
+        android:textOff="@string/show_not_all"
+        android:id="@+id/switchShowAll"
+        android:layout_alignRight="@+id/add_task"
+        android:layout_alignEnd="@+id/add_task"
+        android:layout_above="@+id/add_task"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true" />
 
 </RelativeLayout>

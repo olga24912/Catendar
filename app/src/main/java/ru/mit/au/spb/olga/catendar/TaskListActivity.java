@@ -7,11 +7,13 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.ArrayAdapter;
+import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.ExpandableListAdapter;
 import android.widget.ExpandableListView;
 import android.widget.ListView;
 import android.widget.SimpleExpandableListAdapter;
+import android.widget.Switch;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -21,28 +23,36 @@ import java.util.TreeMap;
 /**
  * Created by olga on 26.10.15.
  */
-public class TaskListActivity extends AppCompatActivity {
+public class TaskListActivity extends AppCompatActivity implements CompoundButton.OnCheckedChangeListener {
     private DatabaseHelper mDatabaseHelper;
     private SQLiteDatabase mSQLiteDatabase;
 
     private ArrayList<Event> eventList = new ArrayList<>();
     private ExpandableListView listOfEvent;
 
+    private boolean showAll;
+
     private void drawTaskList() {
         ArrayList<Event> eventListWithTasks = new ArrayList<>();
         for (Event ev : eventList) {
-            int cnt = 0;
+            Event newEvent = new Event();
+            newEvent.changeText(ev.getEventText());
             for (Task tk : ev.getTaskList()) {
-                if (tk.getIsDone() == false) {
-                    ++cnt;
+                if (!tk.getIsDone()) {
+                    newEvent.addTask(tk);
                 }
             }
-            if (cnt > 0) {
-                eventListWithTasks.add(ev);
+            if (newEvent.getTaskList().size() > 0) {
+                eventListWithTasks.add(newEvent);
             }
         }
 
-        ExpListAdapter adapter = new ExpListAdapter(getApplicationContext(), eventListWithTasks, mSQLiteDatabase);
+        ExpListAdapter adapter;
+        if (!showAll) {
+            adapter = new ExpListAdapter(getApplicationContext(), eventListWithTasks, mSQLiteDatabase);
+        } else {
+            adapter = new ExpListAdapter(getApplicationContext(), eventList, mSQLiteDatabase);
+        }
         listOfEvent.setAdapter(adapter);
     }
 
@@ -78,10 +88,6 @@ public class TaskListActivity extends AppCompatActivity {
             currentTask.changeText(cursor.getString(cursor.getColumnIndex(DatabaseHelper.TASK_NAME_COLUMN)));
             currentTask.changeIsDone(cursor.getInt(cursor.getColumnIndex(DatabaseHelper.TASK_IS_DONE)) == 1);
 
-            if (currentTask.getIsDone()) {
-                continue;
-            }
-
             Event eventOfThisTask = giveEventById.get(parentEventId);
             if (eventOfThisTask != null) {
                 eventOfThisTask.addTask(currentTask);
@@ -109,6 +115,11 @@ public class TaskListActivity extends AppCompatActivity {
 
         synchronizedWithDateBase();
         drawTaskList();
+
+        Switch mSwitch = (Switch)findViewById(R.id.switchShowAll);
+        if (mSwitch != null) {
+            mSwitch.setOnCheckedChangeListener(this);
+        }
     }
 
     public void onCancelTaskListClick(View view) {
@@ -131,5 +142,11 @@ public class TaskListActivity extends AppCompatActivity {
                 drawTaskList();
             }
         }
+    }
+
+    @Override
+    public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+        showAll = isChecked;
+        drawTaskList();
     }
 }

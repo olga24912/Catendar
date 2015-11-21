@@ -22,4 +22,6 @@
     <string name="title_activity_calendar">CalendarActivity</string>
 
     <string name="is_done">Done</string>
+    <string name="show_all">Show All</string>
+    <string name="show_not_all">Show not done</string>
 </resources>
