@@ -6,4 +6,20 @@ package ru.mit.au.spb.olga.catendar;
 public class Task {
     private Boolean isDone;
     private String taskText;
+
+    public String getTaskText() {
+        return taskText;
+    }
+
+    public void changeText(String text) {
+        taskText = text;
+    }
+
+    public void changeIsDone(Boolean fl) {
+        isDone = fl;
+    }
+
+    public Boolean getIsDone() {
+        return isDone;
+    }
 }

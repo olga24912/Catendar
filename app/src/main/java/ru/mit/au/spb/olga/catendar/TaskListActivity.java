@@ -1,26 +1,106 @@
 package ru.mit.au.spb.olga.catendar;
 
+import android.content.Intent;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.ArrayAdapter;
+import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.ExpandableListAdapter;
 import android.widget.ExpandableListView;
 import android.widget.ListView;
 import android.widget.SimpleExpandableListAdapter;
+import android.widget.Switch;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.TreeMap;
 
 /**
  * Created by olga on 26.10.15.
  */
-public class TaskListActivity extends AppCompatActivity {
+public class TaskListActivity extends AppCompatActivity implements CompoundButton.OnCheckedChangeListener {
+    private DatabaseHelper mDatabaseHelper;
+    private SQLiteDatabase mSQLiteDatabase;
 
-    private ArrayList<String> eventList = new ArrayList<>();
+    private ArrayList<Event> eventList = new ArrayList<>();
     private ExpandableListView listOfEvent;
+
+    private boolean showAll;
+
+    private void drawTaskList() {
+        ArrayList<Event> eventListWithTasks = new ArrayList<>();
+        for (Event ev : eventList) {
+            Event newEvent = new Event();
+            newEvent.changeText(ev.getEventText());
+            for (Task tk : ev.getTaskList()) {
+                if (!tk.getIsDone()) {
+                    newEvent.addTask(tk);
+                }
+            }
+            if (newEvent.getTaskList().size() > 0) {
+                eventListWithTasks.add(newEvent);
+            }
+        }
+
+        ExpListAdapter adapter;
+        if (!showAll) {
+            adapter = new ExpListAdapter(getApplicationContext(), eventListWithTasks, mSQLiteDatabase);
+        } else {
+            adapter = new ExpListAdapter(getApplicationContext(), eventList, mSQLiteDatabase);
+        }
+        listOfEvent.setAdapter(adapter);
+    }
+
+
+    private void synchronizedWithDateBase() {
+        Map <Integer, Event> giveEventById = new TreeMap<>();
+
+        Cursor cursor = mSQLiteDatabase.query("events", new String[]{DatabaseHelper._ID, DatabaseHelper.EVENT_NAME,
+                        DatabaseHelper.EVENT_PARENT_CALENDAR},
+                null, null,
+                null, null, null) ;
+
+        while (cursor.moveToNext()) {
+            Event currentEvent = new Event();
+            int id = cursor.getInt(cursor.getColumnIndex(DatabaseHelper._ID));
+            currentEvent.changeText(cursor.getString(cursor
+                    .getColumnIndex(DatabaseHelper.EVENT_NAME)));
+
+            giveEventById.put(id, currentEvent);
+
+        }
+
+        cursor.close();
+
+        cursor = mSQLiteDatabase.query("tasks", new String[]{DatabaseHelper._ID, DatabaseHelper.TASK_NAME_COLUMN,
+                        DatabaseHelper.TASK_PARENT_EVENT_ID,DatabaseHelper.TASK_IS_DONE},
+                null, null,
+                null, null, null);
+
+        while (cursor.moveToNext()) {
+            Task currentTask = new Task();
+            int parentEventId = cursor.getInt(cursor.getColumnIndex(DatabaseHelper.TASK_PARENT_EVENT_ID));
+            currentTask.changeText(cursor.getString(cursor.getColumnIndex(DatabaseHelper.TASK_NAME_COLUMN)));
+            currentTask.changeIsDone(cursor.getInt(cursor.getColumnIndex(DatabaseHelper.TASK_IS_DONE)) == 1);
+
+            Event eventOfThisTask = giveEventById.get(parentEventId);
+            if (eventOfThisTask != null) {
+                eventOfThisTask.addTask(currentTask);
+
+                giveEventById.put(parentEventId, eventOfThisTask);
+            }
+        }
+
+        eventList.clear();
+        for (Event event: giveEventById.values()) {
+            eventList.add(event);
+        }
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -29,42 +109,45 @@ public class TaskListActivity extends AppCompatActivity {
         setContentView(R.layout.activity_task_list);
 
         listOfEvent = (ExpandableListView) findViewById(R.id.expandableListView);
-        eventList = getIntent().getExtras().getStringArrayList("eventList");
 
-        Map<String, String> map;
+        mDatabaseHelper = new DatabaseHelper(this, "mydatabase2.db", null, 1);
+        mSQLiteDatabase = mDatabaseHelper.getWritableDatabase();
 
-        ArrayList<Map<String, String> > groupDataList = new ArrayList<>();
+        synchronizedWithDateBase();
+        drawTaskList();
 
-        for (String cur: eventList) {
-            map = new HashMap<>();
-            map.put("groupName", cur);
-            groupDataList.add(map);
+        Switch mSwitch = (Switch)findViewById(R.id.switchShowAll);
+        if (mSwitch != null) {
+            mSwitch.setOnCheckedChangeListener(this);
         }
-
-        String groupFrom[] = new String[] {"groupName"};
-        int groupTo[] = new int[] {android.R.id.text1};
-
-        ArrayList<ArrayList<Map<String, String>>> сhildDataList = new ArrayList<>();
-
-        ArrayList<Map<String, String>> сhildDataItemList = new ArrayList<>();
-        for (int i = 0; i < eventList.size(); ++i) {
-            сhildDataItemList = new ArrayList<>();
-            сhildDataList.add(сhildDataItemList);
-        }
-        String childFrom[] = new String[] { "eventName" };
-        int childTo[] = new int[] { android.R.id.text1 };
-
-        SimpleExpandableListAdapter adapter = new SimpleExpandableListAdapter(
-                this, groupDataList,
-                android.R.layout.simple_expandable_list_item_1, groupFrom,
-                groupTo, сhildDataList, android.R.layout.simple_list_item_1,
-                childFrom, childTo);
-
-        listOfEvent.setAdapter(adapter);
     }
 
     public void onCancelTaskListClick(View view) {
         setResult(RESULT_CANCELED);
         finish();
+    }
+
+    static final private int CREATE_TASK = 0;
+    public void onCreateTaskClick(View view) {
+        Intent intent = new Intent(TaskListActivity.this, CreateTaskActivity.class);
+        startActivityForResult(intent, CREATE_TASK);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == CREATE_TASK) {
+            if (resultCode == RESULT_OK) {
+                synchronizedWithDateBase();
+                drawTaskList();
+            }
+        }
+    }
+
+    @Override
+    public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+        showAll = isChecked;
+        synchronizedWithDateBase();
+        drawTaskList();
     }
 }

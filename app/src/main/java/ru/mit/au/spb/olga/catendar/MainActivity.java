@@ -1,6 +1,7 @@
 package ru.mit.au.spb.olga.catendar;
 
 import android.content.Intent;
+import android.database.sqlite.SQLiteDatabase;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.Menu;
@@ -12,11 +13,16 @@ import android.widget.ListView;
 import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
+    private DatabaseHelper mDatabaseHelper;
+    private SQLiteDatabase mSQLiteDatabase;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        mDatabaseHelper = new DatabaseHelper(this, "mydatabase2.db", null, 1);
+        mSQLiteDatabase = mDatabaseHelper.getWritableDatabase();
     }
 
     @Override
@@ -58,7 +64,6 @@ public class MainActivity extends AppCompatActivity {
     public void onTaskListClick(View view) {
         Intent intent = new Intent(MainActivity.this, TaskListActivity.class);
 
-        intent.putStringArrayListExtra("eventList", eventList);
         startActivity(intent);
     }
 
