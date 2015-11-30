@@ -28,7 +28,7 @@ public class CreateEventActivity extends AppCompatActivity {
         Event createEvent = new Event();
         createEvent.changeText(String.valueOf(eventText.getText()));
 
-        answerIntent.putExtra(EVENT_NAME, createEvent.getEventText());
+        answerIntent.putExtra(EVENT_NAME, createEvent.getText());
 
         setResult(RESULT_OK, answerIntent);
         finish();

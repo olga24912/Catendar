@@ -8,11 +8,17 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.HorizontalScrollView;
+import android.widget.ScrollView;
 import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
 
 import org.w3c.dom.Text;
+
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.GregorianCalendar;
 
 public class CalendarActivity extends AppCompatActivity {
     public static final int HOURS_PER_DAY = 24;
@@ -24,9 +30,22 @@ public class CalendarActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         //setContentView(R.layout.activity_calendar);
 
+        ScrollView verticalScroll = new ScrollView(this);
+        ScrollView.LayoutParams verticalParams =
+                new ScrollView.LayoutParams(ScrollView.LayoutParams.MATCH_PARENT,
+                                            ScrollView.LayoutParams.WRAP_CONTENT);
+        verticalScroll.setLayoutParams(verticalParams);
+
+        HorizontalScrollView horizontalScroll = new HorizontalScrollView(this);
+        HorizontalScrollView.LayoutParams horizontalParams =
+                new HorizontalScrollView.LayoutParams(HorizontalScrollView.LayoutParams.MATCH_PARENT,
+                                                      HorizontalScrollView.LayoutParams.WRAP_CONTENT);
+        horizontalScroll.setLayoutParams(horizontalParams);
+
         TableLayout calendar = new TableLayout(this);
-        TableLayout.LayoutParams calendarParams = new TableLayout.LayoutParams(TableLayout.LayoutParams.MATCH_PARENT,
-                                                          TableLayout.LayoutParams.WRAP_CONTENT);
+        TableLayout.LayoutParams calendarParams =
+                new TableLayout.LayoutParams(TableLayout.LayoutParams.MATCH_PARENT,
+                                             TableLayout.LayoutParams.WRAP_CONTENT);
         calendar.setLayoutParams(calendarParams);
 
         TableRow topRow = new TableRow(this);
@@ -60,11 +79,28 @@ public class CalendarActivity extends AppCompatActivity {
                     }
                 });
                 curDay.setText("+");
+                curDay.setId(createDayId(i, j));
                 curHour.addView(curDay, rowParams);
             }
             calendar.addView(curHour, calendarParams);
         }
-        setContentView(calendar);
+        verticalScroll.addView(calendar);
+        horizontalScroll.addView(verticalScroll);
+        setContentView(horizontalScroll);
+    }
+
+    protected void onCreate(Bundle savedInstanceState, ArrayList<Template> templates) {
+        /***/
+    }
+
+    private int createDayId(int i, int j) {
+        return (i + j) * (i + j) + j;
+    }
+
+    private int getCellIdByDate(GregorianCalendar date) {
+        int day = (date.get(Calendar.DAY_OF_WEEK) + (DAYS_PER_WEEK - 2)) % DAYS_PER_WEEK;
+        int hour = date.get(Calendar.HOUR_OF_DAY);
+        return createDayId(hour, day);
     }
 
     @Override
@@ -88,4 +124,15 @@ public class CalendarActivity extends AppCompatActivity {
 
         return super.onOptionsItemSelected(item);
     }
+
+    public void displayTemplate(Template t) {
+        ArrayList<Event> eventsToDisplay = t.getEvents();
+        String name = t.getName();
+        for(Event e: eventsToDisplay) {
+            int cellId = getCellIdByDate(e.getStartDate());
+            TextView curCell = (TextView)this.findViewById(cellId);
+            curCell.setText(name + e.getText());
+        }
+    }
+
 }

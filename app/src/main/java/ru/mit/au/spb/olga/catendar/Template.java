@@ -17,6 +17,14 @@ public class Template {
     public void addEvent(Event newEvent) {
         events.add(newEvent);
     }
+
+    public String getName() {
+        return name;
+    }
+
+    public ArrayList<Event> getEvents() {
+        return events;
+    }
 }
 
 

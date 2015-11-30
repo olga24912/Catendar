@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.GregorianCalendar;
 
 public class Event {
-    private ArrayList<Task> taskForThisEvent;
+    private ArrayList<Task> eventTasks;
     private String eventText;
     private GregorianCalendar eventStartDate;
     private GregorianCalendar eventEndDate;
@@ -17,7 +17,11 @@ public class Event {
         eventText = newText;
     }
 
-    public String getEventText() {
+    public String getText() {
         return eventText;
+    }
+
+    public GregorianCalendar getStartDate() {
+        return eventStartDate;
     }
 }
