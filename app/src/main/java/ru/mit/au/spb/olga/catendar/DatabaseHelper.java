@@ -11,7 +11,7 @@ import android.util.Log;
  * Created by olga on 31.10.15.
  */
 public class DatabaseHelper extends SQLiteOpenHelper implements BaseColumns {
-    private static final String DATABASE_NAME = "mydatabase2.db";
+    private static final String DATABASE_NAME = "mydatabase6.db";
     private static final int DATABASE_VERSION = 1;
 
     private static final String DATABASE_TABLE_CALENDAR = "calendar";
@@ -22,6 +22,16 @@ public class DatabaseHelper extends SQLiteOpenHelper implements BaseColumns {
 
     public static final String EVENT_NAME = "name";
     public static final String EVENT_PARENT_CALENDAR = "calendar_id";
+    public static final String EVENT_YEAR_OF_START = "year_start";
+    public static final String EVENT_MONTH_OF_START = "month_start";
+    public static final String EVENT_DAY_OF_START = "day_start";
+    public static final String EVENT_HOUR_OF_START = "hour_start";
+    public static final String EVENT_MINUTE_OF_START = "minute_start";
+    public static final String EVENT_YEAR_OF_END = "year_end";
+    public static final String EVENT_MONTH_OF_END = "month_end";
+    public static final String EVENT_DAY_OF_END = "day_end";
+    public static final String EVENT_HOUR_OF_END = "hour_end";
+    public static final String EVENT_MINUTE_OF_END = "minute_end";
 
     public static final String TASK_NAME_COLUMN = "name";
     public static final String TASK_PARENT_EVENT_ID = "event_id";
@@ -36,7 +46,17 @@ public class DatabaseHelper extends SQLiteOpenHelper implements BaseColumns {
             DATABASE_TABLE_EVENT + " ("
             + BaseColumns._ID + " integer primary key autoincrement, "
             + EVENT_NAME + " text not null, "
-            + EVENT_PARENT_CALENDAR + " integer);";
+            + EVENT_PARENT_CALENDAR + " integer, "
+            + EVENT_YEAR_OF_START + " integer, "
+            + EVENT_MONTH_OF_START + " integer, "
+            + EVENT_DAY_OF_START + " integer, "
+            + EVENT_HOUR_OF_START + " integer, "
+            + EVENT_MINUTE_OF_START + " integer, "
+            + EVENT_YEAR_OF_END + " integer, "
+            + EVENT_MONTH_OF_END + " integer, "
+            + EVENT_DAY_OF_END + " integer, "
+            + EVENT_HOUR_OF_END + " integer, "
+            + EVENT_MINUTE_OF_END + " integer);";
 
     private static final String DATABASE_CREATE_TASK_TABLE_SCRIPT = "create table " +
             DATABASE_TABLE_TASK + " ("

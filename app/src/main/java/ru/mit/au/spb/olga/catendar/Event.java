@@ -45,6 +45,14 @@ public class Event {
         return eventTasks;
     }
 
+    public void setStartDate(int year, int month, int day, int hours, int minutes) {
+        eventStartDate = new GregorianCalendar(year, month, day, hours, minutes);
+    }
+
+    public void setEventEndDate(int year, int month, int day, int hours, int minutes) {
+        eventEndDate = new GregorianCalendar(year, month, day, hours, minutes);
+    }
+
 //    public void setStartDate(GregorianCalendar newStartDate) {
 //        eventStartDate = newStartDate;
 //        startDate = eventStartDate.getTime().toString();
@@ -53,7 +61,6 @@ public class Event {
 //    public void setEndDate(GregorianCalendar newEndDate) {
 //        eventEndDate = newEndDate;
 //    }
-
 
     public void addTask(Task t) {
         eventTasks.add(t);
