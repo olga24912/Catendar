@@ -10,12 +10,21 @@ public class Template {
 
     public Template(String newName, ArrayList<Event> newEvents) {
         name = newName;
-        id.randomUUID();
-        events.addAll(newEvents);
+        id = UUID.randomUUID();
+        events = newEvents;
+//        events.addAll(newEvents);
     }
 
     public void addEvent(Event newEvent) {
         events.add(newEvent);
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public ArrayList<Event> getEvents() {
+        return events;
     }
 }
 

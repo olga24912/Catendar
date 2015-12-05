@@ -34,16 +34,20 @@ public class CreateEventActivity extends AppCompatActivity {
         Intent answerIntent = new Intent();
 
         Event createEvent = new Event();
-        createEvent.changeText(String.valueOf(eventText.getText()));
+        createEvent.setText(String.valueOf(eventText.getText()));
 
+//<<<<<<< HEAD
+        answerIntent.putExtra(EVENT_NAME, createEvent.getText());
+//=======
         ContentValues newValues = new ContentValues();
 
-        newValues.put(DatabaseHelper.EVENT_NAME, String.valueOf(createEvent.getEventText()));
+        newValues.put(DatabaseHelper.EVENT_NAME, String.valueOf(createEvent.getText()));
         newValues.put(DatabaseHelper.EVENT_PARENT_CALENDAR, 0);
 
         mSQLiteDatabase.insert("events", null, newValues);
 
-        answerIntent.putExtra(EVENT_NAME, createEvent.getEventText());
+        answerIntent.putExtra(EVENT_NAME, createEvent.getText());
+//>>>>>>> d644f43949dfc44623f5eb48c0e1d48ac3a893e8
 
         setResult(RESULT_OK, answerIntent);
         finish();

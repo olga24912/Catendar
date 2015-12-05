@@ -6,17 +6,11 @@ import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
-import android.widget.ArrayAdapter;
 import android.widget.CompoundButton;
-import android.widget.EditText;
-import android.widget.ExpandableListAdapter;
 import android.widget.ExpandableListView;
-import android.widget.ListView;
-import android.widget.SimpleExpandableListAdapter;
 import android.widget.Switch;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.Map;
 import java.util.TreeMap;
 
@@ -36,7 +30,7 @@ public class TaskListActivity extends AppCompatActivity implements CompoundButto
         ArrayList<Event> eventListWithTasks = new ArrayList<>();
         for (Event ev : eventList) {
             Event newEvent = new Event();
-            newEvent.changeText(ev.getEventText());
+            newEvent.setText(ev.getText());
             for (Task tk : ev.getTaskList()) {
                 if (!tk.getIsDone()) {
                     newEvent.addTask(tk);
@@ -68,7 +62,7 @@ public class TaskListActivity extends AppCompatActivity implements CompoundButto
         while (cursor.moveToNext()) {
             Event currentEvent = new Event();
             int id = cursor.getInt(cursor.getColumnIndex(DatabaseHelper._ID));
-            currentEvent.changeText(cursor.getString(cursor
+            currentEvent.setText(cursor.getString(cursor
                     .getColumnIndex(DatabaseHelper.EVENT_NAME)));
 
             giveEventById.put(id, currentEvent);
