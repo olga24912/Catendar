@@ -92,7 +92,7 @@ public class ExpListAdapter extends BaseExpandableListAdapter {
             convertView = inflater.inflate(R.layout.child_view, null);
         }
 
-        TextView textChild = (TextView) convertView.findViewById(R.id.textChild);
+        final TextView textChild = (TextView) convertView.findViewById(R.id.textChild);
         textChild.setText(mGroups.get(groupPosition).getTaskList().get(childPosition).getTaskText());
 
         Button button = (Button)convertView.findViewById(R.id.buttonChild);
@@ -100,6 +100,7 @@ public class ExpListAdapter extends BaseExpandableListAdapter {
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                textChild.setBackgroundColor(0xffc5e384);
                 String currentTask = mGroups.get(groupPosition).getTaskList().get(childPosition).getTaskText();
                 Boolean isDone = mGroups.get(groupPosition).getTaskList().get(childPosition).getIsDone();
 
