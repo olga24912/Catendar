@@ -4,40 +4,58 @@ import java.util.ArrayList;
 import java.util.GregorianCalendar;
 
 public class Event {
-//<<<<<<< HEAD
     private ArrayList<Task> eventTasks;
-//=======
-//    private ArrayList<Task> taskForThisEvent = new ArrayList<>();
-//>>>>>>> d644f43949dfc44623f5eb48c0e1d48ac3a893e8
     private String eventText;
     private GregorianCalendar eventStartDate;
     private GregorianCalendar eventEndDate;
+    private String startDate;
 
     public Event() {
-        eventTasks = new ArrayList<Task>();
-        eventStartDate = new GregorianCalendar();
-        eventEndDate = new GregorianCalendar();
+        this(0);
     }
 
-    public void changeText(String newText) {
+    public Event(int numTasks) {
+        this(numTasks, null, null);
+    }
+
+    public Event(int numTasks, GregorianCalendar start, GregorianCalendar end) {
+        eventTasks = new ArrayList<Task>(numTasks);
+        eventStartDate = (start != null) ? start : new GregorianCalendar();
+        startDate = eventStartDate.getTime().toString();
+        eventEndDate = (end != null) ? end : new GregorianCalendar();
+    }
+
+    public void setText(String newText) {
         eventText = newText;
     }
 
     public String getText() {
         return eventText;
     }
-//<<<<<<< HEAD
 
     public GregorianCalendar getStartDate() {
         return eventStartDate;
     }
-//=======
+
+//    public GregorianCalendar getEndDate() {
+//        return eventEndDate;
+//    }
+
     public ArrayList<Task> getTaskList() {
         return eventTasks;
     }
 
+//    public void setStartDate(GregorianCalendar newStartDate) {
+//        eventStartDate = newStartDate;
+//        startDate = eventStartDate.getTime().toString();
+//    }
+//
+//    public void setEndDate(GregorianCalendar newEndDate) {
+//        eventEndDate = newEndDate;
+//    }
+
+
     public void addTask(Task t) {
         eventTasks.add(t);
-//>>>>>>> d644f43949dfc44623f5eb48c0e1d48ac3a893e8
     }
 }

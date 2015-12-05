@@ -80,7 +80,7 @@ public class ExpListAdapter extends BaseExpandableListAdapter {
         }
 
         TextView textGroup = (TextView) convertView.findViewById(R.id.textGroup);
-        textGroup.setText(mGroups.get(groupPosition).getEventText());
+        textGroup.setText(mGroups.get(groupPosition).getText());
 
         return convertView;
     }

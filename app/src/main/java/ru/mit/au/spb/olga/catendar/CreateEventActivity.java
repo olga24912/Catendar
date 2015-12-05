@@ -34,7 +34,7 @@ public class CreateEventActivity extends AppCompatActivity {
         Intent answerIntent = new Intent();
 
         Event createEvent = new Event();
-        createEvent.changeText(String.valueOf(eventText.getText()));
+        createEvent.setText(String.valueOf(eventText.getText()));
 
 //<<<<<<< HEAD
         answerIntent.putExtra(EVENT_NAME, createEvent.getText());
