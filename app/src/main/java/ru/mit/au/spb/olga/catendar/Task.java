@@ -6,6 +6,15 @@ package ru.mit.au.spb.olga.catendar;
 public class Task {
     private Boolean isDone;
     private String taskText;
+    private int id;
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public int getId() {
+        return this.id;
+    }
 
     public String getTaskText() {
         return taskText;

@@ -102,6 +102,7 @@ public class ExpListAdapter extends BaseExpandableListAdapter {
             public void onClick(View view) {
                 textChild.setBackgroundColor(0xffc5e384);
                 String currentTask = mGroups.get(groupPosition).getTaskList().get(childPosition).getTaskText();
+                int dataBaseId = mGroups.get(groupPosition).getTaskList().get(childPosition).getId();
                 Boolean isDone = mGroups.get(groupPosition).getTaskList().get(childPosition).getIsDone();
 
                 Cursor cursor = mSQLiteDatabase.query("tasks", new String[]{DatabaseHelper._ID, DatabaseHelper.TASK_NAME_COLUMN,
@@ -114,7 +115,7 @@ public class ExpListAdapter extends BaseExpandableListAdapter {
                     String name = cursor.getString(cursor
                             .getColumnIndex(DatabaseHelper.TASK_NAME_COLUMN));
                     int parentId = cursor.getInt(cursor.getColumnIndex(DatabaseHelper.TASK_PARENT_EVENT_ID));
-                    if (name.equals(currentTask)) {
+                    if (dataBaseId == id) {
                         ContentValues cv = new ContentValues();
                         cv.put(DatabaseHelper.TASK_NAME_COLUMN, currentTask);
                         cv.put(DatabaseHelper.TASK_PARENT_EVENT_ID, parentId);

@@ -81,6 +81,7 @@ public class TaskListActivity extends AppCompatActivity implements CompoundButto
             int parentEventId = cursor.getInt(cursor.getColumnIndex(DatabaseHelper.TASK_PARENT_EVENT_ID));
             currentTask.changeText(cursor.getString(cursor.getColumnIndex(DatabaseHelper.TASK_NAME_COLUMN)));
             currentTask.changeIsDone(cursor.getInt(cursor.getColumnIndex(DatabaseHelper.TASK_IS_DONE)) == 1);
+            currentTask.setId(cursor.getInt(cursor.getColumnIndex(DatabaseHelper._ID)));
 
             Event eventOfThisTask = giveEventById.get(parentEventId);
             if (eventOfThisTask != null) {
