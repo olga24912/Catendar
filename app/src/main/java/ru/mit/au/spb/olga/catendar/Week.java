@@ -1,16 +1,12 @@
 package ru.mit.au.spb.olga.catendar;
 
-import android.os.Parcel;
-import android.os.Parcelable;
-
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.UUID;
 
 public class Week /*implements Parcelable*/ {
-    private GregorianCalendar date;
+    private GregorianCalendar startDate;
     private ArrayList<Template> templates;//HashMap or index 0 for singleEvents
     private UUID id;
     private static final int WEEK_START = Calendar.MONDAY;
@@ -35,7 +31,7 @@ public class Week /*implements Parcelable*/ {
     }
 
     public Week (GregorianCalendar startDate) {
-        date = formDate(startDate); //"Captain's Log, Stardate 1512.2. ..."
+        this.startDate = formDate(startDate); //"Captain's Log, Stardate 1512.2. ..."
 
         id.randomUUID();
 

@@ -37,13 +37,14 @@ public class CalendarActivity extends AppCompatActivity {
         //FIXME: just for the demo
         {
             //GregorianCalendar start = Week.formDate();//the day is the first day of a week
-            GregorianCalendar start = new GregorianCalendar();
-            start.set(Calendar.DAY_OF_WEEK, 0);
-            GregorianCalendar end = start;
-            end.add(Calendar.HOUR_OF_DAY, 1);
             ArrayList<Event> events = new ArrayList<>();
 
             for(int i = 1; i <= DAYS_PER_WEEK; i++) {
+                GregorianCalendar start = new GregorianCalendar();
+                start.set(Calendar.DAY_OF_WEEK, 0);
+                GregorianCalendar end = start;
+                end.add(Calendar.HOUR_OF_DAY, 1);
+
                 start.set(Calendar.DAY_OF_WEEK, i);
                 end.set(Calendar.DAY_OF_WEEK, i);
 
