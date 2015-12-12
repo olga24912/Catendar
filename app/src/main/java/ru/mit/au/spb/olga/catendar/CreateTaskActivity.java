@@ -31,7 +31,7 @@ public class CreateTaskActivity extends AppCompatActivity {
 
         setContentView(R.layout.activity_create_task);
 
-        mDatabaseHelper = new DatabaseHelper(this, "mydatabase2.db", null, 1);
+        mDatabaseHelper = new DatabaseHelper(this, "mydatabase6.db", null, 1);
         mSQLiteDatabase = mDatabaseHelper.getWritableDatabase();
 
         taskText.add((EditText) findViewById(R.id.editTaskText));

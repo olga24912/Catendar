@@ -11,8 +11,7 @@ public class Template {
     public Template(String newName, ArrayList<Event> newEvents) {
         name = newName;
         id = UUID.randomUUID();
-        events = newEvents;
-//        events.addAll(newEvents);
+        events = new ArrayList<>(newEvents);
     }
 
     public void addEvent(Event newEvent) {
