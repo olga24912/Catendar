@@ -34,7 +34,7 @@ public class CreateEventActivity extends AppCompatActivity {
         eventStartTime = (EditText)findViewById(R.id.editTimeStartEvent);
         eventEndTime = (EditText)findViewById(R.id.editTimeEndEvent);
 
-        mDatabaseHelper = new DatabaseHelper(this, "mydatabase6.db", null, 1);
+        mDatabaseHelper = new DatabaseHelper(this, "mydatabase7.db", null, 1);
         mSQLiteDatabase = mDatabaseHelper.getWritableDatabase();
     }
 
@@ -77,7 +77,7 @@ public class CreateEventActivity extends AppCompatActivity {
         ContentValues newValues = new ContentValues();
 
         newValues.put(DatabaseHelper.EVENT_NAME, String.valueOf(createEvent.getText()));
-        newValues.put(DatabaseHelper.EVENT_PARENT_CALENDAR, 0);
+        newValues.put(DatabaseHelper.EVENT_PARENT_TEMPLATE, 0);
         newValues.put(DatabaseHelper.EVENT_YEAR_OF_START, Integer.valueOf(yearFromDate(dateStart)));
         newValues.put(DatabaseHelper.EVENT_MONTH_OF_START, monthFromDate(dateStart));
         newValues.put(DatabaseHelper.EVENT_DAY_OF_START, dayFromDate(dateStart));

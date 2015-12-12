@@ -55,7 +55,7 @@ public class TaskListActivity extends AppCompatActivity implements CompoundButto
         Map <Integer, Event> giveEventById = new TreeMap<>();
 
         Cursor cursor = mSQLiteDatabase.query("events", new String[]{DatabaseHelper._ID, DatabaseHelper.EVENT_NAME,
-                        DatabaseHelper.EVENT_PARENT_CALENDAR},
+                        DatabaseHelper.EVENT_PARENT_TEMPLATE},
                 null, null,
                 null, null, null) ;
 
@@ -105,7 +105,7 @@ public class TaskListActivity extends AppCompatActivity implements CompoundButto
 
         listOfEvent = (ExpandableListView) findViewById(R.id.expandableListView);
 
-        mDatabaseHelper = new DatabaseHelper(this, "mydatabase2.db", null, 1);
+        mDatabaseHelper = new DatabaseHelper(this, "mydatabase7.db", null, 1);
         mSQLiteDatabase = mDatabaseHelper.getWritableDatabase();
 
         synchronizedWithDateBase();

@@ -11,17 +11,24 @@ import android.util.Log;
  * Created by olga on 31.10.15.
  */
 public class DatabaseHelper extends SQLiteOpenHelper implements BaseColumns {
-    private static final String DATABASE_NAME = "mydatabase6.db";
+    private static final String DATABASE_NAME = "mydatabase7.db";
     private static final int DATABASE_VERSION = 1;
 
-    private static final String DATABASE_TABLE_CALENDAR = "calendar";
     private static final String DATABASE_TABLE_EVENT = "events";
     private static final String DATABASE_TABLE_TASK = "tasks";
+    private static final String DATABASE_TABLE_WEEK = "week";
+    private static final String DATABASE_TABLE_TEMPLATE = "template";
+    private static final String DATABASE_TABLE_TEMPLATES_IN_WEEKS = "template_in_week";
 
-    public static final String CALENDAR_NAME = "name";
+    public static final String TEMPLATE_NAME = "name";
+
+    public static final String WEEK_START_DATE = "start_date";
+
+    public static final String TEMPLATES_IN_WEEKS_WEEK_ID = "week_id";
+    public static final String TEMPLATES_IN_WEEKS_TEMPLATE_ID = "template_id";
 
     public static final String EVENT_NAME = "name";
-    public static final String EVENT_PARENT_CALENDAR = "calendar_id";
+    public static final String EVENT_PARENT_TEMPLATE = "template_id";
     public static final String EVENT_YEAR_OF_START = "year_start";
     public static final String EVENT_MONTH_OF_START = "month_start";
     public static final String EVENT_DAY_OF_START = "day_start";
@@ -37,16 +44,16 @@ public class DatabaseHelper extends SQLiteOpenHelper implements BaseColumns {
     public static final String TASK_PARENT_EVENT_ID = "event_id";
     public static final String TASK_IS_DONE = "is_done";
 
-    private static final String DATABASE_CREATE_CALENDAR_TABLE_SCRIPT = "create table " +
-                    DATABASE_TABLE_CALENDAR + " ("
+    private static final String DATABASE_CREATE_TEMPLATE_TABLE_SCRIPT = "create table " +
+                    DATABASE_TABLE_TEMPLATE + " ("
                     + BaseColumns._ID + " integer primary key autoincrement, "
-                    + CALENDAR_NAME + " text not null);";
+                    + TEMPLATE_NAME + " text not null);";
 
     private static final String DATABASE_CREATE_EVENT_TABLE_SCRIPT = "create table " +
             DATABASE_TABLE_EVENT + " ("
             + BaseColumns._ID + " integer primary key autoincrement, "
             + EVENT_NAME + " text not null, "
-            + EVENT_PARENT_CALENDAR + " integer, "
+            + EVENT_PARENT_TEMPLATE + " integer, "
             + EVENT_YEAR_OF_START + " integer, "
             + EVENT_MONTH_OF_START + " integer, "
             + EVENT_DAY_OF_START + " integer, "
@@ -65,6 +72,17 @@ public class DatabaseHelper extends SQLiteOpenHelper implements BaseColumns {
             + TASK_PARENT_EVENT_ID + " integer, "
             + TASK_IS_DONE + " integer);";
 
+    private static final String DATABASE_CREATE_WEEK_TABLE_SCRIPT = "create table " +
+            DATABASE_TABLE_WEEK + " ("
+            + BaseColumns._ID + " integer primary key autoincrement, "
+            + WEEK_START_DATE + " integer);";
+
+    private static final String DATABASE_CREATE_TEMPLATES_IN_WEEK_SCRIPT = "create table " +
+            DATABASE_TABLE_TEMPLATES_IN_WEEKS + " ("
+            + BaseColumns._ID + " integer primary key autoincrement, "
+            + TEMPLATES_IN_WEEKS_TEMPLATE_ID + " integer, "
+            + TEMPLATES_IN_WEEKS_WEEK_ID + "integer);";
+
     DatabaseHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
     }
@@ -80,14 +98,16 @@ public class DatabaseHelper extends SQLiteOpenHelper implements BaseColumns {
 
     @Override
     public void onCreate(SQLiteDatabase db) {
-        db.execSQL(DATABASE_CREATE_CALENDAR_TABLE_SCRIPT);
+        db.execSQL(DATABASE_CREATE_WEEK_TABLE_SCRIPT);
+        db.execSQL(DATABASE_CREATE_TEMPLATES_IN_WEEK_SCRIPT);
+        db.execSQL(DATABASE_CREATE_TEMPLATE_TABLE_SCRIPT);
         db.execSQL(DATABASE_CREATE_EVENT_TABLE_SCRIPT);
         db.execSQL(DATABASE_CREATE_TASK_TABLE_SCRIPT);
     }
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-        db.execSQL("DROP TABLE IF IT EXISTS " + DATABASE_TABLE_CALENDAR);
+        db.execSQL("DROP TABLE IF IT EXISTS " + DATABASE_TABLE_TEMPLATE);
         db.execSQL("DROP TABLE IF IT EXISTS " + DATABASE_TABLE_EVENT);
         db.execSQL("DROP TABLE IF IT EXISTS " + DATABASE_TABLE_TASK);
         onCreate(db);

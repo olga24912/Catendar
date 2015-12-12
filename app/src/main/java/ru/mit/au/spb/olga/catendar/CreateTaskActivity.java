@@ -31,7 +31,7 @@ public class CreateTaskActivity extends AppCompatActivity {
 
         setContentView(R.layout.activity_create_task);
 
-        mDatabaseHelper = new DatabaseHelper(this, "mydatabase2.db", null, 1);
+        mDatabaseHelper = new DatabaseHelper(this, "mydatabase7.db", null, 1);
         mSQLiteDatabase = mDatabaseHelper.getWritableDatabase();
 
         taskText.add((EditText) findViewById(R.id.editTaskText));
@@ -55,7 +55,7 @@ public class CreateTaskActivity extends AppCompatActivity {
     public void onOkTaskClick(View view) {
         int parentID = 0;
         Cursor cursor = mSQLiteDatabase.query("events", new String[]{DatabaseHelper._ID, DatabaseHelper.EVENT_NAME,
-                        DatabaseHelper.EVENT_PARENT_CALENDAR},
+                        DatabaseHelper.EVENT_PARENT_TEMPLATE},
                 null, null,
                 null, null, null) ;
 
