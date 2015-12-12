@@ -4,6 +4,18 @@
     <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
 
+    <string-array name="views_array">
+        <item>Calendar</item>
+        <item>Task List</item>
+        <item>Create event</item>
+    </string-array>
+    <string name="menu">Меню</string>
+    <string name="first_screen">Calendar</string>
+    <string name="second_screen">Task List</string>
+    <string name="third_screen">Create event</string>
+    <string name="open_menu">Open</string>
+    <string name="close_menu">Close</string>
+
     <string name="create_event_title">Create event</string>
     <string name="create_event_button">Create event</string>
     <string name="name_of_event_in_create_event">Event name</string>

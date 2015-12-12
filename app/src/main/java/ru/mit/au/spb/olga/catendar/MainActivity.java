@@ -1,86 +1,175 @@
 package ru.mit.au.spb.olga.catendar;
 
 import android.content.Intent;
-import android.database.sqlite.SQLiteDatabase;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+
+import android.app.Fragment;
+import android.content.res.Configuration;
+import android.support.v7.app.ActionBarDrawerToggle;
+import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.ActionBarActivity;
+import android.util.Log;
+
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
-import java.util.ArrayList;
 
-public class MainActivity extends AppCompatActivity {
-    private DatabaseHelper mDatabaseHelper;
-    private SQLiteDatabase mSQLiteDatabase;
+public class MainActivity extends ActionBarActivity {
+
+    private DrawerLayout myDrawerLayout;
+    private ListView myDrawerList;
+    private ActionBarDrawerToggle myDrawerToggle;
+
+    // navigation drawer title
+    private CharSequence myDrawerTitle;
+    // used to store app title
+    private CharSequence myTitle;
+
+    private String[] viewsNames;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        mDatabaseHelper = new DatabaseHelper(this, "mydatabase8.db", null, 1);
-        mSQLiteDatabase = mDatabaseHelper.getWritableDatabase();
+        myTitle =  getTitle();
+        myDrawerTitle = getResources().getString(R.string.menu);
+
+        // load slide menu items
+        viewsNames = getResources().getStringArray(R.array.views_array);
+        myDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
+        myDrawerList = (ListView) findViewById(R.id.left_drawer);
+
+        myDrawerList.setAdapter(new ArrayAdapter<String>(this,
+                R.layout.drawer_list_item, viewsNames));
+
+        // enabling action bar app icon and behaving it as toggle button
+        android.support.v7.app.ActionBar actionBar = getSupportActionBar();
+        actionBar.setDisplayHomeAsUpEnabled(true);
+
+        myDrawerToggle = new ActionBarDrawerToggle(this, myDrawerLayout,
+                R.string.open_menu,
+                R.string.close_menu
+        ) {
+            public void onDrawerClosed(View view) {
+                getSupportActionBar().setTitle(myTitle);
+                // calling onPrepareOptionsMenu() to show action bar icons
+                invalidateOptionsMenu();
+            }
+
+            public void onDrawerOpened(View drawerView) {
+                getSupportActionBar().setTitle(myDrawerTitle);
+                // calling onPrepareOptionsMenu() to hide action bar icons
+                invalidateOptionsMenu();
+            }
+        };
+        myDrawerLayout.setDrawerListener(myDrawerToggle);
+
+        if (savedInstanceState == null) {
+            // on first time display view for first nav item
+            displayView(0);
+        }
+
+        myDrawerList.setOnItemClickListener(new DrawerItemClickListener());
+    }
+
+    private class DrawerItemClickListener implements ListView.OnItemClickListener {
+        @Override
+        public void onItemClick(
+                AdapterView<?> parent, View view, int position, long id
+        ) {
+            // display view for selected nav drawer item
+            displayView(position);
+        }
+    }
+
+    private void displayView(int position) {
+        // update the main content by replacing fragments
+        Intent intent;
+        switch (position) {
+            case 0:
+                intent = new Intent(MainActivity.this, CalendarActivity.class);
+
+                startActivity(intent);
+                break;
+            case 1:
+                intent = new Intent(MainActivity.this, TaskListActivity.class);
+
+                startActivity(intent);
+                break;
+            case 2:
+                intent = new Intent(MainActivity.this, CreateEventActivity.class);
+
+                startActivity(intent);
+                break;
+            default:
+                break;
+        }
+
+        // update selected item and title, then close the drawer
+        myDrawerList.setItemChecked(position, true);
+        myDrawerList.setSelection(position);
+        setTitle(viewsNames[position]);
+        myDrawerLayout.closeDrawer(myDrawerList);
     }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_main, menu);
+        getMenuInflater().inflate(R.menu.main, menu);
         return true;
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-        /*if (id == R.id.action_settings) {
+        // toggle nav drawer on selecting action bar app icon/title
+        if (myDrawerToggle.onOptionsItemSelected(item)) {
             return true;
-        }*/
-
-        return super.onOptionsItemSelected(item);
+        }
+        // Handle action bar actions click
+        switch (item.getItemId()) {
+            case R.id.action_settings:
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
     }
 
-    public void onCalendarButtonClick(View view) {
-        Intent intent = new Intent(MainActivity.this, CalendarActivity.class);
-        startActivity(intent);
-    }
-
-    static final private int CREATE_EVENT = 0;
-    public void onCreateEventClick(View view) {
-        Intent intent = new Intent(MainActivity.this, CreateEventActivity.class);
-
-        startActivityForResult(intent, CREATE_EVENT);
-    }
-
-    private ArrayList<String> eventList = new ArrayList<>();
-
-    public void onTaskListClick(View view) {
-        Intent intent = new Intent(MainActivity.this, TaskListActivity.class);
-
-        startActivity(intent);
+    /**
+     * Called when invalidateOptionsMenu() is triggered
+     */
+    @Override
+    public boolean onPrepareOptionsMenu(Menu menu) {
+        // if navigation drawer is opened, hide the action items
+        boolean drawerOpen = myDrawerLayout.isDrawerOpen(myDrawerList);
+        menu.findItem(R.id.action_settings).setVisible(!drawerOpen);
+        return super.onPrepareOptionsMenu(menu);
     }
 
     @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        ListView listOfEvent = (ListView) findViewById(R.id.listView);
+    public void setTitle(CharSequence title) {
+        myTitle = title;
+        getSupportActionBar().setTitle(myTitle);
+    }
 
-        if (requestCode == CREATE_EVENT) {
-            if (resultCode == RESULT_OK) {
-                eventList.add(data.getStringExtra(CreateEventActivity.EVENT_NAME));
+    /**
+     * When using the ActionBarDrawerToggle, you must call it during
+     * onPostCreate() and onConfigurationChanged()...
+     */
+    @Override
+    protected void onPostCreate(Bundle savedInstanceState) {
+        super.onPostCreate(savedInstanceState);
+        // Sync the toggle state after onRestoreInstanceState has occurred.
+        myDrawerToggle.syncState();
+    }
 
-                ArrayAdapter<String> adapter = new ArrayAdapter<>(this,
-                        android.R.layout.simple_list_item_1, eventList);
-
-                listOfEvent.setAdapter(adapter);
-            }
-        }
+    @Override
+    public void onConfigurationChanged(Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+        // Pass any configuration change to the drawer toggls
+        myDrawerToggle.onConfigurationChanged(newConfig);
     }
 }
