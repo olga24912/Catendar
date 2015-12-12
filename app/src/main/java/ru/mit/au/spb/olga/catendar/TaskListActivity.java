@@ -105,7 +105,7 @@ public class TaskListActivity extends AppCompatActivity implements CompoundButto
 
         listOfEvent = (ExpandableListView) findViewById(R.id.expandableListView);
 
-        mDatabaseHelper = new DatabaseHelper(this, "mydatabase7.db", null, 1);
+        mDatabaseHelper = new DatabaseHelper(this, "mydatabase8.db", null, 1);
         mSQLiteDatabase = mDatabaseHelper.getWritableDatabase();
 
         synchronizedWithDateBase();

@@ -8,6 +8,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.EditText;
 
+import java.util.GregorianCalendar;
+
 /**
  * Created by olga on 18.10.15.
  */
@@ -34,7 +36,7 @@ public class CreateEventActivity extends AppCompatActivity {
         eventStartTime = (EditText)findViewById(R.id.editTimeStartEvent);
         eventEndTime = (EditText)findViewById(R.id.editTimeEndEvent);
 
-        mDatabaseHelper = new DatabaseHelper(this, "mydatabase7.db", null, 1);
+        mDatabaseHelper = new DatabaseHelper(this, "mydatabase8.db", null, 1);
         mSQLiteDatabase = mDatabaseHelper.getWritableDatabase();
     }
 
@@ -76,19 +78,22 @@ public class CreateEventActivity extends AppCompatActivity {
 
         ContentValues newValues = new ContentValues();
 
+        GregorianCalendar startCal = new GregorianCalendar(yearFromDate(dateStart),
+                monthFromDate(dateStart),
+                dayFromDate(dateStart),
+                hourFromTime(timeStart),
+                minuteFromTime(timeStart));
+
+        GregorianCalendar endCal = new GregorianCalendar(yearFromDate(dateEnd),
+                monthFromDate(dateEnd),
+                dayFromDate(dateEnd),
+                hourFromTime(timeEnd),
+                minuteFromTime(timeEnd));
+
         newValues.put(DatabaseHelper.EVENT_NAME, String.valueOf(createEvent.getText()));
         newValues.put(DatabaseHelper.EVENT_PARENT_TEMPLATE, 0);
-        newValues.put(DatabaseHelper.EVENT_YEAR_OF_START, Integer.valueOf(yearFromDate(dateStart)));
-        newValues.put(DatabaseHelper.EVENT_MONTH_OF_START, monthFromDate(dateStart));
-        newValues.put(DatabaseHelper.EVENT_DAY_OF_START, dayFromDate(dateStart));
-        newValues.put(DatabaseHelper.EVENT_HOUR_OF_START, hourFromTime(timeStart));
-        newValues.put(DatabaseHelper.EVENT_MINUTE_OF_START, minuteFromTime(timeStart));
-
-        newValues.put(DatabaseHelper.EVENT_YEAR_OF_END, yearFromDate(dateEnd));
-        newValues.put(DatabaseHelper.EVENT_MONTH_OF_END, monthFromDate(dateEnd));
-        newValues.put(DatabaseHelper.EVENT_DAY_OF_END, dayFromDate(dateEnd));
-        newValues.put(DatabaseHelper.EVENT_HOUR_OF_END, hourFromTime(timeEnd));
-        newValues.put(DatabaseHelper.EVENT_MINUTE_OF_END, minuteFromTime(timeEnd));
+        newValues.put(DatabaseHelper.EVENT_START_DATE, startCal.getTimeInMillis());
+        newValues.put(DatabaseHelper.EVENT_END_DATE, endCal.getTimeInMillis());
 
         mSQLiteDatabase.insert("events", null, newValues);
 

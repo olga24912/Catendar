@@ -21,7 +21,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        mDatabaseHelper = new DatabaseHelper(this, "mydatabase7.db", null, 1);
+        mDatabaseHelper = new DatabaseHelper(this, "mydatabase8.db", null, 1);
         mSQLiteDatabase = mDatabaseHelper.getWritableDatabase();
     }
 
