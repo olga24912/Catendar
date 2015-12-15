@@ -109,6 +109,11 @@ public class MainActivity extends ActionBarActivity {
 
                 startActivity(intent);
                 break;
+            case 3:
+                intent = new Intent(MainActivity.this, CreateWeekActivity.class);
+
+                startActivity(intent);
+                break;
             default:
                 break;
         }

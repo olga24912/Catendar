@@ -63,6 +63,10 @@ public class Week /*implements Parcelable*/ {
         templates.get(SINGLE_EVENTS_INDEX).addEvent(newEvent);
     }
 
+    public long getTimeInMS() {
+        return this.startDate.getTimeInMillis();
+    }
+
     public ArrayList<Template> getTemplates() {
         return templates;
     }
