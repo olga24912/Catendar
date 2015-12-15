@@ -1,8 +1,11 @@
 package ru.mit.au.spb.olga.catendar;
 
 import android.app.Activity;
+import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.net.Uri;
 import android.os.Bundle;
 //import android.app.Fragment;
@@ -31,6 +34,9 @@ public class CalendarFragment extends Fragment {
 
     private static Week currentWeek = null;
 
+    private DatabaseHelper mDatabaseHelper;
+    private SQLiteDatabase mSQLiteDatabase;
+
     public CalendarFragment() {
         // Required empty public constructor
     }
@@ -39,6 +45,10 @@ public class CalendarFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        mDatabaseHelper = new DatabaseHelper(getContext(), "mydatabase8.db", null, 1);
+        mSQLiteDatabase = mDatabaseHelper.getWritableDatabase();
+
         //setCalendarView();
 //        return inflater.inflate(R.layout.fragment_calendar2, container, false);
 //    }
@@ -174,7 +184,92 @@ public class CalendarFragment extends Fragment {
         return horizontalScroll;
     }
 
-    private void getWeekDateBase(Integer id) {
+    private Template getTemplateDateBase(int id) {
+        Template tp = null;
 
+        Cursor cursorTemplate = mSQLiteDatabase.query(DatabaseHelper.DATABASE_TABLE_TEMPLATE, new String[]{DatabaseHelper._ID,
+        DatabaseHelper.TEMPLATE_NAME},
+                null, null,
+                null, null, null);
+
+        while (cursorTemplate.moveToNext())  {
+            int currentId = cursorTemplate.getInt(cursorTemplate.getColumnIndex(DatabaseHelper._ID));
+            if (currentId == id) {
+                String name = cursorTemplate.getString(cursorTemplate.getColumnIndex(DatabaseHelper.TEMPLATE_NAME));
+                tp = new Template(name);
+            }
+        }
+
+        assert(tp != null);
+
+        cursorTemplate.close();
+
+        Cursor cursorEvent = mSQLiteDatabase.query(DatabaseHelper.DATABASE_TABLE_EVENT, new String[]{DatabaseHelper._ID,
+        DatabaseHelper.EVENT_PARENT_TEMPLATE, DatabaseHelper.EVENT_NAME, DatabaseHelper.EVENT_START_DATE,
+        DatabaseHelper.EVENT_END_DATE},
+                null, null,
+                null, null, null);
+
+        while (cursorEvent.moveToNext()) {
+            int tpId = cursorEvent.getInt(cursorEvent.getColumnIndex(DatabaseHelper.EVENT_PARENT_TEMPLATE));
+            if (tpId == id) {
+                Event newEvent = new Event();
+                String name = cursorEvent.getString(cursorEvent.getColumnIndex(DatabaseHelper.EVENT_NAME));
+                newEvent.setText(name);
+
+                int startTime = cursorEvent.getInt(cursorEvent.getColumnIndex(DatabaseHelper.EVENT_START_DATE));
+                newEvent.setStartDate(startTime);
+
+                int endTime = cursorEvent.getInt(cursorEvent.getColumnIndex(DatabaseHelper.EVENT_END_DATE));
+                newEvent.setEndDate(endTime);
+                tp.addEvent(newEvent);
+            }
+        }
+        cursorEvent.close();
+        return tp;
+    }
+
+    private void getWeekDateBase(int id) {
+        Cursor cursorWeek = mSQLiteDatabase.query(DatabaseHelper.DATABASE_TABLE_WEEK, new String[]{DatabaseHelper._ID, DatabaseHelper.WEEK_START_DATE},
+                null, null,
+                null, null, null);
+
+        currentWeek = null;
+        while (cursorWeek.moveToNext()) {
+            int currentId = cursorWeek.getInt(cursorWeek.getColumnIndex(DatabaseHelper._ID));
+            if (currentId == id) {
+                int timeInMS = cursorWeek.getInt(cursorWeek.getColumnIndex(DatabaseHelper.WEEK_START_DATE));
+                GregorianCalendar currentTime = new GregorianCalendar();
+                currentTime.setTimeInMillis(timeInMS);
+                currentWeek = new Week(currentTime);
+            }
+        }
+        if (currentWeek == null) {
+            currentWeek = new Week();
+        }
+
+        cursorWeek.close();
+
+        ArrayList<Integer> templatesInWeek = new ArrayList<>();
+
+        Cursor cursorTemplateAndWeek = mSQLiteDatabase.query(DatabaseHelper.DATABASE_TABLE_TEMPLATES_IN_WEEKS, new String[]{
+                DatabaseHelper._ID, DatabaseHelper.TEMPLATES_IN_WEEKS_WEEK_ID, DatabaseHelper.TEMPLATES_IN_WEEKS_TEMPLATE_ID},
+                null, null,
+                null, null, null);
+
+        while (cursorTemplateAndWeek.moveToNext()) {
+            int weekId = cursorWeek.getInt(cursorTemplateAndWeek.getColumnIndex(DatabaseHelper.TEMPLATES_IN_WEEKS_WEEK_ID));
+            int templateId = cursorTemplateAndWeek.getInt(cursorTemplateAndWeek.getColumnIndex(DatabaseHelper.DATABASE_TABLE_TEMPLATES_IN_WEEKS));
+
+            if (weekId == id) {
+                templatesInWeek.add(templateId);
+            }
+        }
+
+        cursorTemplateAndWeek.close();
+
+        for (int i = 0; i < templatesInWeek.size(); i++) {
+            currentWeek.addTemplate(getTemplateDateBase(templatesInWeek.get(i)));
+        }
     }
 }

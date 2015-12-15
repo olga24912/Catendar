@@ -14,11 +14,11 @@ public class DatabaseHelper extends SQLiteOpenHelper implements BaseColumns {
     private static final String DATABASE_NAME = "mydatabase8.db";
     private static final int DATABASE_VERSION = 1;
 
-    private static final String DATABASE_TABLE_EVENT = "events";
-    private static final String DATABASE_TABLE_TASK = "tasks";
-    private static final String DATABASE_TABLE_WEEK = "week";
-    private static final String DATABASE_TABLE_TEMPLATE = "template";
-    private static final String DATABASE_TABLE_TEMPLATES_IN_WEEKS = "template_in_week";
+    public static final String DATABASE_TABLE_EVENT = "events";
+    public static final String DATABASE_TABLE_TASK = "tasks";
+    public static final String DATABASE_TABLE_WEEK = "week";
+    public static final String DATABASE_TABLE_TEMPLATE = "template";
+    public static final String DATABASE_TABLE_TEMPLATES_IN_WEEKS = "template_in_week";
 
     public static final String TEMPLATE_NAME = "name";
 

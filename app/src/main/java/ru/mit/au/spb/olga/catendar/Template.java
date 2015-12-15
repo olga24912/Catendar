@@ -8,6 +8,11 @@ public class Template {
     private UUID id;
     private String name;
 
+    public Template(String newName) {
+        name = newName;
+        events = new ArrayList<>();
+    }
+
     public Template(String newName, ArrayList<Event> newEvents) {
         name = newName;
         id = UUID.randomUUID();

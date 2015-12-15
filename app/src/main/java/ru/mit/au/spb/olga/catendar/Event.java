@@ -11,7 +11,7 @@ public class Event {
     private String startDate;
 
     public Event() {
-        this(0);
+        eventTasks = new ArrayList<>();
     }
 
     public Event(int numTasks) {
@@ -43,6 +43,16 @@ public class Event {
 
     public ArrayList<Task> getTaskList() {
         return eventTasks;
+    }
+
+    public void setStartDate(int msTime) {
+        eventStartDate = new GregorianCalendar();
+        eventStartDate.setTimeInMillis(msTime);
+    }
+
+    public void setEndDate(int msTime) {
+        eventEndDate = new GregorianCalendar();
+        eventEndDate.setTimeInMillis(msTime);
     }
 
     public void setStartDate(int year, int month, int day, int hours, int minutes) {
