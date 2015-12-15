@@ -40,28 +40,105 @@ public class CreateEventActivity extends AppCompatActivity {
         mSQLiteDatabase = mDatabaseHelper.getWritableDatabase();
     }
 
+
+    Boolean notCorrectMonth(String month) {
+        try {
+            int vl = Integer.parseInt(month);
+            if (vl < 1 || vl > 12) {
+                return true;
+            }
+        } catch (Exception ignored) {
+            return true;
+        }
+        return false;
+    }
+
+    Boolean notCorrectYear(String year) {
+        try {
+            int vl = Integer.parseInt(year);
+            if (vl < 0 || vl > 9999) {
+                return true;
+            }
+        } catch (Exception ignored) {
+            return true;
+        }
+        return false;
+    }
+
+    Boolean notCorrectDay(String day) {
+        try {
+            int vl = Integer.parseInt(day);
+            if (vl < 1 || vl > 31) {
+                return true;
+            }
+        } catch (Exception ignored) {
+            return true;
+        }
+        return false;
+    }
+
+    Boolean notCorrectHours(String hours) {
+        try {
+            int vl = Integer.parseInt(hours);
+            if (vl < 0 || vl > 23) {
+                return true;
+            }
+        } catch (Exception ignored) {
+            return true;
+        }
+        return false;
+    }
+
+    Boolean notCorrectMinute(String minute) {
+        try {
+            int vl = Integer.parseInt(minute);
+            if (vl < 0 || vl > 59) {
+                return true;
+            }
+        } catch (Exception ignored) {
+            return true;
+        }
+        return false;
+    }
+
+
     private int yearFromDate (String date) {
         String[] ddmmyyyy = date.split("\\.");
+        if (ddmmyyyy.length < 3 || notCorrectYear(ddmmyyyy[2])) {
+            return 9999;
+        }
         return Integer.parseInt(ddmmyyyy[2]);
     }
 
     private int monthFromDate (String date) {
         String[] ddmmyyyy = date.split("\\.");
+        if (ddmmyyyy.length < 2 || notCorrectMonth(ddmmyyyy[1])){
+            return 01;
+        }
         return Integer.parseInt(ddmmyyyy[1]);
     }
 
     private int dayFromDate (String date) {
         String[] ddmmyyyy = date.split("\\.");
+        if (ddmmyyyy.length < 1 || notCorrectDay(ddmmyyyy[0])) {
+            return 01;
+        }
         return Integer.parseInt(ddmmyyyy[0]);
     }
 
     private int  hourFromTime (String time) {
         String[] hhmm = time.split(":");
+        if (hhmm.length < 1 || notCorrectHours(hhmm[0])) {
+            return 0;
+        }
         return Integer.parseInt(hhmm[0]);
     }
 
     private int minuteFromTime (String time) {
         String[] hhmm = time.split(":");
+        if (hhmm.length < 2 || notCorrectMinute(hhmm[1])) {
+            return 0;
+        }
         return Integer.parseInt(hhmm[1]);
     }
 
