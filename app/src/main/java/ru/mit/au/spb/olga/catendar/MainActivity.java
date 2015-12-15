@@ -1,9 +1,10 @@
 package ru.mit.au.spb.olga.catendar;
 
-import android.app.Fragment;
 import android.content.Intent;
 import android.os.Bundle;
 
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
 import android.content.res.Configuration;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v4.widget.DrawerLayout;
@@ -35,6 +36,11 @@ public class MainActivity extends ActionBarActivity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        if(savedInstanceState == null) {
+            CalendarFragment calendar = new CalendarFragment();
+            getSupportFragmentManager().beginTransaction().add(android.R.id.content, calendar).commit();
+        }
 
         myTitle =  getTitle();
         myDrawerTitle = getResources().getString(R.string.menu);
@@ -89,7 +95,7 @@ public class MainActivity extends ActionBarActivity {
 
     private void displayView(int position) {
         // update the main content by replacing fragments
-        Fragment fragment = null;
+        android.app.Fragment fragment = null;
         Intent intent;
         switch (position) {
             case 0:
