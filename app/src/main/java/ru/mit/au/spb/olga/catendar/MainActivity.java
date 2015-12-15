@@ -1,9 +1,9 @@
 package ru.mit.au.spb.olga.catendar;
 
+import android.app.Fragment;
 import android.content.Intent;
 import android.os.Bundle;
 
-import android.app.Fragment;
 import android.content.res.Configuration;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v4.widget.DrawerLayout;
@@ -89,6 +89,7 @@ public class MainActivity extends ActionBarActivity {
 
     private void displayView(int position) {
         // update the main content by replacing fragments
+        Fragment fragment = null;
         Intent intent;
         switch (position) {
             case 0:
@@ -97,9 +98,7 @@ public class MainActivity extends ActionBarActivity {
                 startActivity(intent);
                 break;
             case 1:
-                intent = new Intent(MainActivity.this, TaskListActivity.class);
-
-                startActivity(intent);
+                fragment = new TaskListFragment();
                 break;
             case 2:
                 intent = new Intent(MainActivity.this, CreateEventActivity.class);
@@ -108,6 +107,11 @@ public class MainActivity extends ActionBarActivity {
                 break;
             default:
                 break;
+        }
+        if (fragment != null) {
+            android.app.FragmentManager fragmentManager = getFragmentManager();
+            fragmentManager.beginTransaction()
+                    .replace(R.id.content_frame, fragment).commit();
         }
 
         // update selected item and title, then close the drawer
