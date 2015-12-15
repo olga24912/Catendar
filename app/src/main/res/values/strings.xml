@@ -43,6 +43,13 @@
     <string name="next_week">Next week</string>
     <string name="other_week">Other week</string>
     <string name="put_date">Date on week(dd.mm.yyyy)</string>
-<!-- TODO: Remove or change this placeholder text -->
+
+    <string name="connect">Connect</string>
+    <string name="discover">Discover</string>
+    <string name="register">Register</string>
+    <string name="send">Send</string>
+
+
+    <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>
