@@ -9,6 +9,7 @@
         <item>Task List</item>
         <item>Create event</item>
         <item>Create week</item>
+        <item>Compare</item>
     </string-array>
     <string name="menu">Меню</string>
     <string name="first_screen">Calendar</string>

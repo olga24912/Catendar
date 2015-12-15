@@ -1,18 +1,42 @@
+/*
+ * Copyright (C) 2012 The Android Open Source Project
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ *
+ * 2015 -- changed by Elizaveta Tretyakova, elizabet.tretyakova@gmail.com
+ */
+
+
 package ru.mit.au.spb.olga.catendar;
 
+import android.annotation.TargetApi;
 import android.app.Activity;
 import android.net.Uri;
+import android.net.nsd.NsdServiceInfo;
+import android.os.Build;
 import android.os.Bundle;
-import android.app.Fragment;
 import android.os.Message;
+import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
 import android.widget.TextView;
 import android.os.Handler;
 
 
-public class CompareFragment extends Fragment {
+public class CompareFragment extends Fragment implements View.OnClickListener {
 
     NsdHelper mNsdHelper;
 
@@ -32,13 +56,13 @@ public class CompareFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mStatusView = (TextView) getView().findViewById(R.id.status);
+        mStatusView = (TextView) getActivity().findViewById(R.id.status);
 
         mUpdateHandler = new Handler() {
             @Override
             public void handleMessage(Message msg) {
                 String gotMessageToCompare = msg.getData().getString("msg");
-//                compare(gotMessageToCompare);
+                compare(gotMessageToCompare);
             }
         };
 
@@ -50,12 +74,85 @@ public class CompareFragment extends Fragment {
         return inflater.inflate(R.layout.fragment_compare, container, false);
     }
 
-    // TODO: Rename method, update argument and hook method into UI event
-    public void onButtonPressed(Uri uri) {
-//        if (mListener != null) {
-//            mListener.onFragmentInteraction(uri);
-//        }
+    public void clickAdvertise(View v) {
+        // Register service
+        if(mConnection.getLocalPort() > -1) {
+            mNsdHelper.registerService(mConnection.getLocalPort());
+        } else {
+            Log.d(TAG, "ServerSocket isn't bound.");
+        }
     }
 
+    public void clickDiscover(View v) {
+        mNsdHelper.discoverServices();
+    }
 
+    @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
+    public void clickConnect(View v) {
+        NsdServiceInfo service = mNsdHelper.getChosenServiceInfo();
+        if (service != null) {
+            Log.d(TAG, "Connecting.");
+            mConnection.connectToServer(service.getHost(),
+                    service.getPort());
+        } else {
+            Log.d(TAG, "No service to connect to!");
+        }
+    }
+
+    public void clickSend(View v) {
+        EditText messageView = (EditText) getView().findViewById(R.id.chatInput);
+        if (messageView != null) {
+            String messageString = messageView.getText().toString();
+            if (!messageString.isEmpty()) {
+                mConnection.sendMessage(messageString);
+            }
+            messageView.setText("");
+        }
+    }
+
+    public void compare(String line) {
+    //TODO: compare with actual value
+        mStatusView.append("\n" + line);
+    }
+
+    @Override
+    public void onPause() {
+        if (mNsdHelper != null) {
+            mNsdHelper.stopDiscovery();
+        }
+        super.onPause();
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        if (mNsdHelper != null) {
+            mNsdHelper.discoverServices();
+        }
+    }
+
+    @Override
+    public void onDestroy() {
+        mNsdHelper.tearDown();
+        mConnection.tearDown();
+        super.onDestroy();
+    }
+
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.advertise_btn:
+                clickAdvertise(v);
+                break;
+            case R.id.discover_btn:
+                clickDiscover(v);
+                break;
+            case R.id.connect_btn:
+                clickConnect(v);
+                break;
+            case R.id.send_btn:
+                clickSend(v);
+                break;
+        }
+    }
 }
