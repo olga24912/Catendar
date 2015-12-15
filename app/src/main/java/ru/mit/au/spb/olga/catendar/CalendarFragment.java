@@ -29,6 +29,8 @@ public class CalendarFragment extends Fragment {
     public static TextView[][] table = new TextView[HOURS_PER_DAY][DAYS_PER_WEEK];
     private static Week sampleWeek = new Week();
 
+    private static Week currentWeek = null;
+
     public CalendarFragment() {
         // Required empty public constructor
     }
@@ -172,4 +174,7 @@ public class CalendarFragment extends Fragment {
         return horizontalScroll;
     }
 
+    private void getWeekDateBase(Integer id) {
+
+    }
 }

@@ -9,6 +9,7 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.ExpandableListView;
 import android.widget.Switch;
@@ -20,7 +21,7 @@ import java.util.TreeMap;
 /**
  * Created by olga on 12.12.15.
  */
-public class TaskListFragment extends Fragment implements CompoundButton.OnCheckedChangeListener {
+public class TaskListFragment extends Fragment implements CompoundButton.OnCheckedChangeListener, View.OnClickListener {
     private DatabaseHelper mDatabaseHelper;
     private SQLiteDatabase mSQLiteDatabase;
 
@@ -37,34 +38,33 @@ public class TaskListFragment extends Fragment implements CompoundButton.OnCheck
 
         listOfEvent = (ExpandableListView) rootView.findViewById(R.id.expandableListView);
 
-        //mDatabaseHelper = new DatabaseHelper(getContext(), "mydatabase8.db", null, 1);
-        //mSQLiteDatabase = mDatabaseHelper.getWritableDatabase();
+        mDatabaseHelper = new DatabaseHelper(getContext(), "mydatabase8.db", null, 1);
+        mSQLiteDatabase = mDatabaseHelper.getWritableDatabase();
 
-        //synchronizedWithDateBase();
-        //drawTaskList();
+        synchronizedWithDateBase();
+        drawTaskList();
 
         Switch mSwitch = (Switch)rootView.findViewById(R.id.switchShowAll);
         if (mSwitch != null) {
             mSwitch.setOnCheckedChangeListener(this);
         }
 
+        Button onCreateTask = (Button) rootView.findViewById(R.id.add_task);
+
+        onCreateTask.setOnClickListener((View.OnClickListener) this);
         return rootView;
     }
 
     @Override
     public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
         showAll = isChecked;
-        //synchronizedWithDateBase();
-        //drawTaskList();
-    }
-
-    public void onCancelTaskListClick(View view) {
-        getActivity().setResult(getActivity().RESULT_CANCELED);
-        getActivity().finish();
+        synchronizedWithDateBase();
+        drawTaskList();
     }
 
     static final private int CREATE_TASK = 0;
-    public void onCreateTaskClick(View view) {
+    @Override
+    public void onClick(View view) {
         Intent intent = new Intent(getActivity(), CreateTaskActivity.class);
         startActivityForResult(intent, CREATE_TASK);
     }
@@ -74,14 +74,14 @@ public class TaskListFragment extends Fragment implements CompoundButton.OnCheck
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == CREATE_TASK) {
             if (resultCode == getActivity().RESULT_OK) {
-     //           synchronizedWithDateBase();
-     //           drawTaskList();
+                synchronizedWithDateBase();
+                drawTaskList();
             }
         }
     }
 
 
-    /*private void drawTaskList() {
+    private void drawTaskList() {
         ArrayList<Event> eventListWithTasks = new ArrayList<>();
         for (Event ev : eventList) {
             Event newEvent = new Event();
@@ -103,10 +103,10 @@ public class TaskListFragment extends Fragment implements CompoundButton.OnCheck
             adapter = new ExpListAdapter(getActivity().getApplicationContext(), eventList, mSQLiteDatabase);
         }
         listOfEvent.setAdapter(adapter);
-    }*/
+    }
 
 
-    /*private void synchronizedWithDateBase() {
+    private void synchronizedWithDateBase() {
         Map<Integer, Event> giveEventById = new TreeMap<>();
 
         Cursor cursor = mSQLiteDatabase.query("events", new String[]{DatabaseHelper._ID, DatabaseHelper.EVENT_NAME,
@@ -150,5 +150,5 @@ public class TaskListFragment extends Fragment implements CompoundButton.OnCheck
         for (Event event: giveEventById.values()) {
             eventList.add(event);
         }
-    }*/
+    }
 }

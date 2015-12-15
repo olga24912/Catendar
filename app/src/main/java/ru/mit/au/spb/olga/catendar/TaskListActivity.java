@@ -123,10 +123,10 @@ public class TaskListActivity extends AppCompatActivity implements CompoundButto
     }
 
     static final private int CREATE_TASK = 0;
-    public void onCreateTaskClick(View view) {
+    /*public void onCreateTaskClick(View view) {
         Intent intent = new Intent(TaskListActivity.this, CreateTaskActivity.class);
         startActivityForResult(intent, CREATE_TASK);
-    }
+    }*/
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
