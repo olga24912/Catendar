@@ -1,5 +1,6 @@
 package ru.mit.au.spb.olga.catendar;
 
+import android.app.FragmentManager;
 import android.content.Intent;
 import android.os.Bundle;
 
@@ -9,7 +10,6 @@ import android.content.res.Configuration;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarActivity;
-import android.util.Log;
 
 import android.view.Menu;
 import android.view.MenuItem;
@@ -37,10 +37,10 @@ public class MainActivity extends ActionBarActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        if(savedInstanceState == null) {
+        /*if(savedInstanceState == null) {
             CalendarFragment calendar = new CalendarFragment();
             getSupportFragmentManager().beginTransaction().add(android.R.id.content, calendar).commit();
-        }
+        }*/
 
         myTitle =  getTitle();
         myDrawerTitle = getResources().getString(R.string.menu);
@@ -95,13 +95,11 @@ public class MainActivity extends ActionBarActivity {
 
     private void displayView(int position) {
         // update the main content by replacing fragments
-        android.app.Fragment fragment = null;
+        Fragment fragment = null;
         Intent intent;
         switch (position) {
             case 0:
-                intent = new Intent(MainActivity.this, CalendarActivity.class);
-
-                startActivity(intent);
+                fragment = new CalendarFragment();
                 break;
             case 1:
                 fragment = new TaskListFragment();
@@ -115,9 +113,7 @@ public class MainActivity extends ActionBarActivity {
                 break;
         }
         if (fragment != null) {
-            android.app.FragmentManager fragmentManager = getFragmentManager();
-            fragmentManager.beginTransaction()
-                    .replace(R.id.content_frame, fragment).commit();
+            getSupportFragmentManager().beginTransaction().replace(R.id.content_frame, fragment).commit();
         }
 
         // update selected item and title, then close the drawer
