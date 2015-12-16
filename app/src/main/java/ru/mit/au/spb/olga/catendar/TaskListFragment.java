@@ -1,11 +1,14 @@
 package ru.mit.au.spb.olga.catendar;
 
+import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
+import android.os.Vibrator;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v7.app.AlertDialog;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -30,6 +33,8 @@ public class TaskListFragment extends Fragment implements CompoundButton.OnCheck
 
     private boolean showAll;
 
+    private ShakeListener mShaker;
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -52,7 +57,27 @@ public class TaskListFragment extends Fragment implements CompoundButton.OnCheck
         Button onCreateTask = (Button) rootView.findViewById(R.id.add_task);
 
         onCreateTask.setOnClickListener((View.OnClickListener) this);
+
+        mShaker = new ShakeListener(getActivity());
+        mShaker.setOnShakeListener(new ShakeListener.OnShakeListener() {
+            public void onShake() {
+                synchronizedWithDateBase();
+                drawTaskList();
+            }
+        });
         return rootView;
+    }
+    @Override
+    public void onResume()
+    {
+        mShaker.resume();
+        super.onResume();
+    }
+    @Override
+    public void onPause()
+    {
+        mShaker.pause();
+        super.onPause();
     }
 
     @Override
