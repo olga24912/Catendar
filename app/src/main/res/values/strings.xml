@@ -10,7 +10,7 @@
         <item>Create event</item>
         <item>Create week</item>
     </string-array>
-    <string name="menu">Меню</string>
+    <string name="menu">Menu</string>
     <string name="first_screen">Calendar</string>
     <string name="second_screen">Task List</string>
     <string name="third_screen">Create event</string>
@@ -49,6 +49,19 @@
     <string name="register">Register</string>
     <string name="send">Send</string>
 
+    <string name="template_name">Template name</string>
+    <string name="add_event_extra">Add event</string>
+
+    <string name="sunday">Sun</string>
+    <string name="monday">Mon</string>
+    <string name="tuesday">Tues</string>
+    <string name="wednesday">Wed</string>
+    <string name="thursday">Thurs</string>
+    <string name="friday">Fri</string>
+    <string name="saturday">Sat</string>
+
+    <string name="start_time">Start(hh:mm)</string>
+    <string name="finish_time">Finish(hh:mm)</string>
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>

@@ -45,14 +45,14 @@ public class Event {
         return eventTasks;
     }
 
-    public void setStartDate(int msTime) {
+    public void setStartDate(int sTime) {
         eventStartDate = new GregorianCalendar();
-        eventStartDate.setTimeInMillis(msTime);
+        eventStartDate.setTimeInMillis(sTime*1000);
     }
 
-    public void setEndDate(int msTime) {
+    public void setEndDate(int sTime) {
         eventEndDate = new GregorianCalendar();
-        eventEndDate.setTimeInMillis(msTime);
+        eventEndDate.setTimeInMillis(sTime*1000);
     }
 
     public void setStartDate(int year, int month, int day, int hours, int minutes) {

@@ -11,7 +11,7 @@ import android.util.Log;
  * Created by olga on 31.10.15.
  */
 public class DatabaseHelper extends SQLiteOpenHelper implements BaseColumns {
-    private static final String DATABASE_NAME = "mydatabase8.db";
+    private static final String DATABASE_NAME = "mydatabase9.db";
     private static final int DATABASE_VERSION = 1;
 
     public static final String DATABASE_TABLE_EVENT = "events";
@@ -64,8 +64,8 @@ public class DatabaseHelper extends SQLiteOpenHelper implements BaseColumns {
     private static final String DATABASE_CREATE_TEMPLATES_IN_WEEK_SCRIPT = "create table " +
             DATABASE_TABLE_TEMPLATES_IN_WEEKS + " ("
             + BaseColumns._ID + " integer primary key autoincrement, "
-            + TEMPLATES_IN_WEEKS_TEMPLATE_ID + " integer, "
-            + TEMPLATES_IN_WEEKS_WEEK_ID + "integer);";
+            + TEMPLATES_IN_WEEKS_WEEK_ID + " integer, "
+            + TEMPLATES_IN_WEEKS_TEMPLATE_ID + " integer);";
 
     DatabaseHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);

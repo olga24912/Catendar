@@ -35,7 +35,7 @@ public class CreateWeekActivity extends AppCompatActivity {
 
         setContentView(R.layout.activity_create_week);
 
-        mDatabaseHelper = new DatabaseHelper(this, "mydatabase8.db", null, 1);
+        mDatabaseHelper = new DatabaseHelper(this, "mydatabase9.db", null, 1);
         mSQLiteDatabase = mDatabaseHelper.getWritableDatabase();
 
         weekDate = (EditText)findViewById(R.id.write_date);
