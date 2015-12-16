@@ -43,7 +43,7 @@ public class AddEventForTemplateActivity  extends AppCompatActivity {
         eventStartTime = (EditText)findViewById(R.id.editStartTime);
         eventEndTime = (EditText)findViewById(R.id.editFinishTime);
 
-        mDatabaseHelper = new DatabaseHelper(this, "mydatabase9.db", null, 1);
+        mDatabaseHelper = new DatabaseHelper(this, "mydatabase10.db", null, 1);
         mSQLiteDatabase = mDatabaseHelper.getWritableDatabase();
 
         RadioGroup radiogroup = (RadioGroup) findViewById(R.id.radioGroup2);

@@ -21,13 +21,14 @@ import android.widget.TableRow;
 import android.widget.TextView;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.GregorianCalendar;
 
 
 public class CalendarFragment extends Fragment {
     public static final int HOURS_PER_DAY = 24;
     public static final int DAYS_PER_WEEK = 7;
-    public static final String[] days = {"Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"};
+    public static final String[] days = {"Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"};
 
     public static TextView[][] table = new TextView[HOURS_PER_DAY][DAYS_PER_WEEK];
     private static Week sampleWeek = new Week();
@@ -48,7 +49,7 @@ public class CalendarFragment extends Fragment {
                              Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        mDatabaseHelper = new DatabaseHelper(getContext(), "mydatabase9.db", null, 1);
+        mDatabaseHelper = new DatabaseHelper(getContext(), "mydatabase10.db", null, 1);
         mSQLiteDatabase = mDatabaseHelper.getWritableDatabase();
 
         //setCalendarView()
@@ -61,8 +62,9 @@ public class CalendarFragment extends Fragment {
 
 
         Week tmpWeek = new Week(currentDate);
-        View result = setCalendarView();
         getWeekDateBaseByDate(tmpWeek.getTimeInMS());
+
+        View result = setCalendarView();
         if (currentWeek != null) {
             displaySampleTemplate(currentWeek);
         }
@@ -102,7 +104,7 @@ public class CalendarFragment extends Fragment {
             sampleWeek.addEvent(singleEvent);
         }
 */
-        for(Template template: w.getTemplates()) {
+        for(Template template : w.getTemplates()) {
             displayTemplate(template);
         }
 
@@ -157,10 +159,15 @@ public class CalendarFragment extends Fragment {
                 TableRow.LayoutParams.WRAP_CONTENT);
         topRow.setLayoutParams(rowParams);
         topRow.addView(new TextView(context), rowParams);
+        GregorianCalendar dayDate = new GregorianCalendar();
+        if (currentWeek != null) {
+            dayDate = currentWeek.getStartDate();
+        }
         for(int i = 0; i < DAYS_PER_WEEK; i++) {
             TextView curDay = new TextView(context);
-            curDay.setText(days[i]);
+            curDay.setText(days[i] + "\n" + Integer.toString(dayDate.get(Calendar.DAY_OF_MONTH)));
             topRow.addView(curDay, rowParams);
+            dayDate.add(Calendar.DAY_OF_MONTH, 1);
         }
         calendar.addView(topRow, calendarParams);
         for(int i = 0; i < HOURS_PER_DAY; i++) {

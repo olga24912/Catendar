@@ -9,7 +9,7 @@ public class Week /*implements Parcelable*/ {
     private GregorianCalendar startDate;
     private ArrayList<Template> templates;//HashMap or index 0 for singleEvents
     private UUID id;
-    private static final int WEEK_START = Calendar.MONDAY;
+    private static final int WEEK_START = Calendar.SUNDAY;
     private static final int SINGLE_EVENTS_INDEX = 0;
 
     public static void toWeekStart(GregorianCalendar g) {

@@ -36,7 +36,7 @@ public class CreateEventActivity extends AppCompatActivity {
         eventStartTime = (EditText)findViewById(R.id.editTimeStartEvent);
         eventEndTime = (EditText)findViewById(R.id.editTimeEndEvent);
 
-        mDatabaseHelper = new DatabaseHelper(this, "mydatabase9.db", null, 1);
+        mDatabaseHelper = new DatabaseHelper(this, "mydatabase10.db", null, 1);
         mSQLiteDatabase = mDatabaseHelper.getWritableDatabase();
     }
 

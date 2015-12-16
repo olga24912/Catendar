@@ -12,7 +12,7 @@
         android:layout_alignParentTop="true"
         android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true"
-        android:text="@string/put_date" />
+        android:hint="@string/put_date" />
 
     <RadioGroup
         android:layout_width="match_parent"
