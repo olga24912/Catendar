@@ -1,6 +1,7 @@
 package ru.mit.au.spb.olga.catendar;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.GregorianCalendar;
 
 public class Event {
@@ -9,6 +10,8 @@ public class Event {
     private GregorianCalendar eventStartDate;
     private GregorianCalendar eventEndDate;
     private String startDate;
+
+    public static final String[] days = {"Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"};
 
     public Event() {
         eventTasks = new ArrayList<>();
@@ -23,6 +26,13 @@ public class Event {
         eventStartDate = (start != null) ? start : new GregorianCalendar();
         startDate = eventStartDate.getTime().toString();
         eventEndDate = (end != null) ? end : new GregorianCalendar();
+    }
+
+    public String getDayOfWeekAndTime() {
+        String res = "(" + days[eventStartDate.get(Calendar.DAY_OF_WEEK)] + " "
+                + eventStartDate.get(Calendar.HOUR_OF_DAY) + " - "
+                + eventEndDate.get(Calendar.MINUTE) + ")";
+        return res;
     }
 
     public void setText(String newText) {
@@ -47,12 +57,12 @@ public class Event {
 
     public void setStartDate(int sTime) {
         eventStartDate = new GregorianCalendar();
-        eventStartDate.setTimeInMillis(sTime*1000);
+        eventStartDate.setTimeInMillis((long)sTime*1000);
     }
 
     public void setEndDate(int sTime) {
         eventEndDate = new GregorianCalendar();
-        eventEndDate.setTimeInMillis(sTime*1000);
+        eventEndDate.setTimeInMillis((long)sTime*1000);
     }
 
     public void setStartDate(int year, int month, int day, int hours, int minutes) {

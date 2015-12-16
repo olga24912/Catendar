@@ -114,6 +114,11 @@ public class MainActivity extends ActionBarActivity {
 
                 startActivity(intent);
                 break;
+            case 4:
+                intent = new Intent(MainActivity.this, CreateTemplateActivity.class);
+
+                startActivity(intent);
+                break;
             default:
                 break;
         }

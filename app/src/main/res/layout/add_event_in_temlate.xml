@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent" android:layout_height="match_parent">
+
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/editEventTextForTemplate"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_toLeftOf="@+id/radioGroup2"
+        android:layout_toStartOf="@+id/radioGroup2"
+        android:hint="@string/name_of_event_in_create_event"/>
+
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:inputType="time"
+        android:ems="10"
+        android:id="@+id/editStartTime"
+        android:layout_below="@+id/editEventTextForTemplate"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:hint="@string/start_time"/>
+
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:inputType="time"
+        android:ems="10"
+        android:id="@+id/editFinishTime"
+        android:layout_below="@+id/editStartTime"
+        android:layout_alignRight="@+id/editStartTime"
+        android:layout_alignEnd="@+id/editStartTime"
+        android:hint="@string/finish_time"/>
+
+    <RadioGroup
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_alignParentTop="true"
+        android:layout_toEndOf="@+id/editStartTime"
+        android:layout_toRightOf="@+id/editStartTime"
+        android:id="@+id/radioGroup2">
+
+        <RadioButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/sunday"
+            android:id="@+id/radioButtonSunday" />
+
+        <RadioButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/monday"
+            android:id="@+id/radioButtonMonday" />
+
+        <RadioButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/tuesday"
+            android:id="@+id/radioButtonTuesday" />
+
+        <RadioButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/wednesday"
+            android:id="@+id/radioButtonWednesday" />
+
+        <RadioButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/thursday"
+            android:id="@+id/radioButtonThursday" />
+
+        <RadioButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/friday"
+            android:id="@+id/radioButtonFriday" />
+
+        <RadioButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/saturday"
+            android:id="@+id/radioButtonSaturday" />
+
+    </RadioGroup>
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/cancel_button"
+        android:id="@+id/cancelButtonInAddEvent"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:onClick="onCancelClick"/>
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/ok_button"
+        android:id="@+id/ok_button_in_add_event"
+        android:layout_alignParentBottom="true"
+        android:layout_toLeftOf="@+id/radioGroup2"
+        android:layout_toStartOf="@+id/radioGroup2"
+        android:onClick="onOkClick"/>
+
+</RelativeLayout>

@@ -33,6 +33,14 @@
             android:name=".CreateWeekActivity"
             android:label="Create week">
         </activity>
+        <activity
+            android:name=".CreateTemplateActivity"
+            android:label="Create template">
+        </activity>
+        <activity
+            android:name=".AddEventForTemplateActivity"
+            android:label="Create event">
+        </activity>
     </application>
 
 </manifest>
