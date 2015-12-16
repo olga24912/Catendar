@@ -269,8 +269,8 @@ public class CalendarFragment extends Fragment {
                 null, null, null);
 
         while (cursorTemplateAndWeek.moveToNext()) {
-            int weekId = cursorWeek.getInt(cursorTemplateAndWeek.getColumnIndex(DatabaseHelper.TEMPLATES_IN_WEEKS_WEEK_ID));
-            int templateId = cursorTemplateAndWeek.getInt(cursorTemplateAndWeek.getColumnIndex(DatabaseHelper.DATABASE_TABLE_TEMPLATES_IN_WEEKS));
+            int weekId = cursorTemplateAndWeek.getInt(cursorTemplateAndWeek.getColumnIndex(DatabaseHelper.TEMPLATES_IN_WEEKS_WEEK_ID));
+            int templateId = cursorTemplateAndWeek.getInt(cursorTemplateAndWeek.getColumnIndex(DatabaseHelper.TEMPLATES_IN_WEEKS_TEMPLATE_ID));
 
             if (weekId == id) {
                 templatesInWeek.add(templateId);
