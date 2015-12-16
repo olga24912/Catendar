@@ -1,13 +1,21 @@
 package ru.mit.au.spb.olga.catendar;
 
+import android.app.DatePickerDialog;
+import android.app.Dialog;
+import android.app.TimePickerDialog;
 import android.content.ContentValues;
 import android.content.Intent;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
+import android.widget.Button;
+import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.TextView;
+import android.widget.TimePicker;
 
+import java.util.Calendar;
 import java.util.GregorianCalendar;
 
 /**
@@ -18,12 +26,26 @@ public class CreateEventActivity extends AppCompatActivity {
     private SQLiteDatabase mSQLiteDatabase;
 
     private EditText eventText;
-    private EditText eventStartDate;
-    private EditText eventEndDate;
-    private EditText eventStartTime;
-    private EditText eventEndTime;
+
+    int DIALOG_DATE = 1;
+    private DatePicker pickerDate;
+
+    int DIALOG_TIME = 2;
+    int hour = 14;
+    int minute = 00;
+
+    TextView tvInfo;
+    TextView tvInfoStartTime;
+
+    private int year;
+    private int month;
+    private int day;
 
     public final static String EVENT_NAME = "ru.mit.au.spb.olga.catendar.eventName";
+
+    public CreateEventActivity() {
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -31,141 +53,70 @@ public class CreateEventActivity extends AppCompatActivity {
         setContentView(R.layout.activity_create_event);
 
         eventText = (EditText)findViewById(R.id.editEventText);
-        eventStartDate = (EditText)findViewById(R.id.editDateStartEvent);
-        eventEndDate = (EditText)findViewById(R.id.editDateEndEvent);
-        eventStartTime = (EditText)findViewById(R.id.editTimeStartEvent);
-        eventEndTime = (EditText)findViewById(R.id.editTimeEndEvent);
+
+        tvInfo = (TextView)findViewById(R.id.StartDate);
+        tvInfoStartTime = (TextView)findViewById(R.id.StartTime);
 
         mDatabaseHelper = new DatabaseHelper(this, "mydatabase10.db", null, 1);
         mSQLiteDatabase = mDatabaseHelper.getWritableDatabase();
+
+        Calendar today = Calendar.getInstance();
+        year = today.get(Calendar.YEAR);
+        month = today.get(Calendar.MONTH);
+        day = today.get(Calendar.DAY_OF_MONTH);
+    }
+
+    public void onSetDateClick(View view) {
+        showDialog(DIALOG_DATE);
+    }
+
+    public void onSetTimeClick(View view) {
+        showDialog(DIALOG_TIME);
     }
 
 
-    Boolean notCorrectMonth(String month) {
-        try {
-            int vl = Integer.parseInt(month);
-            if (vl < 1 || vl > 12) {
-                return true;
-            }
-        } catch (Exception ignored) {
-            return true;
+    protected Dialog onCreateDialog(int id) {
+        if (id == DIALOG_DATE) {
+            DatePickerDialog tpd = new DatePickerDialog(this, (DatePickerDialog.OnDateSetListener) myCallBackDate, year, month, day);
+            return tpd;
+        } else if (id == DIALOG_TIME) {
+            TimePickerDialog tpd = new TimePickerDialog(this, (TimePickerDialog.OnTimeSetListener) myCallBackTime, hour, minute, true);
+            return tpd;
         }
-        return false;
+        return super.onCreateDialog(id);
     }
 
-    Boolean notCorrectYear(String year) {
-        try {
-            int vl = Integer.parseInt(year);
-            if (vl < 0 || vl > 9999) {
-                return true;
-            }
-        } catch (Exception ignored) {
-            return true;
+    DatePickerDialog.OnDateSetListener myCallBackDate = new DatePickerDialog.OnDateSetListener() {
+
+        public void onDateSet(DatePicker view, int _year, int monthOfYear,
+                              int dayOfMonth) {
+            year = _year;
+            month = monthOfYear;
+            day = dayOfMonth;
+            tvInfo.setText("Event day is " + day + "/" + month + "/" + year);
         }
-        return false;
-    }
+    };
 
-    Boolean notCorrectDay(String day) {
-        try {
-            int vl = Integer.parseInt(day);
-            if (vl < 1 || vl > 31) {
-                return true;
-            }
-        } catch (Exception ignored) {
-            return true;
+    TimePickerDialog.OnTimeSetListener myCallBackTime = new TimePickerDialog.OnTimeSetListener() {
+        public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
+            hour = hourOfDay;
+            minute = minute;
+            tvInfoStartTime.setText("Start time is " + hour + " hours " + minute + " minutes");
         }
-        return false;
-    }
-
-    Boolean notCorrectHours(String hours) {
-        try {
-            int vl = Integer.parseInt(hours);
-            if (vl < 0 || vl > 23) {
-                return true;
-            }
-        } catch (Exception ignored) {
-            return true;
-        }
-        return false;
-    }
-
-    Boolean notCorrectMinute(String minute) {
-        try {
-            int vl = Integer.parseInt(minute);
-            if (vl < 0 || vl > 59) {
-                return true;
-            }
-        } catch (Exception ignored) {
-            return true;
-        }
-        return false;
-    }
-
-
-    private int yearFromDate (String date) {
-        String[] ddmmyyyy = date.split("\\.");
-        if (ddmmyyyy.length < 3 || notCorrectYear(ddmmyyyy[2])) {
-            return 9999;
-        }
-        return Integer.parseInt(ddmmyyyy[2]);
-    }
-
-    private int monthFromDate (String date) {
-        String[] ddmmyyyy = date.split("\\.");
-        if (ddmmyyyy.length < 2 || notCorrectMonth(ddmmyyyy[1])){
-            return 01;
-        }
-        return Integer.parseInt(ddmmyyyy[1]);
-    }
-
-    private int dayFromDate (String date) {
-        String[] ddmmyyyy = date.split("\\.");
-        if (ddmmyyyy.length < 1 || notCorrectDay(ddmmyyyy[0])) {
-            return 01;
-        }
-        return Integer.parseInt(ddmmyyyy[0]);
-    }
-
-    private int  hourFromTime (String time) {
-        String[] hhmm = time.split(":");
-        if (hhmm.length < 1 || notCorrectHours(hhmm[0])) {
-            return 0;
-        }
-        return Integer.parseInt(hhmm[0]);
-    }
-
-    private int minuteFromTime (String time) {
-        String[] hhmm = time.split(":");
-        if (hhmm.length < 2 || notCorrectMinute(hhmm[1])) {
-            return 0;
-        }
-        return Integer.parseInt(hhmm[1]);
-    }
+    };
 
     public void onOkClick(View view) {
         Intent answerIntent = new Intent();
-
-        String dateStart = String.valueOf(eventStartDate.getText());
-        String dateEnd = String.valueOf(eventEndDate.getText());
-        String timeStart = String.valueOf(eventStartTime.getText());
-        String timeEnd = String.valueOf(eventEndTime.getText());
 
         Event createEvent = new Event();
         createEvent.setText(String.valueOf(eventText.getText()));
 
         ContentValues newValues = new ContentValues();
 
-        GregorianCalendar startCal = new GregorianCalendar(yearFromDate(dateStart),
-                monthFromDate(dateStart),
-                dayFromDate(dateStart),
-                hourFromTime(timeStart),
-                minuteFromTime(timeStart));
+        GregorianCalendar startCal = new GregorianCalendar(year, month, day, hour, minute);
 
-        GregorianCalendar endCal = new GregorianCalendar(yearFromDate(dateEnd),
-                monthFromDate(dateEnd),
-                dayFromDate(dateEnd),
-                hourFromTime(timeEnd),
-                minuteFromTime(timeEnd));
+        GregorianCalendar endCal = startCal;
+        endCal.add(Calendar.HOUR_OF_DAY, 1);
 
         newValues.put(DatabaseHelper.EVENT_NAME, String.valueOf(createEvent.getText()));
         newValues.put(DatabaseHelper.EVENT_PARENT_TEMPLATE, 0);
