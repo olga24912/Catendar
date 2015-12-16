@@ -46,7 +46,7 @@ public class AddEventForTemplateActivity  extends AppCompatActivity {
         mDatabaseHelper = new DatabaseHelper(this, "mydatabase9.db", null, 1);
         mSQLiteDatabase = mDatabaseHelper.getWritableDatabase();
 
-        RadioGroup radiogroup = (RadioGroup) findViewById(R.id.radioGroup);
+        RadioGroup radiogroup = (RadioGroup) findViewById(R.id.radioGroup2);
 
         radiogroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override

@@ -16,6 +16,7 @@ import android.widget.Switch;
 
 import java.util.ArrayList;
 import java.util.Map;
+import java.util.Objects;
 import java.util.TreeMap;
 
 /**
@@ -30,7 +31,7 @@ public class CreateTemplateActivity extends AppCompatActivity {
 
     private EditText templateName;
 
-    private int templateId;
+    private int templateId = -1;
 
     private String newTemplate = "unknownTemplate179";
 
@@ -109,7 +110,7 @@ public class CreateTemplateActivity extends AppCompatActivity {
             int idTmp = cursor.getInt(cursor.getColumnIndex(DatabaseHelper._ID));;
             String name = cursor.getString(cursor.getColumnIndex(DatabaseHelper.TEMPLATE_NAME));
 
-            if (name == newTemplate) {
+            if (name.equals(newTemplate)) {
                 templateId = idTmp;
             }
         }

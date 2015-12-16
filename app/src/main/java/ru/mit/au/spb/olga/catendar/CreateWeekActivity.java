@@ -124,24 +124,26 @@ public class CreateWeekActivity extends AppCompatActivity {
                 dayFromDate(date));
 
         Week nw = new Week(gc);
-        long msTime = nw.getTimeInMS();
+        long sTime = nw.getTimeInMS();
 
-        ContentValues newValues = new ContentValues();
+        if (findIdWithThisTime(sTime) == null) {
+            ContentValues newValues = new ContentValues();
 
-        newValues.put(DatabaseHelper.WEEK_START_DATE, msTime);
+            newValues.put(DatabaseHelper.WEEK_START_DATE, sTime);
 
-        mSQLiteDatabase.insert(DatabaseHelper.DATABASE_TABLE_WEEK, null, newValues);
+            mSQLiteDatabase.insert(DatabaseHelper.DATABASE_TABLE_WEEK, null, newValues);
+        }
 
-        Integer id = findIdWithThisTime(msTime);
+        Integer id = findIdWithThisTime(sTime);
 
         for (int i = 0; i < existsTemplate.size(); i++) {
             if (existsTemplate.get(i).isChecked()) {
                 ContentValues twValues = new ContentValues();
 
-                newValues.put(DatabaseHelper.TEMPLATES_IN_WEEKS_TEMPLATE_ID, templateId.get(i));
-                newValues.put(DatabaseHelper.TEMPLATES_IN_WEEKS_WEEK_ID, id);
+                twValues.put(DatabaseHelper.TEMPLATES_IN_WEEKS_TEMPLATE_ID, templateId.get(i));
+                twValues.put(DatabaseHelper.TEMPLATES_IN_WEEKS_WEEK_ID, id);
 
-                mSQLiteDatabase.insert(DatabaseHelper.DATABASE_TABLE_TEMPLATES_IN_WEEKS, null, newValues);
+                mSQLiteDatabase.insert(DatabaseHelper.DATABASE_TABLE_TEMPLATES_IN_WEEKS, null, twValues);
             }
         }
 
