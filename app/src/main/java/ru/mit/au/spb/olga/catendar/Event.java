@@ -5,11 +5,11 @@ import java.util.Calendar;
 import java.util.GregorianCalendar;
 
 public class Event {
-    private ArrayList<Task> eventTasks;
+    private transient ArrayList<Task> eventTasks;
     private String eventText;
     private GregorianCalendar eventStartDate;
     private GregorianCalendar eventEndDate;
-    private String startDate;
+    private long startDate;
 
     public static final String[] days = {"Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"};
 
@@ -24,7 +24,7 @@ public class Event {
     public Event(int numTasks, GregorianCalendar start, GregorianCalendar end) {
         eventTasks = new ArrayList<Task>(numTasks);
         eventStartDate = (start != null) ? start : new GregorianCalendar();
-        startDate = eventStartDate.getTime().toString();
+        startDate = eventStartDate.getTimeInMillis();
         eventEndDate = (end != null) ? end : new GregorianCalendar();
     }
 

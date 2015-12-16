@@ -5,7 +5,6 @@ import java.util.UUID;
 
 public class Template {
     private ArrayList<Event> events;
-    private UUID id;
     private String name;
 
     public Template(String newName) {
@@ -15,7 +14,6 @@ public class Template {
 
     public Template(String newName, ArrayList<Event> newEvents) {
         name = newName;
-        id = UUID.randomUUID();
         events = new ArrayList<>(newEvents);
     }
 

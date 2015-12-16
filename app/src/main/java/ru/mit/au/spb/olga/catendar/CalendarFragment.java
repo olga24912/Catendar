@@ -30,8 +30,6 @@ public class CalendarFragment extends Fragment {
     public static final String[] days = {"Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"};
 
     public static TextView[][] table = new TextView[HOURS_PER_DAY][DAYS_PER_WEEK];
-    private static Week sampleWeek = new Week();
-
     private static Week currentWeek = null;
 
     private DatabaseHelper mDatabaseHelper;
@@ -72,7 +70,7 @@ public class CalendarFragment extends Fragment {
 
     }
 
-    private void displaySampleTemplate(Week w) {
+    public void displaySampleTemplate(Week w) {
         //FIXME: just for the demo
 /*
         {

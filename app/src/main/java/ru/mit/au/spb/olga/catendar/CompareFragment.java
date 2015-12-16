@@ -27,6 +27,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Message;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -36,15 +37,16 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.os.Handler;
 
+import com.google.gson.Gson;
+
 
 public class CompareFragment extends Fragment {
 
     NsdHelper mNsdHelper;
-
     private TextView mStatusView;
     private Handler mUpdateHandler;
-
     public static final String TAG = "NsdChat";
+    private static Gson gson = new Gson();
 
     ChatConnection mConnection;
 
@@ -63,7 +65,10 @@ public class CompareFragment extends Fragment {
             @Override
             public void handleMessage(Message msg) {
                 String gotMessageToCompare = msg.getData().getString("msg");
-                compare(gotMessageToCompare);
+                Week weekToDisplay = gson.fromJson(gotMessageToCompare, Week.class);
+
+                CalendarFragment calendar = new CalendarFragment();
+                getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.content_frame, calendar).commit();
             }
         };
 
@@ -135,18 +140,19 @@ public class CompareFragment extends Fragment {
     public void clickSend(View v) {
         EditText messageView = (EditText) getView().findViewById(R.id.chatInput);
         if (messageView != null) {
-            String messageString = messageView.getText().toString();
-            if (!messageString.isEmpty()) {
-                mConnection.sendMessage(messageString);
+            String message = gson.toJson(/*week*/);
+            //String message = "hardcoded";
+            if (!message.isEmpty()) {
+                mConnection.sendMessage(message);
             }
             messageView.setText("");
         }
     }
 
-    public void compare(String line) {
-    //TODO: compare with actual value
-        mStatusView.append("\n" + line);
-    }
+//    public void compare(String line) {
+//    //TODO: compare with actual value
+//        mStatusView.append("\n" + line);
+//    }
 
     @Override
     public void onPause() {

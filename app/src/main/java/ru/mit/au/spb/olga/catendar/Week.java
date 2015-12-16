@@ -4,11 +4,12 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.UUID;
+import com.google.gson.*;
 
 public class Week /*implements Parcelable*/ {
-    private GregorianCalendar startDate;
+    private transient GregorianCalendar startDate;
     private ArrayList<Template> templates;//HashMap or index 0 for singleEvents
-    private UUID id;
+
     private static final int WEEK_START = Calendar.MONDAY;
     private static final int SINGLE_EVENTS_INDEX = 0;
 
@@ -33,8 +34,6 @@ public class Week /*implements Parcelable*/ {
 
     public Week (GregorianCalendar startDate) {
         this.startDate = formDate(startDate); //"Captain's Log, Stardate 1512.2. ..."
-
-        id.randomUUID();
 
         templates = new ArrayList<>();
         templates.add(new Template("singleEvents", new ArrayList<Event>()));
