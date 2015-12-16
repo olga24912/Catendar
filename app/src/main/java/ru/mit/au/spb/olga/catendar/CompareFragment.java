@@ -31,12 +31,13 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.os.Handler;
 
 
-public class CompareFragment extends Fragment implements View.OnClickListener {
+public class CompareFragment extends Fragment {
 
     NsdHelper mNsdHelper;
 
@@ -56,7 +57,7 @@ public class CompareFragment extends Fragment implements View.OnClickListener {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mStatusView = (TextView) getActivity().findViewById(R.id.status);
+
 
         mUpdateHandler = new Handler() {
             @Override
@@ -71,7 +72,39 @@ public class CompareFragment extends Fragment implements View.OnClickListener {
         mNsdHelper = new NsdHelper(getActivity());
         mNsdHelper.initializeNsd();
 
-        return inflater.inflate(R.layout.fragment_compare, container, false);
+        View compareView = inflater.inflate(R.layout.fragment_compare, container, false);
+
+        compareView.findViewById(R.id.advertise_btn).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                clickAdvertise(v);
+            }
+        });
+
+        compareView.findViewById(R.id.discover_btn).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                clickDiscover(v);
+            }
+        });
+
+        compareView.findViewById(R.id.connect_btn).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                clickConnect(v);
+            }
+        });
+
+        compareView.findViewById(R.id.send_btn).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                clickSend(v);
+            }
+        });
+
+        mStatusView = (TextView) compareView.findViewById(R.id.status);
+
+        return compareView;
     }
 
     public void clickAdvertise(View v) {
@@ -138,21 +171,4 @@ public class CompareFragment extends Fragment implements View.OnClickListener {
         super.onDestroy();
     }
 
-    @Override
-    public void onClick(View v) {
-        switch (v.getId()) {
-            case R.id.advertise_btn:
-                clickAdvertise(v);
-                break;
-            case R.id.discover_btn:
-                clickDiscover(v);
-                break;
-            case R.id.connect_btn:
-                clickConnect(v);
-                break;
-            case R.id.send_btn:
-                clickSend(v);
-                break;
-        }
-    }
 }
