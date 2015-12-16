@@ -140,8 +140,8 @@ public class CompareFragment extends Fragment {
     public void clickSend(View v) {
         EditText messageView = (EditText) getView().findViewById(R.id.chatInput);
         if (messageView != null) {
-            String message = gson.toJson(/*week*/);
-            //String message = "hardcoded";
+            //String message = gson.toJson(/*week*/);
+            String message = "hardcoded";
             if (!message.isEmpty()) {
                 mConnection.sendMessage(message);
             }
