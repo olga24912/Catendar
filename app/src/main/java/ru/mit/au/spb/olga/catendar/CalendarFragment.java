@@ -1,16 +1,12 @@
 package ru.mit.au.spb.olga.catendar;
 
-import android.app.Activity;
-import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
-import android.net.Uri;
 import android.os.Bundle;
 //import android.app.Fragment;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -62,7 +58,7 @@ public class CalendarFragment extends Fragment {
 
         Week tmpWeek = new Week(currentDate);
         View result = setCalendarView();
-        getWeekDateBaseByDate(tmpWeek.getTimeInMS());
+        getWeekByDate(tmpWeek.getTimeInMS());
         if (currentWeek != null) {
             displaySampleTemplate(currentWeek);
         }
@@ -335,7 +331,7 @@ public class CalendarFragment extends Fragment {
         return null;
     }
 
-    private void getWeekDateBaseByDate (long msTime) {
+    private void getWeekByDate(long msTime) {
         Integer id = findIdWithThisTime(msTime);
         if (id != null) {
             getWeekDateBase(id);

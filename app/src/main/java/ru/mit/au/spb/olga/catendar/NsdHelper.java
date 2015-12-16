@@ -136,6 +136,7 @@ public class NsdHelper {
             
             @Override
             public void onRegistrationFailed(NsdServiceInfo arg0, int arg1) {
+                Log.d(TAG, "Registration failed");
             }
 
             @Override
@@ -178,6 +179,10 @@ public class NsdHelper {
     
     @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
     public void tearDown() {
-        mNsdManager.unregisterService(mRegistrationListener);
+        try {
+            mNsdManager.unregisterService(mRegistrationListener);
+        } catch(IllegalArgumentException e) {
+            Log.d(TAG, "Trying to unregister unregistered registration listener.");
+        }
     }
 }

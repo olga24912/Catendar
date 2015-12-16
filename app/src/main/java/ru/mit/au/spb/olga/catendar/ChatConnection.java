@@ -54,7 +54,9 @@ public class ChatConnection {
 
     public void tearDown() {
         mChatServer.tearDown();
-        mChatClient.tearDown();
+        if(mChatClient != null) {
+            mChatClient.tearDown();
+        }
     }
 
     public void connectToServer(InetAddress address, int port) {
