@@ -119,6 +119,9 @@ public class MainActivity extends ActionBarActivity {
 
                 startActivity(intent);
                 break;
+            case 5:
+                fragment = new CompareFragment();
+                break;
             default:
                 break;
         }
