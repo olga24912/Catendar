@@ -119,6 +119,7 @@ public class CreateTemplateActivity extends AppCompatActivity {
     }
 
     public void onCancelClick(View view) {
+        mSQLiteDatabase.delete(DatabaseHelper.DATABASE_TABLE_TEMPLATE, DatabaseHelper._ID + "=" + templateId, null);
         setResult(RESULT_CANCELED);
         finish();
     }
