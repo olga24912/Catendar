@@ -37,6 +37,8 @@ public class CalendarFragment extends Fragment {
     private DatabaseHelper mDatabaseHelper;
     private SQLiteDatabase mSQLiteDatabase;
 
+    private GregorianCalendar currentDate = new GregorianCalendar();
+
     public CalendarFragment() {
         // Required empty public constructor
     }
@@ -46,25 +48,33 @@ public class CalendarFragment extends Fragment {
                              Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        mDatabaseHelper = new DatabaseHelper(getContext(), "mydatabase8.db", null, 1);
+        mDatabaseHelper = new DatabaseHelper(getContext(), "mydatabase9.db", null, 1);
         mSQLiteDatabase = mDatabaseHelper.getWritableDatabase();
 
-        //setCalendarView();
+        //setCalendarView()
 //        return inflater.inflate(R.layout.fragment_calendar2, container, false);
 //    }
 //
 //    @Override
 //    public void onActivityCreated(Bundle savedInstanceState) {
-//        super.onActivityCreated(savedInstanceState);
+//        super.onActivityCreated(savedInstanceState)
 
-        return setCalendarView();
+
+        Week tmpWeek = new Week(currentDate);
+        View result = setCalendarView();
+        getWeekDateBaseByDate(tmpWeek.getTimeInMS());
+        if (currentWeek != null) {
+            displaySampleTemplate(currentWeek);
+        }
+        return result;
 
         //return inflater.inflate(R.layout.fragment_calendar2, container, false);
 
     }
 
-    private void displaySampleTemplate() {
+    private void displaySampleTemplate(Week w) {
         //FIXME: just for the demo
+/*
         {
             //GregorianCalendar start = Week.formDate();//the day is the first day of a week
             ArrayList<Event> events = new ArrayList<>();
@@ -91,8 +101,8 @@ public class CalendarFragment extends Fragment {
 
             sampleWeek.addEvent(singleEvent);
         }
-
-        for(Template template: sampleWeek.getTemplates()) {
+*/
+        for(Template template: w.getTemplates()) {
             displayTemplate(template);
         }
 
@@ -107,7 +117,8 @@ public class CalendarFragment extends Fragment {
             int hour = e.getStartDate().get(java.util.Calendar.HOUR_OF_DAY);
             int j = (day + (DAYS_PER_WEEK - 1)) % DAYS_PER_WEEK;
             int i = (hour) % HOURS_PER_DAY;
-            table[i][j].setText(name + "\n" + e.getText());
+            String nm2 = e.getText();
+            table[i][j].setText(name + "\n" + nm2);
         }
     }
 
@@ -238,9 +249,9 @@ public class CalendarFragment extends Fragment {
         while (cursorWeek.moveToNext()) {
             int currentId = cursorWeek.getInt(cursorWeek.getColumnIndex(DatabaseHelper._ID));
             if (currentId == id) {
-                int timeInMS = cursorWeek.getInt(cursorWeek.getColumnIndex(DatabaseHelper.WEEK_START_DATE));
+                long timeInMS = cursorWeek.getLong(cursorWeek.getColumnIndex(DatabaseHelper.WEEK_START_DATE));
                 GregorianCalendar currentTime = new GregorianCalendar();
-                currentTime.setTimeInMillis(timeInMS);
+                currentTime.setTimeInMillis(timeInMS*1000 + 1);
                 currentWeek = new Week(currentTime);
             }
         }
@@ -270,6 +281,64 @@ public class CalendarFragment extends Fragment {
 
         for (int i = 0; i < templatesInWeek.size(); i++) {
             currentWeek.addTemplate(getTemplateDateBase(templatesInWeek.get(i)));
+        }
+
+        Cursor cursorEvent = mSQLiteDatabase.query(DatabaseHelper.DATABASE_TABLE_EVENT, new String[]{DatabaseHelper._ID,
+                        DatabaseHelper.EVENT_PARENT_TEMPLATE, DatabaseHelper.EVENT_NAME, DatabaseHelper.EVENT_START_DATE,
+                        DatabaseHelper.EVENT_END_DATE},
+                null, null,
+                null, null, null);
+
+        while (cursorEvent.moveToNext()) {
+            long msTime = cursorEvent.getLong(cursorEvent.getColumnIndex(DatabaseHelper.EVENT_START_DATE));
+            GregorianCalendar currentEvent = new GregorianCalendar();
+            currentEvent.setTimeInMillis(msTime*1000);
+            Week weekForEvent = new Week(currentEvent);
+
+            long weekTimeForEvent = weekForEvent.getTimeInMS();
+
+            GregorianCalendar nc = currentWeek.getStartDate();
+
+            if (weekTimeForEvent == currentWeek.getTimeInMS()) {
+                Event newEvent = new Event();
+                String name = cursorEvent.getString(cursorEvent.getColumnIndex(DatabaseHelper.EVENT_NAME));
+                newEvent.setText(name);
+
+                int startTime = cursorEvent.getInt(cursorEvent.getColumnIndex(DatabaseHelper.EVENT_START_DATE));
+                newEvent.setStartDate(startTime);
+
+                int endTime = cursorEvent.getInt(cursorEvent.getColumnIndex(DatabaseHelper.EVENT_END_DATE));
+                newEvent.setEndDate(endTime);
+                currentWeek.addEvent(newEvent);
+            }
+        }
+        cursorEvent.close();
+
+    }
+
+    private Integer findIdWithThisTime(long ms) {
+        Cursor cursor = mSQLiteDatabase.query(DatabaseHelper.DATABASE_TABLE_WEEK, new String[]{
+                        DatabaseHelper._ID, DatabaseHelper.WEEK_START_DATE
+                },
+                null, null, null,
+                null, null);
+
+        while(cursor.moveToNext()) {
+            int id = cursor.getInt(cursor.getColumnIndex(DatabaseHelper._ID));
+            long time = cursor.getLong(cursor.getColumnIndex(DatabaseHelper.WEEK_START_DATE));
+
+            if (time == ms) {
+                return id;
+            }
+        }
+
+        return null;
+    }
+
+    private void getWeekDateBaseByDate (long msTime) {
+        Integer id = findIdWithThisTime(msTime);
+        if (id != null) {
+            getWeekDateBase(id);
         }
     }
 }

@@ -13,7 +13,8 @@ public class Week /*implements Parcelable*/ {
     private static final int SINGLE_EVENTS_INDEX = 0;
 
     public static void toWeekStart(GregorianCalendar g) {
-        g.add(Calendar.DAY_OF_WEEK, WEEK_START - Calendar.DAY_OF_WEEK);
+        g.add(Calendar.DAY_OF_WEEK, WEEK_START - g.get(Calendar.DAY_OF_WEEK));
+        g.set(g.get(Calendar.YEAR), g.get(Calendar.MONTH), g.get(Calendar.DAY_OF_MONTH), 0, 0, 0);
     }
 
     public static GregorianCalendar formDate() {
@@ -63,8 +64,12 @@ public class Week /*implements Parcelable*/ {
         templates.get(SINGLE_EVENTS_INDEX).addEvent(newEvent);
     }
 
+    public GregorianCalendar getStartDate() {
+        return startDate;
+    }
+
     public long getTimeInMS() {
-        return this.startDate.getTimeInMillis();
+        return this.startDate.getTimeInMillis()/1000;
     }
 
     public ArrayList<Template> getTemplates() {
