@@ -87,13 +87,19 @@ public class CalendarFragment extends Fragment {
             int i = (hour) % HOURS_PER_DAY;
             long length = (e.getEnd() - e.getStart()) / HOUR_LENGTH;
             String nm2 = e.getText();
+            if (name.length() > 6) {
+                name = name.substring(0, 6);
+            }
+            if (nm2.length() > 6) {
+                nm2 = nm2.substring(0, 6);
+            }
             table[i][j].setText(name + "\n" + nm2);
 
             int color = getColor();
             for(int k = i; k < min(i + length, (long)HOURS_PER_DAY); k++) {
                 table[k][j].setBackgroundColor(color);
-                if(table[k][j].getText().equals("+")) {
-                    table[k][j].setText("");
+                if(table[k][j].getText().equals("+\n ")) {
+                    table[k][j].setText(" \n ");
                 }
             }
             tableId[i][j] = e.getId();
@@ -179,8 +185,7 @@ public class CalendarFragment extends Fragment {
                         }
                     }
                 });
-                curDay.setText("+");
-                //curDay.setId(createDayId(i, j));
+                curDay.setText("+\n ");
                 table[i][j] = curDay;
                 curHour.addView(curDay, rowParams);
             }

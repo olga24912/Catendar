@@ -41,9 +41,9 @@ public class Event {
     public String getDayOfWeekAndTime() {
         String res = "(" + days[eventStartDate.get(Calendar.DAY_OF_WEEK) - 1] + " "
                 + eventStartDate.get(Calendar.HOUR_OF_DAY) + ":"
-                + eventStartDate.get(Calendar.HOUR_OF_DAY) + " - "
+                + eventStartDate.get(Calendar.MINUTE) + " - "
                 + eventEndDate.get(Calendar.HOUR_OF_DAY) + ":"
-                + eventEndDate.get(Calendar.HOUR_OF_DAY) + ")";
+                + eventEndDate.get(Calendar.MINUTE) + ")";
         return res;
     }
 
