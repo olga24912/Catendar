@@ -120,22 +120,27 @@ public class CreateWeekActivity extends AppCompatActivity {
             int id = cursor.getInt(cursor
                     .getColumnIndex(DatabaseHelper._ID));
 
-            LinearLayout linearLayout = (LinearLayout)findViewById(R.id.LinearLayoutInCreateWeek);
+            if (name.equals("unknownTemplate179")) {
+                mSQLiteDatabase.delete(DatabaseHelper.DATABASE_TABLE_TEMPLATE, DatabaseHelper._ID + "=" + id, null);
+            } else {
+                LinearLayout linearLayout = (LinearLayout) findViewById(R.id.LinearLayoutInCreateWeek);
 
-            LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT,
-                    LinearLayout.LayoutParams.WRAP_CONTENT);
+                LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT,
+                        LinearLayout.LayoutParams.WRAP_CONTENT);
 
-            layoutParams.gravity = Gravity.LEFT;
-            layoutParams.setMargins(0, 10, 10, 10);
+                layoutParams.gravity = Gravity.LEFT;
+                layoutParams.setMargins(0, 10, 10, 10);
 
-            CheckBox newCheckBox = new CheckBox(this);
-            newCheckBox.setLayoutParams(layoutParams);
-            newCheckBox.setText(name);
-            linearLayout.addView(newCheckBox);
+                CheckBox newCheckBox = new CheckBox(this);
+                newCheckBox.setLayoutParams(layoutParams);
+                newCheckBox.setText(name);
+                linearLayout.addView(newCheckBox);
 
-            existsTemplate.add(newCheckBox);
-            templateId.add(id);
+                existsTemplate.add(newCheckBox);
+                templateId.add(id);
+            }
         }
+        cursor.close();
     }
 
     protected Dialog onCreateDialog(int id) {
