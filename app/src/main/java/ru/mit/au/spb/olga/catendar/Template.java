@@ -22,7 +22,7 @@ public class Template {
     }
 
     public String getName() {
-        return name;
+        return (name == Week.SINGLE_EVENTS) ? "" : name;
     }
 
     public ArrayList<Event> getEvents() {

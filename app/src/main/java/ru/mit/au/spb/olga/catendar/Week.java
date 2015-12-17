@@ -12,6 +12,7 @@ public class Week /*implements Parcelable*/ {
 
     private static final int WEEK_START = Calendar.SUNDAY;
     private static final int SINGLE_EVENTS_INDEX = 0;
+    public static final String SINGLE_EVENTS = "singleEvents";
 
     public static void toWeekStart(GregorianCalendar g) {
         g.add(Calendar.DAY_OF_WEEK, WEEK_START - g.get(Calendar.DAY_OF_WEEK));
@@ -36,7 +37,7 @@ public class Week /*implements Parcelable*/ {
         this.startDate = formDate(startDate); //"Captain's Log, Stardate 1512.2. ..."
 
         templates = new ArrayList<>();
-        templates.add(new Template("singleEvents", new ArrayList<Event>()));
+        templates.add(new Template(SINGLE_EVENTS, new ArrayList<Event>()));
     }
 
 //    protected Week(Parcel in) {
