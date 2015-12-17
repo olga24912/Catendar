@@ -10,6 +10,7 @@ import android.net.Uri;
 import android.os.Bundle;
 //import android.app.Fragment;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -31,6 +32,10 @@ public class CalendarFragment extends Fragment {
     public static final String[] days = {"Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"};
 
     public static TextView[][] table = new TextView[HOURS_PER_DAY][DAYS_PER_WEEK];
+
+    private static int[][] tableId = new int[HOURS_PER_DAY][DAYS_PER_WEEK];
+    private static Week sampleWeek = new Week();
+
     private static Week currentWeek = null;
 
     private DatabaseHelper mDatabaseHelper;
@@ -50,15 +55,6 @@ public class CalendarFragment extends Fragment {
         mDatabaseHelper = new DatabaseHelper(getContext(), "mydatabase10.db", null, 1);
         mSQLiteDatabase = mDatabaseHelper.getWritableDatabase();
 
-        //setCalendarView()
-//        return inflater.inflate(R.layout.fragment_calendar2, container, false);
-//    }
-//
-//    @Override
-//    public void onActivityCreated(Bundle savedInstanceState) {
-//        super.onActivityCreated(savedInstanceState)
-
-
         Week tmpWeek = new Week(currentDate);
         getWeekDateBaseByDate(tmpWeek.getTimeInMS());
 
@@ -67,45 +63,13 @@ public class CalendarFragment extends Fragment {
             displaySampleTemplate(currentWeek);
         }
         return result;
-
-        //return inflater.inflate(R.layout.fragment_calendar2, container, false);
-
     }
 
-    public void displaySampleTemplate(Week w) {
-        //FIXME: just for the demo
-/*
-        {
-            //GregorianCalendar start = Week.formDate();//the day is the first day of a week
-            ArrayList<Event> events = new ArrayList<>();
 
-            for(int i = 1; i <= DAYS_PER_WEEK; i++) {
-                GregorianCalendar start = new GregorianCalendar();
-                start.set(java.util.Calendar.DAY_OF_WEEK, 0);
-                GregorianCalendar end = start;
-                end.add(java.util.Calendar.HOUR_OF_DAY, 1);
-
-                start.set(java.util.Calendar.DAY_OF_WEEK, i);
-                end.set(java.util.Calendar.DAY_OF_WEEK, i);
-
-                Event event = new Event(0, start, end);
-                event.setText("event #00" + Integer.toString(i));
-
-                events.add(event);
-            }
-            Template myHometasks = new Template("myHometasks", events);
-            sampleWeek.addTemplate(myHometasks);
-
-            Event singleEvent = new Event();
-            singleEvent.setText("Still alive");
-
-            sampleWeek.addEvent(singleEvent);
-        }
-*/
+    private void displaySampleTemplate(Week w) {
         for(Template template : w.getTemplates()) {
             displayTemplate(template);
         }
-
     }
 
 
@@ -119,6 +83,7 @@ public class CalendarFragment extends Fragment {
             int i = (hour) % HOURS_PER_DAY;
             String nm2 = e.getText();
             table[i][j].setText(name + "\n" + nm2);
+            tableId[i][j] = e.getId();
         }
     }
 
@@ -177,14 +142,23 @@ public class CalendarFragment extends Fragment {
 
             for(int j = 0; j < DAYS_PER_WEEK; j++) {
                 TextView curDay = new TextView(context);
+                final int globalI = i, globalJ = j;
+
                 curDay.setOnClickListener(new View.OnClickListener() {
                     static final private int CREATE_EVENT = 0;
+                    static final private int CHANGE_EVENT = 1;
 
                     @Override
                     public void onClick(View v) {
-                        Intent intent = new Intent(context, CreateEventActivity.class);
+                        if (table[globalI][globalJ].getText().equals("+")) {
+                            Intent intent = new Intent(context, CreateEventActivity.class);
 
-                        startActivityForResult(intent, CREATE_EVENT);
+                            startActivityForResult(intent, CREATE_EVENT);
+                        } else {
+                            Intent intent = new Intent(context, ChangeEventActivity.class);
+                            intent.putExtra("id", tableId[globalI][globalJ]);
+                            startActivityForResult(intent, CHANGE_EVENT);
+                        }
                     }
                 });
                 curDay.setText("+");
@@ -238,6 +212,10 @@ public class CalendarFragment extends Fragment {
 
                 int endTime = cursorEvent.getInt(cursorEvent.getColumnIndex(DatabaseHelper.EVENT_END_DATE));
                 newEvent.setEndDate(endTime);
+
+                int evId = cursorEvent.getInt(cursorEvent.getColumnIndex(DatabaseHelper._ID));
+                newEvent.setId(evId);
+
                 tp.addEvent(newEvent);
             }
         }
@@ -314,6 +292,8 @@ public class CalendarFragment extends Fragment {
 
                 int endTime = cursorEvent.getInt(cursorEvent.getColumnIndex(DatabaseHelper.EVENT_END_DATE));
                 newEvent.setEndDate(endTime);
+                int evId = cursorEvent.getInt(cursorEvent.getColumnIndex(DatabaseHelper._ID));
+                newEvent.setId(evId);
                 currentWeek.addEvent(newEvent);
             }
         }
@@ -321,7 +301,7 @@ public class CalendarFragment extends Fragment {
 
     }
 
-    private Integer findIdWithThisTime(long ms) {
+    private Integer findIdWithThisTime(long s) {
         Cursor cursor = mSQLiteDatabase.query(DatabaseHelper.DATABASE_TABLE_WEEK, new String[]{
                         DatabaseHelper._ID, DatabaseHelper.WEEK_START_DATE
                 },
@@ -332,7 +312,7 @@ public class CalendarFragment extends Fragment {
             int id = cursor.getInt(cursor.getColumnIndex(DatabaseHelper._ID));
             long time = cursor.getLong(cursor.getColumnIndex(DatabaseHelper.WEEK_START_DATE));
 
-            if (time == ms) {
+            if (time == s) {
                 return id;
             }
         }
@@ -340,10 +320,23 @@ public class CalendarFragment extends Fragment {
         return null;
     }
 
-    private void getWeekDateBaseByDate (long msTime) {
-        Integer id = findIdWithThisTime(msTime);
+    private void getWeekDateBaseByDate (long sTime) {
+        Integer id = findIdWithThisTime(sTime);
         if (id != null) {
             getWeekDateBase(id);
         }
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        getWeekDateBaseByDate(currentWeek.getTimeInMS());
+        displaySampleTemplate(currentWeek);
+
+        Fragment currentFragment = this;
+        FragmentTransaction fragTransaction = getFragmentManager().beginTransaction();
+        fragTransaction.detach(currentFragment);
+        fragTransaction.attach(currentFragment);
+        fragTransaction.commit();
     }
 }

@@ -9,7 +9,12 @@ public class Event {
     private String eventText;
     private GregorianCalendar eventStartDate;
     private GregorianCalendar eventEndDate;
+<<<<<<< HEAD
     private long startDate;
+=======
+    private String startDate;
+    private int id;
+>>>>>>> 8fe5a56ecbcd4feaa9c3edac0e15edf4f2cf2b61
 
     public static final String[] days = {"Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"};
 
@@ -19,6 +24,14 @@ public class Event {
 
     public Event(int numTasks) {
         this(numTasks, null, null);
+    }
+
+    public void setId(int _id) {
+        id = _id;
+    }
+
+    public int getId() {
+        return id;
     }
 
     public Event(int numTasks, GregorianCalendar start, GregorianCalendar end) {

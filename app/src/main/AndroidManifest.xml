@@ -37,6 +37,9 @@
             android:name=".AddEventForTemplateActivity"
             android:label="Create event">
         </activity>
+        <activity
+            android:name=".ChangeEventActivity"
+            android:label="Change event">
+        </activity>
     </application>
-
 </manifest>
