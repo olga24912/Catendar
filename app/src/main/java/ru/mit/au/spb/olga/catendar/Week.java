@@ -40,27 +40,12 @@ public class Week /*implements Parcelable*/ {
         templates.add(new Template(SINGLE_EVENTS, new ArrayList<Event>()));
     }
 
-//    protected Week(Parcel in) {
-//    }
-//
-//    public static final Creator<Week> CREATOR = new Creator<Week>() {
-//        @Override
-//        public Week createFromParcel(Parcel in) {
-//            return new Week(in);
-//        }
-//
-//        @Override
-//        public Week[] newArray(int size) {
-//            return new Week[size];
-//        }
-//    };
 
     public void addTemplate(Template newTemplate) {
         templates.add(newTemplate);
     }
 
     public void addEvent(Event newEvent) {
-//    adds newEvent to singleEvents
         templates.get(SINGLE_EVENTS_INDEX).addEvent(newEvent);
     }
 

@@ -8,6 +8,7 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
+import android.provider.ContactsContract;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Gravity;
 import android.view.View;
@@ -31,6 +32,7 @@ public class CreateWeekActivity extends AppCompatActivity {
 
     private ArrayList<CheckBox> existsTemplate = new ArrayList<>();
     private ArrayList<Integer> templateId = new ArrayList<>();
+    private ArrayList<String> templateText = new ArrayList<>();
 
     private int selectedRadioButton = -1;
 
@@ -42,13 +44,15 @@ public class CreateWeekActivity extends AppCompatActivity {
 
     private TextView tvInfo;
 
+    private Week nw;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.activity_create_week);
 
-        mDatabaseHelper = new DatabaseHelper(this, "mydatabase10.db", null, 1);
+        mDatabaseHelper = new DatabaseHelper(this, "mydatabase11.db", null, 1);
         mSQLiteDatabase = mDatabaseHelper.getWritableDatabase();
 
         tvInfo = (TextView)findViewById(R.id.Selected_date);
@@ -109,7 +113,8 @@ public class CreateWeekActivity extends AppCompatActivity {
 
     private void createCheckBox() {
         Cursor cursor = mSQLiteDatabase.query(DatabaseHelper.DATABASE_TABLE_TEMPLATE, new String[]{DatabaseHelper._ID,
-                        DatabaseHelper.TEMPLATE_NAME},
+                        DatabaseHelper.TEMPLATE_NAME,
+                        DatabaseHelper.TEMPLATE_FOR_WEEK},
                 null, null,
                 null, null, null) ;
 
@@ -120,6 +125,12 @@ public class CreateWeekActivity extends AppCompatActivity {
             int id = cursor.getInt(cursor
                     .getColumnIndex(DatabaseHelper._ID));
 
+            int ignored = cursor.getInt(cursor
+                    .getColumnIndex(DatabaseHelper.TEMPLATE_FOR_WEEK));
+
+            if (ignored == 1) {
+                continue;
+            }
             if (name.equals("unknownTemplate179")) {
                 mSQLiteDatabase.delete(DatabaseHelper.DATABASE_TABLE_TEMPLATE, DatabaseHelper._ID + "=" + id, null);
             } else {
@@ -138,6 +149,7 @@ public class CreateWeekActivity extends AppCompatActivity {
 
                 existsTemplate.add(newCheckBox);
                 templateId.add(id);
+                templateText.add(name);
             }
         }
         cursor.close();
@@ -186,7 +198,7 @@ public class CreateWeekActivity extends AppCompatActivity {
     public void onOkWeekClick(View view) {
         GregorianCalendar gc = new GregorianCalendar(year, month, day);
 
-        Week nw = new Week(gc);
+        nw = new Week(gc);
         long sTime = nw.getTimeInMS();
 
         if (findIdWithThisTime(sTime) == null) {
@@ -201,9 +213,17 @@ public class CreateWeekActivity extends AppCompatActivity {
 
         for (int i = 0; i < existsTemplate.size(); i++) {
             if (existsTemplate.get(i).isChecked()) {
+                ContentValues tValues = new ContentValues();
+
+                tValues.put(DatabaseHelper.TEMPLATE_NAME, templateText.get(i));
+                tValues.put(DatabaseHelper.TEMPLATE_FOR_WEEK, 1);
+
+                int tId = (int) mSQLiteDatabase.insert(DatabaseHelper.DATABASE_TABLE_TEMPLATE, null, tValues);
+                copyEvent(templateId.get(i), tId);
+
                 ContentValues twValues = new ContentValues();
 
-                twValues.put(DatabaseHelper.TEMPLATES_IN_WEEKS_TEMPLATE_ID, templateId.get(i));
+                twValues.put(DatabaseHelper.TEMPLATES_IN_WEEKS_TEMPLATE_ID, tId);
                 twValues.put(DatabaseHelper.TEMPLATES_IN_WEEKS_WEEK_ID, id);
 
                 mSQLiteDatabase.insert(DatabaseHelper.DATABASE_TABLE_TEMPLATES_IN_WEEKS, null, twValues);
@@ -212,6 +232,42 @@ public class CreateWeekActivity extends AppCompatActivity {
 
         setResult(RESULT_OK);
         finish();
+    }
+
+    private void copyEvent(int oldTp, int nwId) {
+        Cursor cursor = mSQLiteDatabase.query(DatabaseHelper.DATABASE_TABLE_EVENT, new String[]{
+                        DatabaseHelper._ID, DatabaseHelper.EVENT_NAME,
+                        DatabaseHelper.EVENT_START_DATE, DatabaseHelper.EVENT_END_DATE,
+                        DatabaseHelper.EVENT_PARENT_TEMPLATE
+                },
+                null, null, null, null, null);
+
+        while (cursor.moveToNext()) {
+            int curId = cursor.getInt(cursor.getColumnIndex(DatabaseHelper.EVENT_PARENT_TEMPLATE));
+            if (curId == oldTp) {
+                String name = cursor.getString(cursor.getColumnIndex(DatabaseHelper.EVENT_NAME));
+                long startTime = cursor.getLong(cursor.getColumnIndex(DatabaseHelper.EVENT_START_DATE));
+                long endTime = cursor.getLong(cursor.getColumnIndex(DatabaseHelper.EVENT_END_DATE));
+
+                GregorianCalendar startOfLife = new GregorianCalendar(1970, 0, 4, 0, 0);
+                GregorianCalendar startGC = new GregorianCalendar();
+                startGC.setTimeInMillis(startTime*1000);
+                GregorianCalendar endGC = new GregorianCalendar();
+                endGC.setTimeInMillis(endTime * 1000);
+
+                startTime = nw.getTimeInMS() + startTime - startOfLife.getTimeInMillis()/1000;
+                endTime = nw.getTimeInMS() + endTime - startOfLife.getTimeInMillis()/1000;
+
+                ContentValues tValues = new ContentValues();
+
+                tValues.put(DatabaseHelper.EVENT_NAME, name);
+                tValues.put(DatabaseHelper.EVENT_START_DATE, startTime);
+                tValues.put(DatabaseHelper.EVENT_END_DATE, endTime);
+                tValues.put(DatabaseHelper.EVENT_PARENT_TEMPLATE, nwId);
+
+                mSQLiteDatabase.insert(DatabaseHelper.DATABASE_TABLE_EVENT, null, tValues);
+            }
+        }
     }
 
     public void onCancelWeekClick(View view) {

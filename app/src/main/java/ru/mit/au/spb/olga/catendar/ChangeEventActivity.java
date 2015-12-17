@@ -66,7 +66,7 @@ public class ChangeEventActivity extends AppCompatActivity
 
         setContentView(R.layout.activity_change_event);
 
-        mDatabaseHelper = new DatabaseHelper(this, "mydatabase10.db", null, 1);
+        mDatabaseHelper = new DatabaseHelper(this, "mydatabase11.db", null, 1);
         mSQLiteDatabase = mDatabaseHelper.getWritableDatabase();
 
         eventId = getIntent().getIntExtra("id", 0);

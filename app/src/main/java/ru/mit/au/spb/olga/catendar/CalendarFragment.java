@@ -56,7 +56,7 @@ public class CalendarFragment extends Fragment {
                              Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        mDatabaseHelper = new DatabaseHelper(getContext(), "mydatabase10.db", null, 1);
+        mDatabaseHelper = new DatabaseHelper(getContext(), "mydatabase11.db", null, 1);
         mSQLiteDatabase = mDatabaseHelper.getWritableDatabase();
 
         Week tmpWeek = new Week(currentDate);
