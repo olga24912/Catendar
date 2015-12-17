@@ -179,14 +179,23 @@ public class CalendarFragment extends Fragment {
 
             for(int j = 0; j < DAYS_PER_WEEK; j++) {
                 TextView curDay = new TextView(context);
+                final int globalI = i, globalJ = j;
+
                 curDay.setOnClickListener(new View.OnClickListener() {
                     static final private int CREATE_EVENT = 0;
+                    static final private int CHANGE_EVENT = 1;
 
                     @Override
                     public void onClick(View v) {
-                        Intent intent = new Intent(context, CreateEventActivity.class);
+                        if (table[globalI][globalJ].getText().equals("+")) {
+                            Intent intent = new Intent(context, CreateEventActivity.class);
 
-                        startActivityForResult(intent, CREATE_EVENT);
+                            startActivityForResult(intent, CREATE_EVENT);
+                        } else {
+                            Intent intent = new Intent(context, ChangeEventActivity.class);
+
+                            startActivityForResult(intent, CHANGE_EVENT);
+                        }
                     }
                 });
                 curDay.setText("+");
