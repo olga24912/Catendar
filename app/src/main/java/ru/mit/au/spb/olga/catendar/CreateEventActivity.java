@@ -5,17 +5,21 @@ import android.app.Dialog;
 import android.app.TimePickerDialog;
 import android.content.ContentValues;
 import android.content.Intent;
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.view.Gravity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.TimePicker;
 
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 
@@ -46,6 +50,8 @@ public class CreateEventActivity extends AppCompatActivity
     private int day;
 
     private int duration;
+
+    private ArrayList<EditText> taskText = new ArrayList<>();
 
     public final static String EVENT_NAME = "ru.mit.au.spb.olga.catendar.eventName";
 
@@ -138,9 +144,20 @@ public class CreateEventActivity extends AppCompatActivity
         newValues.put(DatabaseHelper.EVENT_PARENT_TEMPLATE, 0);
         newValues.put(DatabaseHelper.EVENT_START_DATE, startCal.getTimeInMillis()/1000);
         endCal.add(Calendar.HOUR_OF_DAY, duration);
-        newValues.put(DatabaseHelper.EVENT_END_DATE, endCal.getTimeInMillis()/1000);
+        newValues.put(DatabaseHelper.EVENT_END_DATE, endCal.getTimeInMillis() / 1000);
 
-        mSQLiteDatabase.insert("events", null, newValues);
+        int parentID = (int)mSQLiteDatabase.insert(DatabaseHelper.DATABASE_TABLE_EVENT, null, newValues);
+        
+        for (EditText currentTask : taskText) {
+            newValues = new ContentValues();
+
+            newValues.put(DatabaseHelper.TASK_NAME_COLUMN, String.valueOf(currentTask.getText()));
+            newValues.put(DatabaseHelper.TASK_PARENT_EVENT_ID, parentID);
+            newValues.put(DatabaseHelper.TASK_IS_DONE, 0);
+
+            mSQLiteDatabase.insert("tasks", null, newValues);
+        }
+
 
         answerIntent.putExtra(EVENT_NAME, createEvent.getText());
 
@@ -167,5 +184,20 @@ public class CreateEventActivity extends AppCompatActivity
     public void onStopTrackingTouch(SeekBar seekBar) {
         lenOfEvent.setText(String.valueOf(seekBar.getProgress()));
         duration = seekBar.getProgress();
+    }
+
+    public void onAddTaskClick(View view) {
+        LinearLayout linearLayout = (LinearLayout)findViewById(R.id.LinearLayoutInCreateTask);
+
+        LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT,
+                LinearLayout.LayoutParams.WRAP_CONTENT);
+
+        layoutParams.gravity = Gravity.LEFT;
+        layoutParams.setMargins(0, 10, 10, 10);
+        EditText textView = new EditText(this);
+        textView.setLayoutParams(layoutParams);
+        textView.setHint("Task text");
+        taskText.add(textView);
+        linearLayout.addView(textView);
     }
 }
