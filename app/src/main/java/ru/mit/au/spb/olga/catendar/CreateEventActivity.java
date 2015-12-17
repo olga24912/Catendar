@@ -147,7 +147,7 @@ public class CreateEventActivity extends AppCompatActivity
         newValues.put(DatabaseHelper.EVENT_END_DATE, endCal.getTimeInMillis() / 1000);
 
         int parentID = (int)mSQLiteDatabase.insert(DatabaseHelper.DATABASE_TABLE_EVENT, null, newValues);
-        
+
         for (EditText currentTask : taskText) {
             newValues = new ContentValues();
 
