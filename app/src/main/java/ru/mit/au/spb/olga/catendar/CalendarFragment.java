@@ -24,11 +24,15 @@ import android.widget.TextView;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
+import java.util.Random;
+
+import static java.lang.Math.min;
 
 
 public class CalendarFragment extends Fragment {
     public static final int HOURS_PER_DAY = 24;
     public static final int DAYS_PER_WEEK = 7;
+    public static final long HOUR_LENGTH = 60 * 60;
     public static final String[] days = {"Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"};
 
     public static TextView[][] table = new TextView[HOURS_PER_DAY][DAYS_PER_WEEK];
@@ -81,10 +85,24 @@ public class CalendarFragment extends Fragment {
             int hour = e.getStartDate().get(java.util.Calendar.HOUR_OF_DAY);
             int j = (day + (DAYS_PER_WEEK - 1)) % DAYS_PER_WEEK;
             int i = (hour) % HOURS_PER_DAY;
+            long length = (e.getEnd() - e.getStart()) / HOUR_LENGTH;
             String nm2 = e.getText();
             table[i][j].setText(name + "\n" + nm2);
+
+            int color = getColor();
+            for(int k = i; k < min(i + length, (long)HOURS_PER_DAY); k++) {
+                table[k][j].setBackgroundColor(color);
+                if(table[k][j].getText().equals("+")) {
+                    table[k][j].setText("");
+                }
+            }
             tableId[i][j] = e.getId();
         }
+    }
+
+    private int getColor() {
+        Random randColor = new Random();
+        return 0x50000000 + randColor.nextInt() % (0xffffff);
     }
 
     private int createDayId(int i, int j) {
