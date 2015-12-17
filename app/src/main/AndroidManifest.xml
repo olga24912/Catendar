@@ -26,10 +26,6 @@
             android:label="@string/title_activity_calendar" >
         </activity>
         <activity
-            android:name=".CreateTaskActivity"
-            android:label="Create task">
-        </activity>
-        <activity
             android:name=".CreateWeekActivity"
             android:label="Create week">
         </activity>
@@ -41,6 +37,9 @@
             android:name=".AddEventForTemplateActivity"
             android:label="Create event">
         </activity>
+        <activity
+            android:name=".ChangeEventActivity"
+            android:label="Change event">
+        </activity>
     </application>
-
 </manifest>

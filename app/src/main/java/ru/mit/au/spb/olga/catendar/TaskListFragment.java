@@ -24,7 +24,7 @@ import java.util.TreeMap;
 /**
  * Created by olga on 12.12.15.
  */
-public class TaskListFragment extends Fragment implements CompoundButton.OnCheckedChangeListener, View.OnClickListener {
+public class TaskListFragment extends Fragment implements CompoundButton.OnCheckedChangeListener {
     private DatabaseHelper mDatabaseHelper;
     private SQLiteDatabase mSQLiteDatabase;
 
@@ -54,10 +54,6 @@ public class TaskListFragment extends Fragment implements CompoundButton.OnCheck
             mSwitch.setOnCheckedChangeListener(this);
         }
 
-        Button onCreateTask = (Button) rootView.findViewById(R.id.add_task);
-
-        onCreateTask.setOnClickListener((View.OnClickListener) this);
-
         mShaker = new ShakeListener(getActivity());
         mShaker.setOnShakeListener(new ShakeListener.OnShakeListener() {
             public void onShake() {
@@ -86,25 +82,6 @@ public class TaskListFragment extends Fragment implements CompoundButton.OnCheck
         synchronizedWithDateBase();
         drawTaskList();
     }
-
-    static final private int CREATE_TASK = 0;
-    @Override
-    public void onClick(View view) {
-        Intent intent = new Intent(getActivity(), CreateTaskActivity.class);
-        startActivityForResult(intent, CREATE_TASK);
-    }
-
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == CREATE_TASK) {
-            if (resultCode == getActivity().RESULT_OK) {
-                synchronizedWithDateBase();
-                drawTaskList();
-            }
-        }
-    }
-
 
     private void drawTaskList() {
         ArrayList<Event> eventListWithTasks = new ArrayList<>();

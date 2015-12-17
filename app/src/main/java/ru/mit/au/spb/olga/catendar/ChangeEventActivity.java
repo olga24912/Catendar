@@ -9,9 +9,9 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.text.Editable;
 import android.view.Gravity;
 import android.view.View;
-import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.LinearLayout;
@@ -24,9 +24,9 @@ import java.util.Calendar;
 import java.util.GregorianCalendar;
 
 /**
- * Created by olga on 18.10.15.
+ * Created by olga on 17.12.15.
  */
-public class CreateEventActivity extends AppCompatActivity
+public class ChangeEventActivity extends AppCompatActivity
         implements SeekBar.OnSeekBarChangeListener {
     private DatabaseHelper mDatabaseHelper;
     private SQLiteDatabase mSQLiteDatabase;
@@ -34,7 +34,6 @@ public class CreateEventActivity extends AppCompatActivity
     private EditText eventText;
 
     private int DIALOG_DATE = 1;
-    private DatePicker pickerDate;
 
     private int DIALOG_TIME = 2;
     private int hour = 14;
@@ -51,42 +50,80 @@ public class CreateEventActivity extends AppCompatActivity
 
     private int duration;
 
+    private int eventId;
+
     private ArrayList<EditText> taskText = new ArrayList<>();
 
     public final static String EVENT_NAME = "ru.mit.au.spb.olga.catendar.eventName";
 
-    public CreateEventActivity() {
+    public ChangeEventActivity() {
     }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        setContentView(R.layout.activity_create_event);
+        setContentView(R.layout.activity_change_event);
 
-        eventText = (EditText)findViewById(R.id.editEventText);
+        mDatabaseHelper = new DatabaseHelper(this, "mydatabase10.db", null, 1);
+        mSQLiteDatabase = mDatabaseHelper.getWritableDatabase();
 
-        tvInfo = (TextView)findViewById(R.id.StartDate);
-        tvInfoStartTime = (TextView)findViewById(R.id.StartTime);
-        lenOfEvent = (TextView)findViewById(R.id.durationVal);
+        eventId = getIntent().getIntExtra("id", 0);
+
+        Cursor cursor = mSQLiteDatabase.query(DatabaseHelper.DATABASE_TABLE_EVENT, new String[]{DatabaseHelper._ID,
+                        DatabaseHelper.EVENT_START_DATE, DatabaseHelper.EVENT_END_DATE,
+                DatabaseHelper.EVENT_NAME},
+                null, null,
+                null, null, null);
+
+        eventText = (EditText)findViewById(R.id.changeEventText);
+
+        tvInfo = (TextView)findViewById(R.id.changeStartDate);
+        tvInfoStartTime = (TextView)findViewById(R.id.changeStartTime);
+        lenOfEvent = (TextView)findViewById(R.id.durationValChange);
         lenOfEvent.setText("1");
 
-        final SeekBar seekbar = (SeekBar)findViewById(R.id.seekBarOfEventLen);
+        final SeekBar seekbar = (SeekBar)findViewById(R.id.changesSeekBarOfEventLen);
         seekbar.setOnSeekBarChangeListener(this);
         seekbar.setMax(24);
         seekbar.setProgress(1);
 
         duration = 1;
 
-        mDatabaseHelper = new DatabaseHelper(this, "mydatabase10.db", null, 1);
-        mSQLiteDatabase = mDatabaseHelper.getWritableDatabase();
-
         Calendar today = Calendar.getInstance();
         year = today.get(Calendar.YEAR);
         month = today.get(Calendar.MONTH);
         day = today.get(Calendar.DAY_OF_MONTH);
+
+        while (cursor.moveToNext())  {
+            int currentId = cursor.getInt(cursor.getColumnIndex(DatabaseHelper._ID));
+            if (currentId == eventId) {
+                String name = cursor.getString(cursor.getColumnIndex(DatabaseHelper.EVENT_NAME));
+                int startTime = cursor.getInt(cursor.getColumnIndex(DatabaseHelper.EVENT_START_DATE));
+                int endTime = cursor.getInt(cursor.getColumnIndex(DatabaseHelper.EVENT_END_DATE));
+                seekbar.setProgress((endTime - startTime)/(60*60));
+                duration = (endTime - startTime)/(60*60);
+
+                lenOfEvent.setText(Integer.toString((endTime - startTime) / (60 * 60)));
+
+                GregorianCalendar gc = new GregorianCalendar();
+                gc.setTimeInMillis((long)startTime*1000);
+                year = gc.get(Calendar.YEAR);
+                month = gc.get(Calendar.MONTH);
+                day = gc.get(Calendar.DAY_OF_MONTH);
+
+                hour = gc.get(Calendar.HOUR_OF_DAY);
+                minute = gc.get(Calendar.MINUTE);
+                eventText.setText(name);
+            }
+        }
+
+        cursor.close();
+
         tvInfoStartTime.setText("Start time is " + hour + " hours " + minute + " minutes");
         tvInfo.setText("Event day is " + day + "/" + (month + 1) + "/" + year);
+
+        printTask();
     }
 
     public void onSetDateClick(View view) {
@@ -142,11 +179,13 @@ public class CreateEventActivity extends AppCompatActivity
 
         newValues.put(DatabaseHelper.EVENT_NAME, String.valueOf(createEvent.getText()));
         newValues.put(DatabaseHelper.EVENT_PARENT_TEMPLATE, 0);
-        newValues.put(DatabaseHelper.EVENT_START_DATE, startCal.getTimeInMillis()/1000);
+        newValues.put(DatabaseHelper.EVENT_START_DATE, startCal.getTimeInMillis() / 1000);
         endCal.add(Calendar.HOUR_OF_DAY, duration);
         newValues.put(DatabaseHelper.EVENT_END_DATE, endCal.getTimeInMillis() / 1000);
 
-        int parentID = (int)mSQLiteDatabase.insert(DatabaseHelper.DATABASE_TABLE_EVENT, null, newValues);
+        mSQLiteDatabase.update(DatabaseHelper.DATABASE_TABLE_EVENT, newValues, "_id " + "=" + eventId, null);
+
+        int parentID = eventId;
 
         for (EditText currentTask : taskText) {
             newValues = new ContentValues();
@@ -187,7 +226,7 @@ public class CreateEventActivity extends AppCompatActivity
     }
 
     public void onAddTaskClick(View view) {
-        LinearLayout linearLayout = (LinearLayout)findViewById(R.id.LinearLayoutInCreateTask);
+        LinearLayout linearLayout = (LinearLayout)findViewById(R.id.LinearLayoutInChangeEvent);
 
         LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT,
                 LinearLayout.LayoutParams.WRAP_CONTENT);
@@ -199,5 +238,31 @@ public class CreateEventActivity extends AppCompatActivity
         textView.setHint("Task text");
         taskText.add(textView);
         linearLayout.addView(textView);
+    }
+
+    private void printTask() {
+        Cursor cursor = mSQLiteDatabase.query(DatabaseHelper.DATABASE_TABLE_TASK, new String[]{DatabaseHelper._ID,
+                        DatabaseHelper.TASK_NAME_COLUMN, DatabaseHelper.TASK_PARENT_EVENT_ID,
+                        DatabaseHelper.TASK_IS_DONE},
+                null, null,
+                null, null, null);
+        while (cursor.moveToNext()) {
+            String taskName = cursor.getString(cursor.getColumnIndex(DatabaseHelper.TASK_NAME_COLUMN));
+            int prId = cursor.getInt(cursor.getColumnIndex(DatabaseHelper.TASK_PARENT_EVENT_ID));
+            if (prId == eventId) {
+                LinearLayout linearLayout = (LinearLayout)findViewById(R.id.LinearLayoutInChangeEvent);
+
+                LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT,
+                        LinearLayout.LayoutParams.WRAP_CONTENT);
+
+                layoutParams.gravity = Gravity.LEFT;
+                layoutParams.setMargins(0, 10, 10, 10);
+                EditText textView = new EditText(this);
+                textView.setLayoutParams(layoutParams);
+                textView.setText(taskName);
+                taskText.add(textView);
+                linearLayout.addView(textView);
+            }
+        }
     }
 }

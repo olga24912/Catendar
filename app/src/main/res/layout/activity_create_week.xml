@@ -2,27 +2,13 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent" android:layout_height="match_parent">
 
-    <EditText
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:inputType="date"
-        android:ems="10"
-        android:id="@+id/write_date"
-        android:layout_marginTop="52dp"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true"
-        android:hint="@string/put_date" />
-
     <RadioGroup
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_alignParentTop="true"
+        android:id="@+id/radioGroup"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
-        android:layout_alignBottom="@+id/write_date"
-        android:layout_toStartOf="@+id/write_date"
-        android:id="@+id/radioGroup">
+        android:layout_alignBottom="@+id/Selected_date">
 
         <RadioButton
             android:layout_width="wrap_content"
@@ -49,10 +35,10 @@
         android:id="@+id/scrollViewInCreateWeek"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
-        android:layout_below="@+id/radioGroup"
-        android:layout_alignRight="@+id/write_date"
-        android:layout_alignEnd="@+id/write_date"
-        android:layout_above="@+id/ok_button_in_create_week">
+        android:layout_above="@+id/ok_button_in_create_week"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
+        android:layout_below="@+id/radioGroup">
         <LinearLayout
             android:orientation="vertical"
             android:layout_width="match_parent"
@@ -66,12 +52,10 @@
         android:layout_height="wrap_content"
         android:text="@string/ok_button"
         android:id="@+id/ok_button_in_create_week"
-        android:layout_alignTop="@+id/cancel_button_in_create_week"
-        android:layout_alignRight="@+id/write_date"
-        android:layout_alignEnd="@+id/write_date"
-        android:layout_toRightOf="@+id/cancel_button_in_create_week"
-        android:layout_toEndOf="@+id/cancel_button_in_create_week"
-        android:onClick="onOkWeekClick"/>
+        android:onClick="onOkWeekClick"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true" />
 
     <Button
         android:layout_width="wrap_content"
@@ -81,7 +65,19 @@
         android:layout_alignParentBottom="true"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
-        android:layout_toLeftOf="@+id/write_date"
-        android:layout_toStartOf="@+id/write_date"
         android:onClick="onCancelWeekClick" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:text=""
+        android:id="@+id/Selected_date"
+        android:layout_marginTop="79dp"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
+        android:layout_marginRight="85dp"
+        android:layout_marginEnd="85dp" />
+
 </RelativeLayout>
