@@ -32,7 +32,6 @@ public class ChangeEventActivity extends AppCompatActivity
     private EditText eventText;
 
     private int DIALOG_DATE = 1;
-    private DatePicker pickerDate;
 
     private int DIALOG_TIME = 2;
     private int hour = 14;
@@ -49,6 +48,8 @@ public class ChangeEventActivity extends AppCompatActivity
 
     private int duration;
 
+    private int eventId;
+
     private ArrayList<EditText> taskText = new ArrayList<>();
 
     public final static String EVENT_NAME = "ru.mit.au.spb.olga.catendar.eventName";
@@ -62,6 +63,7 @@ public class ChangeEventActivity extends AppCompatActivity
 
         setContentView(R.layout.activity_change_event);
 
+        eventId = getIntent().getIntExtra("id", 0);
         eventText = (EditText)findViewById(R.id.changeEventText);
 
         tvInfo = (TextView)findViewById(R.id.changeStartDate);

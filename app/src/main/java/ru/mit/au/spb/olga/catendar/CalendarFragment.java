@@ -31,6 +31,7 @@ public class CalendarFragment extends Fragment {
     public static final String[] days = {"Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"};
 
     public static TextView[][] table = new TextView[HOURS_PER_DAY][DAYS_PER_WEEK];
+    private static int[][] tableId = new int[HOURS_PER_DAY][DAYS_PER_WEEK];
     private static Week sampleWeek = new Week();
 
     private static Week currentWeek = null;
@@ -75,39 +76,9 @@ public class CalendarFragment extends Fragment {
     }
 
     private void displaySampleTemplate(Week w) {
-        //FIXME: just for the demo
-/*
-        {
-            //GregorianCalendar start = Week.formDate();//the day is the first day of a week
-            ArrayList<Event> events = new ArrayList<>();
-
-            for(int i = 1; i <= DAYS_PER_WEEK; i++) {
-                GregorianCalendar start = new GregorianCalendar();
-                start.set(java.util.Calendar.DAY_OF_WEEK, 0);
-                GregorianCalendar end = start;
-                end.add(java.util.Calendar.HOUR_OF_DAY, 1);
-
-                start.set(java.util.Calendar.DAY_OF_WEEK, i);
-                end.set(java.util.Calendar.DAY_OF_WEEK, i);
-
-                Event event = new Event(0, start, end);
-                event.setText("event #00" + Integer.toString(i));
-
-                events.add(event);
-            }
-            Template myHometasks = new Template("myHometasks", events);
-            sampleWeek.addTemplate(myHometasks);
-
-            Event singleEvent = new Event();
-            singleEvent.setText("Still alive");
-
-            sampleWeek.addEvent(singleEvent);
-        }
-*/
         for(Template template : w.getTemplates()) {
             displayTemplate(template);
         }
-
     }
 
 
@@ -121,6 +92,7 @@ public class CalendarFragment extends Fragment {
             int i = (hour) % HOURS_PER_DAY;
             String nm2 = e.getText();
             table[i][j].setText(name + "\n" + nm2);
+            tableId[i][j] = e.getId();
         }
     }
 
@@ -193,7 +165,7 @@ public class CalendarFragment extends Fragment {
                             startActivityForResult(intent, CREATE_EVENT);
                         } else {
                             Intent intent = new Intent(context, ChangeEventActivity.class);
-
+                            intent.putExtra("id", tableId[globalI][globalJ]);
                             startActivityForResult(intent, CHANGE_EVENT);
                         }
                     }
@@ -249,6 +221,10 @@ public class CalendarFragment extends Fragment {
 
                 int endTime = cursorEvent.getInt(cursorEvent.getColumnIndex(DatabaseHelper.EVENT_END_DATE));
                 newEvent.setEndDate(endTime);
+
+                int evId = cursorEvent.getInt(cursorEvent.getColumnIndex(DatabaseHelper._ID));
+                newEvent.setId(evId);
+
                 tp.addEvent(newEvent);
             }
         }
@@ -325,6 +301,8 @@ public class CalendarFragment extends Fragment {
 
                 int endTime = cursorEvent.getInt(cursorEvent.getColumnIndex(DatabaseHelper.EVENT_END_DATE));
                 newEvent.setEndDate(endTime);
+                int evId = cursorEvent.getInt(cursorEvent.getColumnIndex(DatabaseHelper._ID));
+                newEvent.setId(evId);
                 currentWeek.addEvent(newEvent);
             }
         }
