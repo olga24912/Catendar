@@ -143,5 +143,7 @@
         android:id="@+id/delete_event"
         android:layout_alignTop="@+id/add_new_task_in_change"
         android:layout_toRightOf="@+id/CancelButtonInChange"
-        android:layout_toEndOf="@+id/CancelButtonInChange" />
+        android:layout_toEndOf="@+id/CancelButtonInChange"
+        android:onClick="onDeleteClick"
+        />
 </RelativeLayout>

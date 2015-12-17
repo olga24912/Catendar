@@ -55,6 +55,7 @@ public class CreateEventActivity extends AppCompatActivity
 
     public final static String EVENT_NAME = "ru.mit.au.spb.olga.catendar.eventName";
 
+
     public CreateEventActivity() {
     }
 

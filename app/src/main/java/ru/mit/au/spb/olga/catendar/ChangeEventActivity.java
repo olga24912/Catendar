@@ -165,6 +165,15 @@ public class ChangeEventActivity extends AppCompatActivity
         }
     };
 
+    public void onDeleteClick(View view) {
+        Intent answerIntent = new Intent();
+
+        mSQLiteDatabase.delete(DatabaseHelper.DATABASE_TABLE_EVENT, "_id " + "=" + eventId, null);
+
+        setResult(RESULT_OK, answerIntent);
+        finish();
+    }
+
     public void onOkClick(View view) {
         Intent answerIntent = new Intent();
 
