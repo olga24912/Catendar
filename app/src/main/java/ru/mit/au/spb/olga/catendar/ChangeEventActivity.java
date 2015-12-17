@@ -53,6 +53,7 @@ public class ChangeEventActivity extends AppCompatActivity
     private int eventId;
 
     private ArrayList<EditText> taskText = new ArrayList<>();
+    private ArrayList<Integer> taskId = new ArrayList<>();
 
     public final static String EVENT_NAME = "ru.mit.au.spb.olga.catendar.eventName";
 
@@ -170,6 +171,9 @@ public class ChangeEventActivity extends AppCompatActivity
 
         mSQLiteDatabase.delete(DatabaseHelper.DATABASE_TABLE_EVENT, "_id " + "=" + eventId, null);
 
+        for (int tId : taskId) {
+            mSQLiteDatabase.delete(DatabaseHelper.DATABASE_TABLE_TASK, "_id " + "=" + tId, null);
+        }
         setResult(RESULT_OK, answerIntent);
         finish();
     }
@@ -196,14 +200,23 @@ public class ChangeEventActivity extends AppCompatActivity
 
         int parentID = eventId;
 
-        for (EditText currentTask : taskText) {
+        for (int i = 0; i < taskText.size(); i++) {
+            EditText currentTask = taskText.get(i);
             newValues = new ContentValues();
 
             newValues.put(DatabaseHelper.TASK_NAME_COLUMN, String.valueOf(currentTask.getText()));
             newValues.put(DatabaseHelper.TASK_PARENT_EVENT_ID, parentID);
             newValues.put(DatabaseHelper.TASK_IS_DONE, 0);
 
-            mSQLiteDatabase.insert("tasks", null, newValues);
+            if (i >= taskId.size()) {
+                mSQLiteDatabase.insert("tasks", null, newValues);
+            } else {
+                if (String.valueOf(currentTask.getText()).equals("")) {
+                    mSQLiteDatabase.delete(DatabaseHelper.DATABASE_TABLE_TASK, "_id " + "=" + taskId.get(i), null);
+                } else {
+                    mSQLiteDatabase.update(DatabaseHelper.DATABASE_TABLE_TASK, newValues, "_id " + "=" + taskId.get(i), null);
+                }
+            }
         }
 
 
@@ -258,6 +271,7 @@ public class ChangeEventActivity extends AppCompatActivity
         while (cursor.moveToNext()) {
             String taskName = cursor.getString(cursor.getColumnIndex(DatabaseHelper.TASK_NAME_COLUMN));
             int prId = cursor.getInt(cursor.getColumnIndex(DatabaseHelper.TASK_PARENT_EVENT_ID));
+            int tId = cursor.getInt(cursor.getColumnIndex(DatabaseHelper._ID));
             if (prId == eventId) {
                 LinearLayout linearLayout = (LinearLayout)findViewById(R.id.LinearLayoutInChangeEvent);
 
@@ -270,6 +284,7 @@ public class ChangeEventActivity extends AppCompatActivity
                 textView.setLayoutParams(layoutParams);
                 textView.setText(taskName);
                 taskText.add(textView);
+                taskId.add(tId);
                 linearLayout.addView(textView);
             }
         }

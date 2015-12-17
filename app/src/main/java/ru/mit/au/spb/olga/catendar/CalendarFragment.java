@@ -174,7 +174,7 @@ public class CalendarFragment extends Fragment {
 
                     @Override
                     public void onClick(View v) {
-                        if (table[globalI][globalJ].getText().equals("+")) {
+                        if (table[globalI][globalJ].getText().equals("+\n ")) {
                             Intent intent = new Intent(context, CreateEventActivity.class);
 
                             startActivityForResult(intent, CREATE_EVENT);
