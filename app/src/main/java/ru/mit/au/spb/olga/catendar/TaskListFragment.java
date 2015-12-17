@@ -1,11 +1,14 @@
 package ru.mit.au.spb.olga.catendar;
 
+import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
+import android.os.Vibrator;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v7.app.AlertDialog;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,7 +24,7 @@ import java.util.TreeMap;
 /**
  * Created by olga on 12.12.15.
  */
-public class TaskListFragment extends Fragment implements CompoundButton.OnCheckedChangeListener, View.OnClickListener {
+public class TaskListFragment extends Fragment implements CompoundButton.OnCheckedChangeListener {
     private DatabaseHelper mDatabaseHelper;
     private SQLiteDatabase mSQLiteDatabase;
 
@@ -29,6 +32,8 @@ public class TaskListFragment extends Fragment implements CompoundButton.OnCheck
     private ExpandableListView listOfEvent;
 
     private boolean showAll;
+
+    private ShakeListener mShaker;
 
     @Nullable
     @Override
@@ -38,7 +43,7 @@ public class TaskListFragment extends Fragment implements CompoundButton.OnCheck
 
         listOfEvent = (ExpandableListView) rootView.findViewById(R.id.expandableListView);
 
-        mDatabaseHelper = new DatabaseHelper(getContext(), "mydatabase9.db", null, 1);
+        mDatabaseHelper = new DatabaseHelper(getContext(), "mydatabase10.db", null, 1);
         mSQLiteDatabase = mDatabaseHelper.getWritableDatabase();
 
         synchronizedWithDateBase();
@@ -49,10 +54,26 @@ public class TaskListFragment extends Fragment implements CompoundButton.OnCheck
             mSwitch.setOnCheckedChangeListener(this);
         }
 
-        Button onCreateTask = (Button) rootView.findViewById(R.id.add_task);
-
-        onCreateTask.setOnClickListener((View.OnClickListener) this);
+        mShaker = new ShakeListener(getActivity());
+        mShaker.setOnShakeListener(new ShakeListener.OnShakeListener() {
+            public void onShake() {
+                synchronizedWithDateBase();
+                drawTaskList();
+            }
+        });
         return rootView;
+    }
+    @Override
+    public void onResume()
+    {
+        mShaker.resume();
+        super.onResume();
+    }
+    @Override
+    public void onPause()
+    {
+        mShaker.pause();
+        super.onPause();
     }
 
     @Override
@@ -61,25 +82,6 @@ public class TaskListFragment extends Fragment implements CompoundButton.OnCheck
         synchronizedWithDateBase();
         drawTaskList();
     }
-
-    static final private int CREATE_TASK = 0;
-    @Override
-    public void onClick(View view) {
-        Intent intent = new Intent(getActivity(), CreateTaskActivity.class);
-        startActivityForResult(intent, CREATE_TASK);
-    }
-
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == CREATE_TASK) {
-            if (resultCode == getActivity().RESULT_OK) {
-                synchronizedWithDateBase();
-                drawTaskList();
-            }
-        }
-    }
-
 
     private void drawTaskList() {
         ArrayList<Event> eventListWithTasks = new ArrayList<>();

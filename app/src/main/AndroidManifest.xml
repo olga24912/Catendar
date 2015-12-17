@@ -21,14 +21,9 @@
             android:name=".CreateEventActivity"
             android:label="@string/create_event_title" >
         </activity>
-        <activity android:name=".TaskListActivity" />
         <activity
             android:name=".CalendarActivity"
             android:label="@string/title_activity_calendar" >
-        </activity>
-        <activity
-            android:name=".CreateTaskActivity"
-            android:label="Create task">
         </activity>
         <activity
             android:name=".CreateWeekActivity"

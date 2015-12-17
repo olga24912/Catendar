@@ -13,50 +13,6 @@
         android:layout_alignParentEnd="true"
         android:hint="@string/name_of_event_in_create_event" />
 
-    <EditText
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:inputType="date"
-        android:ems="10"
-        android:id="@+id/editDateStartEvent"
-        android:hint="@string/date_of_begin"
-        android:layout_below="@+id/editEventText"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true" />
-
-    <EditText
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:inputType="date"
-        android:ems="10"
-        android:id="@+id/editDateEndEvent"
-        android:hint="@string/date_of_end"
-        android:layout_below="@+id/editDateStartEvent"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true" />
-
-    <EditText
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:inputType="time"
-        android:ems="10"
-        android:id="@+id/editTimeStartEvent"
-        android:layout_below="@+id/editEventText"
-        android:layout_toEndOf="@+id/editDateStartEvent"
-        android:layout_toRightOf="@+id/editDateStartEvent" />
-
-    <EditText
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:inputType="time"
-        android:ems="10"
-        android:id="@+id/editTimeEndEvent"
-        android:layout_alignBottom="@+id/editDateEndEvent"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true"
-        android:layout_toRightOf="@+id/editDateEndEvent"
-        android:layout_toEndOf="@+id/editDateEndEvent" />
-
     <Button
         style="?android:attr/buttonStyleSmall"
         android:layout_width="wrap_content"
@@ -66,7 +22,6 @@
         android:layout_alignParentBottom="true"
         android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true"
-        android:layout_toEndOf="@+id/editDateEndEvent"
         android:onClick="onOkClick"/>
 
     <Button
@@ -78,8 +33,100 @@
         android:layout_alignParentBottom="true"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
+        android:onClick="onCancelClick"
+        />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:id="@+id/StartDate"
+        android:layout_below="@+id/editEventText"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_alignBottom="@+id/setDate" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/set_date"
+        android:id="@+id/setDate"
+        android:layout_below="@+id/editEventText"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
+        android:onClick="onSetDateClick"
+        />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/set_time"
+        android:id="@+id/setTime"
+        android:layout_below="@+id/setDate"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
+        android:onClick="onSetTimeClick"
+        />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:text=""
+        android:id="@+id/StartTime"
+        android:layout_below="@+id/StartDate"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true" />
+
+    <SeekBar
+        android:layout_height="wrap_content"
+        android:layout_width="match_parent"
+        android:id="@+id/seekBarOfEventLen"
+        android:layout_toStartOf="@+id/OKinCreateEvent"
+        android:layout_below="@+id/setTime"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true" />
+
+    <TextView
+        android:id="@+id/durationVal"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" android:text="1" android:textStyle="bold"
+        android:layout_toRightOf="@+id/duration"
+        android:layout_alignTop="@+id/duration"></TextView>
+
+    <TextView
+        android:id="@+id/duration"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" android:text="The duration of the event: " android:textStyle="bold"
+        android:layout_below="@+id/seekBarOfEventLen"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"></TextView>
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/scrollView"
+        android:layout_gravity="right"
+        android:layout_above="@+id/OKinCreateEvent"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_below="@+id/duration">
+
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/LinearLayoutInCreateTask">
+        </LinearLayout>
+    </ScrollView>
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/add_task_extra"
+        android:id="@+id/add_new_task"
+        android:layout_alignBottom="@+id/OKinCreateEvent"
         android:layout_toLeftOf="@+id/OKinCreateEvent"
         android:layout_toStartOf="@+id/OKinCreateEvent"
-        android:onClick="onCancelClick"/>
-
+        android:onClick="onAddTaskClick"/>
 </RelativeLayout>

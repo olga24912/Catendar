@@ -107,17 +107,17 @@ public class MainActivity extends ActionBarActivity {
             case 2:
                 intent = new Intent(MainActivity.this, CreateEventActivity.class);
 
-                startActivity(intent);
+                startActivityForResult(intent, 2);
                 break;
             case 3:
                 intent = new Intent(MainActivity.this, CreateWeekActivity.class);
 
-                startActivity(intent);
+                startActivityForResult(intent, 3);
                 break;
             case 4:
                 intent = new Intent(MainActivity.this, CreateTemplateActivity.class);
 
-                startActivity(intent);
+                startActivityForResult(intent, 4);
                 break;
             case 5:
                 fragment = new CompareFragment();
@@ -190,5 +190,13 @@ public class MainActivity extends ActionBarActivity {
         super.onConfigurationChanged(newConfig);
         // Pass any configuration change to the drawer toggls
         myDrawerToggle.onConfigurationChanged(newConfig);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (2 <= requestCode && requestCode <= 4) {
+            displayView(0);
+        }
     }
 }
