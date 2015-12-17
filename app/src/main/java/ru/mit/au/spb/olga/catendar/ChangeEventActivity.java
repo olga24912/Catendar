@@ -5,9 +5,11 @@ import android.app.Dialog;
 import android.app.TimePickerDialog;
 import android.content.ContentValues;
 import android.content.Intent;
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.text.Editable;
 import android.view.Gravity;
 import android.view.View;
 import android.widget.DatePicker;
@@ -63,7 +65,17 @@ public class ChangeEventActivity extends AppCompatActivity
 
         setContentView(R.layout.activity_change_event);
 
+        mDatabaseHelper = new DatabaseHelper(this, "mydatabase10.db", null, 1);
+        mSQLiteDatabase = mDatabaseHelper.getWritableDatabase();
+
         eventId = getIntent().getIntExtra("id", 0);
+
+        Cursor cursor = mSQLiteDatabase.query(DatabaseHelper.DATABASE_TABLE_EVENT, new String[]{DatabaseHelper._ID,
+                        DatabaseHelper.EVENT_START_DATE, DatabaseHelper.EVENT_END_DATE,
+                DatabaseHelper.EVENT_NAME},
+                null, null,
+                null, null, null);
+
         eventText = (EditText)findViewById(R.id.changeEventText);
 
         tvInfo = (TextView)findViewById(R.id.changeStartDate);
@@ -78,15 +90,40 @@ public class ChangeEventActivity extends AppCompatActivity
 
         duration = 1;
 
-        mDatabaseHelper = new DatabaseHelper(this, "mydatabase10.db", null, 1);
-        mSQLiteDatabase = mDatabaseHelper.getWritableDatabase();
-
         Calendar today = Calendar.getInstance();
         year = today.get(Calendar.YEAR);
         month = today.get(Calendar.MONTH);
         day = today.get(Calendar.DAY_OF_MONTH);
+
+        while (cursor.moveToNext())  {
+            int currentId = cursor.getInt(cursor.getColumnIndex(DatabaseHelper._ID));
+            if (currentId == eventId) {
+                String name = cursor.getString(cursor.getColumnIndex(DatabaseHelper.EVENT_NAME));
+                int startTime = cursor.getInt(cursor.getColumnIndex(DatabaseHelper.EVENT_START_DATE));
+                int endTime = cursor.getInt(cursor.getColumnIndex(DatabaseHelper.EVENT_END_DATE));
+                seekbar.setProgress((endTime - startTime)/(60*60));
+                duration = (endTime - startTime)/(60*60);
+
+                lenOfEvent.setText(Integer.toString((endTime - startTime) / (60 * 60)));
+
+                GregorianCalendar gc = new GregorianCalendar();
+                gc.setTimeInMillis((long)startTime*1000);
+                year = gc.get(Calendar.YEAR);
+                month = gc.get(Calendar.MONTH);
+                day = gc.get(Calendar.DAY_OF_MONTH);
+
+                hour = gc.get(Calendar.HOUR_OF_DAY);
+                minute = gc.get(Calendar.MINUTE);
+                eventText.setText(name);
+            }
+        }
+
+        cursor.close();
+
         tvInfoStartTime.setText("Start time is " + hour + " hours " + minute + " minutes");
         tvInfo.setText("Event day is " + day + "/" + (month + 1) + "/" + year);
+
+        printTask();
     }
 
     public void onSetDateClick(View view) {
@@ -199,5 +236,31 @@ public class ChangeEventActivity extends AppCompatActivity
         textView.setHint("Task text");
         taskText.add(textView);
         linearLayout.addView(textView);
+    }
+
+    private void printTask() {
+        Cursor cursor = mSQLiteDatabase.query(DatabaseHelper.DATABASE_TABLE_TASK, new String[]{DatabaseHelper._ID,
+                        DatabaseHelper.TASK_NAME_COLUMN, DatabaseHelper.TASK_PARENT_EVENT_ID,
+                        DatabaseHelper.TASK_IS_DONE},
+                null, null,
+                null, null, null);
+        while (cursor.moveToNext()) {
+            String taskName = cursor.getString(cursor.getColumnIndex(DatabaseHelper.TASK_NAME_COLUMN));
+            int prId = cursor.getInt(cursor.getColumnIndex(DatabaseHelper.TASK_PARENT_EVENT_ID));
+            if (prId == eventId) {
+                LinearLayout linearLayout = (LinearLayout)findViewById(R.id.LinearLayoutInChangeEvent);
+
+                LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT,
+                        LinearLayout.LayoutParams.WRAP_CONTENT);
+
+                layoutParams.gravity = Gravity.LEFT;
+                layoutParams.setMargins(0, 10, 10, 10);
+                EditText textView = new EditText(this);
+                textView.setLayoutParams(layoutParams);
+                textView.setText(taskName);
+                taskText.add(textView);
+                linearLayout.addView(textView);
+            }
+        }
     }
 }
