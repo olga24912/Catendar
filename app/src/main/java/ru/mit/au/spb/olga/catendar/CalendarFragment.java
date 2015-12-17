@@ -10,6 +10,7 @@ import android.net.Uri;
 import android.os.Bundle;
 //import android.app.Fragment;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -53,15 +54,6 @@ public class CalendarFragment extends Fragment {
         mDatabaseHelper = new DatabaseHelper(getContext(), "mydatabase10.db", null, 1);
         mSQLiteDatabase = mDatabaseHelper.getWritableDatabase();
 
-        //setCalendarView()
-//        return inflater.inflate(R.layout.fragment_calendar2, container, false);
-//    }
-//
-//    @Override
-//    public void onActivityCreated(Bundle savedInstanceState) {
-//        super.onActivityCreated(savedInstanceState)
-
-
         Week tmpWeek = new Week(currentDate);
         getWeekDateBaseByDate(tmpWeek.getTimeInMS());
 
@@ -70,9 +62,6 @@ public class CalendarFragment extends Fragment {
             displaySampleTemplate(currentWeek);
         }
         return result;
-
-        //return inflater.inflate(R.layout.fragment_calendar2, container, false);
-
     }
 
     private void displaySampleTemplate(Week w) {
@@ -310,7 +299,7 @@ public class CalendarFragment extends Fragment {
 
     }
 
-    private Integer findIdWithThisTime(long ms) {
+    private Integer findIdWithThisTime(long s) {
         Cursor cursor = mSQLiteDatabase.query(DatabaseHelper.DATABASE_TABLE_WEEK, new String[]{
                         DatabaseHelper._ID, DatabaseHelper.WEEK_START_DATE
                 },
@@ -321,7 +310,7 @@ public class CalendarFragment extends Fragment {
             int id = cursor.getInt(cursor.getColumnIndex(DatabaseHelper._ID));
             long time = cursor.getLong(cursor.getColumnIndex(DatabaseHelper.WEEK_START_DATE));
 
-            if (time == ms) {
+            if (time == s) {
                 return id;
             }
         }
@@ -329,10 +318,23 @@ public class CalendarFragment extends Fragment {
         return null;
     }
 
-    private void getWeekDateBaseByDate (long msTime) {
-        Integer id = findIdWithThisTime(msTime);
+    private void getWeekDateBaseByDate (long sTime) {
+        Integer id = findIdWithThisTime(sTime);
         if (id != null) {
             getWeekDateBase(id);
         }
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        getWeekDateBaseByDate(currentWeek.getTimeInMS());
+        displaySampleTemplate(currentWeek);
+
+        Fragment currentFragment = this;
+        FragmentTransaction fragTransaction = getFragmentManager().beginTransaction();
+        fragTransaction.detach(currentFragment);
+        fragTransaction.attach(currentFragment);
+        fragTransaction.commit();
     }
 }

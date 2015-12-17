@@ -179,11 +179,13 @@ public class ChangeEventActivity extends AppCompatActivity
 
         newValues.put(DatabaseHelper.EVENT_NAME, String.valueOf(createEvent.getText()));
         newValues.put(DatabaseHelper.EVENT_PARENT_TEMPLATE, 0);
-        newValues.put(DatabaseHelper.EVENT_START_DATE, startCal.getTimeInMillis()/1000);
+        newValues.put(DatabaseHelper.EVENT_START_DATE, startCal.getTimeInMillis() / 1000);
         endCal.add(Calendar.HOUR_OF_DAY, duration);
         newValues.put(DatabaseHelper.EVENT_END_DATE, endCal.getTimeInMillis() / 1000);
 
-        int parentID = (int)mSQLiteDatabase.insert(DatabaseHelper.DATABASE_TABLE_EVENT, null, newValues);
+        mSQLiteDatabase.update(DatabaseHelper.DATABASE_TABLE_EVENT, newValues, "_id " + "=" + eventId, null);
+
+        int parentID = eventId;
 
         for (EditText currentTask : taskText) {
             newValues = new ContentValues();
