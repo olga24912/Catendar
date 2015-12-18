@@ -120,6 +120,11 @@ public class MainActivity extends ActionBarActivity {
                 startActivityForResult(intent, 4);
                 break;
             case 5:
+                intent = new Intent(MainActivity.this, DeleteTemplateActivity.class);
+
+                startActivityForResult(intent, 5);
+                break;
+            case 6:
                 fragment = new CompareFragment();
                 break;
             default:
@@ -195,7 +200,7 @@ public class MainActivity extends ActionBarActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (2 <= requestCode && requestCode <= 4) {
+        if (2 <= requestCode && requestCode <= 5) {
             displayView(0);
         }
     }

@@ -10,6 +10,7 @@
         <item>Create event</item>
         <item>Create week</item>
         <item>Create template</item>
+        <item>Delete template</item>
         <item>Compare</item>
     </string-array>
     <string name="menu">Menu</string>
