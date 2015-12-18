@@ -51,6 +51,7 @@ public class ChangeEventActivity extends AppCompatActivity
     private int duration;
 
     private int eventId;
+    private int parentId;
 
     private ArrayList<EditText> taskText = new ArrayList<>();
     private ArrayList<Integer> taskId = new ArrayList<>();
@@ -73,7 +74,7 @@ public class ChangeEventActivity extends AppCompatActivity
 
         Cursor cursor = mSQLiteDatabase.query(DatabaseHelper.DATABASE_TABLE_EVENT, new String[]{DatabaseHelper._ID,
                         DatabaseHelper.EVENT_START_DATE, DatabaseHelper.EVENT_END_DATE,
-                DatabaseHelper.EVENT_NAME},
+                DatabaseHelper.EVENT_NAME, DatabaseHelper.EVENT_PARENT_TEMPLATE},
                 null, null,
                 null, null, null);
 
@@ -102,6 +103,7 @@ public class ChangeEventActivity extends AppCompatActivity
                 String name = cursor.getString(cursor.getColumnIndex(DatabaseHelper.EVENT_NAME));
                 int startTime = cursor.getInt(cursor.getColumnIndex(DatabaseHelper.EVENT_START_DATE));
                 int endTime = cursor.getInt(cursor.getColumnIndex(DatabaseHelper.EVENT_END_DATE));
+                parentId = cursor.getInt(cursor.getColumnIndex(DatabaseHelper.EVENT_PARENT_TEMPLATE));
                 seekbar.setProgress((endTime - startTime)/(60*60));
                 duration = (endTime - startTime)/(60*60);
 
@@ -195,7 +197,8 @@ public class ChangeEventActivity extends AppCompatActivity
         newValues.put(DatabaseHelper.EVENT_START_DATE, startCal.getTimeInMillis() / 1000);
         endCal.add(Calendar.HOUR_OF_DAY, duration);
         newValues.put(DatabaseHelper.EVENT_END_DATE, endCal.getTimeInMillis() / 1000);
-
+        newValues.put(DatabaseHelper.EVENT_PARENT_TEMPLATE, parentId);
+        
         mSQLiteDatabase.update(DatabaseHelper.DATABASE_TABLE_EVENT, newValues, "_id " + "=" + eventId, null);
 
         int parentID = eventId;
