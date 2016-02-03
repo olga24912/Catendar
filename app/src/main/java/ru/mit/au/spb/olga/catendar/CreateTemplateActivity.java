@@ -88,7 +88,7 @@ public class CreateTemplateActivity extends AppCompatActivity {
 
         listOfEvent = (ListView) findViewById(R.id.listViewInCreateTemplate);
 
-        mDatabaseHelper = new DatabaseHelper(this, "mydatabase11.db", null, 1);
+        mDatabaseHelper = new DatabaseHelper(this, "mydatabase12.db", null, 1);
         mSQLiteDatabase = mDatabaseHelper.getWritableDatabase();
 
         templateName = (EditText) findViewById(R.id.editTemplate);
@@ -116,6 +116,7 @@ public class CreateTemplateActivity extends AppCompatActivity {
         }
         synchronizedWithDateBase();
         drawEventList();
+        cursor.close();
     }
 
     public void onCancelClick(View view) {

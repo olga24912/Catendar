@@ -13,14 +13,18 @@ import android.support.v7.app.ActionBarActivity;
 
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
 
-public class MainActivity extends ActionBarActivity {
+public class MainActivity extends ActionBarActivity implements SimpleGestureFilter.SimpleGestureListener{
+    private SimpleGestureFilter detector;
 
+    private int currentAdditionToWeek = 0;
+    private int currentPosition = 0;
     private DrawerLayout myDrawerLayout;
     private ListView myDrawerList;
     private ActionBarDrawerToggle myDrawerToggle;
@@ -41,6 +45,7 @@ public class MainActivity extends ActionBarActivity {
             CalendarFragment calendar = new CalendarFragment();
             getSupportFragmentManager().beginTransaction().add(android.R.id.content, calendar).commit();
         }*/
+        detector = new SimpleGestureFilter(this,this);
 
         myTitle =  getTitle();
         myDrawerTitle = getResources().getString(R.string.menu);
@@ -82,6 +87,42 @@ public class MainActivity extends ActionBarActivity {
 
         myDrawerList.setOnItemClickListener(new DrawerItemClickListener());
     }
+    @Override
+    public boolean dispatchTouchEvent(MotionEvent me){
+        // Call onTouchEvent of SimpleGestureFilter class
+        this.detector.onTouchEvent(me);
+        return super.dispatchTouchEvent(me);
+    }
+    @Override
+    public void onSwipe(int direction) {
+        if (currentPosition != 0) {
+            return;
+        }
+        Fragment fragment = null;
+        switch (direction) {
+            case SimpleGestureFilter.SWIPE_RIGHT :
+                currentAdditionToWeek--;
+                fragment = new CalendarFragment(currentAdditionToWeek);
+                break;
+            case SimpleGestureFilter.SWIPE_LEFT :
+                currentAdditionToWeek++;
+                fragment = new CalendarFragment(currentAdditionToWeek);
+                break;
+            case SimpleGestureFilter.SWIPE_DOWN :
+                break;
+            case SimpleGestureFilter.SWIPE_UP :
+                break;
+
+        }
+        if (fragment != null) {
+            getSupportFragmentManager().beginTransaction().replace(R.id.content_frame, fragment).commit();
+        }
+    }
+
+    @Override
+    public void onDoubleTap() {
+
+    }
 
     private class DrawerItemClickListener implements ListView.OnItemClickListener {
         @Override
@@ -99,32 +140,40 @@ public class MainActivity extends ActionBarActivity {
         Intent intent;
         switch (position) {
             case 0:
+                currentPosition = 0;
+                currentAdditionToWeek = 0;
                 fragment = new CalendarFragment();
                 break;
             case 1:
+                currentPosition = 1;
                 fragment = new TaskListFragment();
                 break;
             case 2:
+                currentPosition = 2;
                 intent = new Intent(MainActivity.this, CreateEventActivity.class);
 
                 startActivityForResult(intent, 2);
                 break;
             case 3:
+                currentPosition = 3;
                 intent = new Intent(MainActivity.this, CreateWeekActivity.class);
 
                 startActivityForResult(intent, 3);
                 break;
             case 4:
+                currentPosition = 4;
                 intent = new Intent(MainActivity.this, CreateTemplateActivity.class);
 
                 startActivityForResult(intent, 4);
                 break;
             case 5:
+                currentPosition = 5;
                 intent = new Intent(MainActivity.this, DeleteTemplateActivity.class);
 
                 startActivityForResult(intent, 5);
                 break;
             case 6:
+                currentPosition = 6;
                 fragment = new CompareFragment();
                 break;
             default:

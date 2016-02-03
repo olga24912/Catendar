@@ -52,7 +52,7 @@ public class CreateWeekActivity extends AppCompatActivity {
 
         setContentView(R.layout.activity_create_week);
 
-        mDatabaseHelper = new DatabaseHelper(this, "mydatabase11.db", null, 1);
+        mDatabaseHelper = new DatabaseHelper(this, "mydatabase12.db", null, 1);
         mSQLiteDatabase = mDatabaseHelper.getWritableDatabase();
 
         tvInfo = (TextView)findViewById(R.id.Selected_date);
@@ -188,10 +188,12 @@ public class CreateWeekActivity extends AppCompatActivity {
             long time = cursor.getLong(cursor.getColumnIndex(DatabaseHelper.WEEK_START_DATE));
 
             if (time == ms) {
+                cursor.close();
                 return id;
             }
         }
 
+        cursor.close();
         return null;
     }
 
@@ -268,6 +270,7 @@ public class CreateWeekActivity extends AppCompatActivity {
                 mSQLiteDatabase.insert(DatabaseHelper.DATABASE_TABLE_EVENT, null, tValues);
             }
         }
+        cursor.close();
     }
 
     public void onCancelWeekClick(View view) {

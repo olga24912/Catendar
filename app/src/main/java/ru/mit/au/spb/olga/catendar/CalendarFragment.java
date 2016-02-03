@@ -10,11 +10,14 @@ import android.net.Uri;
 import android.os.Bundle;
 //import android.app.Fragment;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v4.view.ViewPager;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.accessibility.AccessibilityManager;
 import android.widget.HorizontalScrollView;
 import android.widget.ScrollView;
 import android.widget.TableLayout;
@@ -51,12 +54,18 @@ public class CalendarFragment extends Fragment {
         // Required empty public constructor
     }
 
+    public CalendarFragment(int add) {
+        currentDate = new GregorianCalendar();
+        currentDate.add(Calendar.SECOND, add*7*24*60*60);
+    }
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        mDatabaseHelper = new DatabaseHelper(getContext(), "mydatabase11.db", null, 1);
+
+        mDatabaseHelper = new DatabaseHelper(getContext(), "mydatabase12.db", null, 1);
         mSQLiteDatabase = mDatabaseHelper.getWritableDatabase();
 
         Week tmpWeek = new Week(currentDate);
@@ -66,6 +75,7 @@ public class CalendarFragment extends Fragment {
         if (currentWeek != null) {
             displaySampleTemplate(currentWeek);
         }
+
         return result;
     }
 
@@ -87,11 +97,11 @@ public class CalendarFragment extends Fragment {
             int i = (hour) % HOURS_PER_DAY;
             long length = (e.getEnd() - e.getStart()) / HOUR_LENGTH;
             String nm2 = e.getText();
-            if (name.length() > 6) {
-                name = name.substring(0, 6);
+            if (name.length() > 5) {
+                name = name.substring(0, 5);
             }
-            if (nm2.length() > 6) {
-                nm2 = nm2.substring(0, 6);
+            if (nm2.length() > 5) {
+                nm2 = nm2.substring(0, 5);
             }
             table[i][j].setText(name + "\n" + nm2);
 
@@ -194,6 +204,8 @@ public class CalendarFragment extends Fragment {
         verticalScroll.addView(calendar);
         horizontalScroll.addView(verticalScroll);
         //setContentView(horizontalScroll);
+
+
         return horizontalScroll;
     }
 
@@ -336,9 +348,12 @@ public class CalendarFragment extends Fragment {
             long time = cursor.getLong(cursor.getColumnIndex(DatabaseHelper.WEEK_START_DATE));
 
             if (time == s) {
+                cursor.close();
                 return id;
             }
         }
+
+        cursor.close();
 
         return null;
     }
@@ -346,6 +361,15 @@ public class CalendarFragment extends Fragment {
     private void getWeekDateBaseByDate (long sTime) {
         Integer id = findIdWithThisTime(sTime);
         if (id != null) {
+            getWeekDateBase(id);
+        } else {
+            ContentValues newValues = new ContentValues();
+
+            newValues.put(DatabaseHelper.WEEK_START_DATE, sTime);
+
+            mSQLiteDatabase.insert(DatabaseHelper.DATABASE_TABLE_WEEK, null, newValues);
+
+            id = findIdWithThisTime(sTime);
             getWeekDateBase(id);
         }
     }

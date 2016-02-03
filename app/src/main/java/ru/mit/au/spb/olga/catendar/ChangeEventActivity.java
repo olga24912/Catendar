@@ -67,7 +67,7 @@ public class ChangeEventActivity extends AppCompatActivity
 
         setContentView(R.layout.activity_change_event);
 
-        mDatabaseHelper = new DatabaseHelper(this, "mydatabase11.db", null, 1);
+        mDatabaseHelper = new DatabaseHelper(this, "mydatabase12.db", null, 1);
         mSQLiteDatabase = mDatabaseHelper.getWritableDatabase();
 
         eventId = getIntent().getIntExtra("id", 0);
@@ -198,7 +198,7 @@ public class ChangeEventActivity extends AppCompatActivity
         endCal.add(Calendar.HOUR_OF_DAY, duration);
         newValues.put(DatabaseHelper.EVENT_END_DATE, endCal.getTimeInMillis() / 1000);
         newValues.put(DatabaseHelper.EVENT_PARENT_TEMPLATE, parentId);
-        
+
         mSQLiteDatabase.update(DatabaseHelper.DATABASE_TABLE_EVENT, newValues, "_id " + "=" + eventId, null);
 
         int parentID = eventId;

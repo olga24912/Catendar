@@ -43,7 +43,7 @@ public class TaskListFragment extends Fragment implements CompoundButton.OnCheck
 
         listOfEvent = (ExpandableListView) rootView.findViewById(R.id.expandableListView);
 
-        mDatabaseHelper = new DatabaseHelper(getContext(), "mydatabase11.db", null, 1);
+        mDatabaseHelper = new DatabaseHelper(getContext(), "mydatabase12.db", null, 1);
         mSQLiteDatabase = mDatabaseHelper.getWritableDatabase();
 
         synchronizedWithDateBase();
@@ -152,5 +152,6 @@ public class TaskListFragment extends Fragment implements CompoundButton.OnCheck
         for (Event event: giveEventById.values()) {
             eventList.add(event);
         }
+        cursor.close();
     }
 }
