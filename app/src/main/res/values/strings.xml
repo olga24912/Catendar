@@ -70,6 +70,20 @@
     <string name="set_time">Set Time</string>
 
     <string name="delete">Delete</string>
+
+    <string name="taskText">What you need to do?</string>
+    <string name="priority">Priority:</string>
+    <string name="duration">Time for this task:</string>
+    <string name="startTime">Time when you can start:</string>
+    <string name="startDate">Date when you can start:</string>
+    <string name="finishTime">Deadline time:</string>
+    <string name="finishDate">Deadline date:</string>
+    <string name="context">Place where you can do this task:</string>
+    <string name="comments">Some comments about this task</string>
+
+
+    <string name="change">Change</string>
+
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>
