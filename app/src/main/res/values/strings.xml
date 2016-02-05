@@ -7,6 +7,7 @@
     <string-array name="views_array">
         <item>Calendar</item>
         <item>Task List</item>
+        <item>Create task</item>
         <item>Create event</item>
         <item>Create week</item>
         <item>Create template</item>

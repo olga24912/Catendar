@@ -34,6 +34,10 @@
             android:label="Create event">
         </activity>
         <activity
+            android:name=".CreateTaskActivity"
+            android:label="Create task">
+        </activity>
+        <activity
             android:name=".ChangeEventActivity"
             android:label="Change event">
         </activity>

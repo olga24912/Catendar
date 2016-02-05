@@ -150,30 +150,37 @@ public class MainActivity extends ActionBarActivity implements SimpleGestureFilt
                 break;
             case 2:
                 currentPosition = 2;
-                intent = new Intent(MainActivity.this, CreateEventActivity.class);
+
+                intent = new Intent(MainActivity.this, CreateTaskActivity.class);
 
                 startActivityForResult(intent, 2);
                 break;
             case 3:
                 currentPosition = 3;
-                intent = new Intent(MainActivity.this, CreateWeekActivity.class);
+                intent = new Intent(MainActivity.this, CreateEventActivity.class);
 
                 startActivityForResult(intent, 3);
                 break;
             case 4:
                 currentPosition = 4;
-                intent = new Intent(MainActivity.this, CreateTemplateActivity.class);
+                intent = new Intent(MainActivity.this, CreateWeekActivity.class);
 
                 startActivityForResult(intent, 4);
                 break;
             case 5:
                 currentPosition = 5;
-                intent = new Intent(MainActivity.this, DeleteTemplateActivity.class);
+                intent = new Intent(MainActivity.this, CreateTemplateActivity.class);
 
                 startActivityForResult(intent, 5);
                 break;
             case 6:
                 currentPosition = 6;
+                intent = new Intent(MainActivity.this, DeleteTemplateActivity.class);
+
+                startActivityForResult(intent, 6);
+                break;
+            case 7:
+                currentPosition = 7;
                 fragment = new CompareFragment();
                 break;
             default:
@@ -249,7 +256,7 @@ public class MainActivity extends ActionBarActivity implements SimpleGestureFilt
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (2 <= requestCode && requestCode <= 5) {
+        if (2 <= requestCode && requestCode <= 6) {
             displayView(0);
         }
     }
