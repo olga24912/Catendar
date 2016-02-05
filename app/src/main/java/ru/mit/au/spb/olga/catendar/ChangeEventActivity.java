@@ -126,7 +126,7 @@ public class ChangeEventActivity extends AppCompatActivity
         tvInfoStartTime.setText("Start time is " + hour + " hours " + minute + " minutes");
         tvInfo.setText("Event day is " + day + "/" + (month + 1) + "/" + year);
 
-        printTask();
+        //printTask();
     }
 
     public void onSetDateClick(View view) {
@@ -208,7 +208,7 @@ public class ChangeEventActivity extends AppCompatActivity
             newValues = new ContentValues();
 
             newValues.put(DatabaseHelper.TASK_NAME_COLUMN, String.valueOf(currentTask.getText()));
-            newValues.put(DatabaseHelper.TASK_PARENT_EVENT_ID, parentID);
+            //newValues.put(DatabaseHelper.TASK_PARENT_EVENT_ID, parentID);
             newValues.put(DatabaseHelper.TASK_IS_DONE, 0);
 
             if (i >= taskId.size()) {
@@ -265,7 +265,7 @@ public class ChangeEventActivity extends AppCompatActivity
         linearLayout.addView(textView);
     }
 
-    private void printTask() {
+    /*private void printTask() {
         Cursor cursor = mSQLiteDatabase.query(DatabaseHelper.DATABASE_TABLE_TASK, new String[]{DatabaseHelper._ID,
                         DatabaseHelper.TASK_NAME_COLUMN, DatabaseHelper.TASK_PARENT_EVENT_ID,
                         DatabaseHelper.TASK_IS_DONE},
@@ -291,5 +291,5 @@ public class ChangeEventActivity extends AppCompatActivity
                 linearLayout.addView(textView);
             }
         }
-    }
+    }*/
 }

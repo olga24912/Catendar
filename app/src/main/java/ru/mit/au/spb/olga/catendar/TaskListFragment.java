@@ -46,7 +46,7 @@ public class TaskListFragment extends Fragment implements CompoundButton.OnCheck
         mDatabaseHelper = new DatabaseHelper(getContext(), "mydatabase12.db", null, 1);
         mSQLiteDatabase = mDatabaseHelper.getWritableDatabase();
 
-        synchronizedWithDateBase();
+        //synchronizedWithDateBase();
         drawTaskList();
 
         Switch mSwitch = (Switch)rootView.findViewById(R.id.switchShowAll);
@@ -57,7 +57,7 @@ public class TaskListFragment extends Fragment implements CompoundButton.OnCheck
         mShaker = new ShakeListener(getActivity());
         mShaker.setOnShakeListener(new ShakeListener.OnShakeListener() {
             public void onShake() {
-                synchronizedWithDateBase();
+                //synchronizedWithDateBase();
                 drawTaskList();
             }
         });
@@ -79,7 +79,7 @@ public class TaskListFragment extends Fragment implements CompoundButton.OnCheck
     @Override
     public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
         showAll = isChecked;
-        synchronizedWithDateBase();
+        //synchronizedWithDateBase();
         drawTaskList();
     }
 
@@ -108,7 +108,7 @@ public class TaskListFragment extends Fragment implements CompoundButton.OnCheck
     }
 
 
-    private void synchronizedWithDateBase() {
+    /*private void synchronizedWithDateBase() {
         Map<Integer, Event> giveEventById = new TreeMap<>();
 
         Cursor cursor = mSQLiteDatabase.query("events", new String[]{DatabaseHelper._ID, DatabaseHelper.EVENT_NAME,
@@ -153,5 +153,5 @@ public class TaskListFragment extends Fragment implements CompoundButton.OnCheck
             eventList.add(event);
         }
         cursor.close();
-    }
+    }*/
 }

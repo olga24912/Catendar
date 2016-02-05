@@ -105,7 +105,7 @@ public class ExpListAdapter extends BaseExpandableListAdapter {
                 int dataBaseId = mGroups.get(groupPosition).getTaskList().get(childPosition).getId();
                 Boolean isDone = mGroups.get(groupPosition).getTaskList().get(childPosition).getIsDone();
 
-                Cursor cursor = mSQLiteDatabase.query("tasks", new String[]{DatabaseHelper._ID, DatabaseHelper.TASK_NAME_COLUMN,
+                /*Cursor cursor = mSQLiteDatabase.query("tasks", new String[]{DatabaseHelper._ID, DatabaseHelper.TASK_NAME_COLUMN,
                                 DatabaseHelper.TASK_PARENT_EVENT_ID, DatabaseHelper.TASK_IS_DONE},
                         null, null,
                         null, null, null);
@@ -125,7 +125,7 @@ public class ExpListAdapter extends BaseExpandableListAdapter {
                     }
                 }
 
-                cursor.close();
+                cursor.close();*/
             }
         });
 

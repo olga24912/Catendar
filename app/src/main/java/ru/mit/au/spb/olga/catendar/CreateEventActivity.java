@@ -149,7 +149,7 @@ public class CreateEventActivity extends AppCompatActivity
 
         int parentID = (int)mSQLiteDatabase.insert(DatabaseHelper.DATABASE_TABLE_EVENT, null, newValues);
 
-        for (EditText currentTask : taskText) {
+        /*for (EditText currentTask : taskText) {
             newValues = new ContentValues();
 
             newValues.put(DatabaseHelper.TASK_NAME_COLUMN, String.valueOf(currentTask.getText()));
@@ -157,7 +157,7 @@ public class CreateEventActivity extends AppCompatActivity
             newValues.put(DatabaseHelper.TASK_IS_DONE, 0);
 
             mSQLiteDatabase.insert("tasks", null, newValues);
-        }
+        }*/
 
 
         answerIntent.putExtra(EVENT_NAME, createEvent.getText());

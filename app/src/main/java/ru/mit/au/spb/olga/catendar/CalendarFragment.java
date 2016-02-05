@@ -37,6 +37,9 @@ public class CalendarFragment extends Fragment {
     public static final int DAYS_PER_WEEK = 7;
     public static final long HOUR_LENGTH = 60 * 60;
     public static final String[] days = {"Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"};
+    public static final String[] months = {"January","February","March", "April", "May", "June",
+            "July", "August", "September", "October", "November", "December"};
+
 
     public static TextView[][] table = new TextView[HOURS_PER_DAY][DAYS_PER_WEEK];
 
@@ -75,6 +78,9 @@ public class CalendarFragment extends Fragment {
         if (currentWeek != null) {
             displaySampleTemplate(currentWeek);
         }
+
+        getActivity().setTitle(months[currentWeek.getStartDate().get(Calendar.MONTH)] + ", " +
+                String.valueOf(currentWeek.getStartDate().get(Calendar.YEAR)));
 
         return result;
     }
