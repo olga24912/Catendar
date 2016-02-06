@@ -52,7 +52,8 @@
             android:text="@string/change"
             android:id="@+id/createTaskButtonDuration"
             android:layout_alignParentTop="true"
-            android:layout_alignParentEnd="true" />
+            android:layout_alignParentEnd="true"
+            android:onClick="onSetDuration" />
     </RelativeLayout>
 
     <RelativeLayout
@@ -74,7 +75,8 @@
             android:text="@string/change"
             android:id="@+id/createTaskButtonStartDate"
             android:layout_alignParentTop="true"
-            android:layout_alignParentEnd="true" />
+            android:layout_alignParentEnd="true"
+            android:onClick="onSetStartDate" />
     </RelativeLayout>
 
     <RelativeLayout
@@ -96,7 +98,8 @@
             android:text="@string/change"
             android:id="@+id/createTaskButtonStartTime"
             android:layout_alignParentTop="true"
-            android:layout_alignParentEnd="true" />
+            android:layout_alignParentEnd="true"
+            android:onClick="onSetStartTime" />
     </RelativeLayout>
 
     <RelativeLayout
@@ -118,7 +121,8 @@
             android:text="@string/change"
             android:id="@+id/createTaskButtonFinishDate"
             android:layout_alignParentTop="true"
-            android:layout_alignParentEnd="true" />
+            android:layout_alignParentEnd="true"
+            android:onClick="onSetFinishDate" />
     </RelativeLayout>
 
     <RelativeLayout
@@ -140,7 +144,9 @@
             android:text="@string/change"
             android:id="@+id/createTaskButtonFinishTime"
             android:layout_alignParentTop="true"
-            android:layout_alignParentEnd="true" />
+            android:layout_alignParentEnd="true"
+            android:nestedScrollingEnabled="true"
+            android:onClick="onSetFinishTime" />
     </RelativeLayout>
 
     <RelativeLayout
@@ -189,6 +195,7 @@
         android:layout_height="wrap_content"
         android:text="@string/ok_button"
         android:id="@+id/createTaskButtonOk"
-        android:layout_gravity="right" />
+        android:layout_gravity="right"
+        android:onClick="onOkClick" />
 
 </LinearLayout>
