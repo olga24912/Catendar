@@ -11,8 +11,8 @@ import android.util.Log;
  * Created by olga on 31.10.15.
  */
 public class DatabaseHelper extends SQLiteOpenHelper implements BaseColumns {
-    private static final String DATABASE_NAME = "mydatabase12.db";
-    private static final int DATABASE_VERSION = 2;
+    private static final String DATABASE_NAME = "mydatabase13.db";
+    private static final int DATABASE_VERSION = 1;
 
     public static final String DATABASE_TABLE_EVENT = "events";
     public static final String DATABASE_TABLE_TASK = "tasks";

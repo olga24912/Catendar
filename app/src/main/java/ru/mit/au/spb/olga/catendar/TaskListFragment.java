@@ -6,6 +6,7 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.os.Vibrator;
+import android.provider.BaseColumns;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AlertDialog;
@@ -28,8 +29,8 @@ public class TaskListFragment extends Fragment implements CompoundButton.OnCheck
     private DatabaseHelper mDatabaseHelper;
     private SQLiteDatabase mSQLiteDatabase;
 
-    private ArrayList<Event> eventList = new ArrayList<>();
-    private ExpandableListView listOfEvent;
+    private ArrayList<Task> taskList = new ArrayList<>();
+    private ExpandableListView listOfTask;
 
     private boolean showAll;
 
@@ -41,18 +42,18 @@ public class TaskListFragment extends Fragment implements CompoundButton.OnCheck
         View rootView =
                 inflater.inflate(R.layout.activity_task_list, container, false);
 
-        listOfEvent = (ExpandableListView) rootView.findViewById(R.id.expandableListView);
+        listOfTask = (ExpandableListView) rootView.findViewById(R.id.toDoExpandableListView);
 
-        mDatabaseHelper = new DatabaseHelper(getContext(), "mydatabase12.db", null, 1);
+        mDatabaseHelper = new DatabaseHelper(getContext(), "mydatabase13.db", null, 1);
         mSQLiteDatabase = mDatabaseHelper.getWritableDatabase();
 
-        //synchronizedWithDateBase();
+        synchronizedWithDateBase();
         drawTaskList();
 
-        Switch mSwitch = (Switch)rootView.findViewById(R.id.switchShowAll);
+        /*Switch mSwitch = (Switch)rootView.findViewById(R.id.switchShowAll);
         if (mSwitch != null) {
             mSwitch.setOnCheckedChangeListener(this);
-        }
+        }*/
 
         mShaker = new ShakeListener(getActivity());
         mShaker.setOnShakeListener(new ShakeListener.OnShakeListener() {
@@ -84,74 +85,36 @@ public class TaskListFragment extends Fragment implements CompoundButton.OnCheck
     }
 
     private void drawTaskList() {
-        ArrayList<Event> eventListWithTasks = new ArrayList<>();
-        for (Event ev : eventList) {
-            Event newEvent = new Event();
-            newEvent.setText(ev.getText());
-            for (Task tk : ev.getTaskList()) {
-                if (!tk.getIsDone()) {
-                    newEvent.addTask(tk);
-                }
-            }
-            if (newEvent.getTaskList().size() > 0) {
-                eventListWithTasks.add(newEvent);
-            }
-        }
-
         ExpListAdapter adapter;
-        if (!showAll) {
-            adapter = new ExpListAdapter(getActivity().getApplicationContext(), eventListWithTasks, mSQLiteDatabase);
-        } else {
-            adapter = new ExpListAdapter(getActivity().getApplicationContext(), eventList, mSQLiteDatabase);
-        }
-        listOfEvent.setAdapter(adapter);
+        adapter = new ExpListAdapter(getActivity().getApplicationContext(), taskList, mSQLiteDatabase);
+        listOfTask.setAdapter(adapter);
     }
 
 
-    /*private void synchronizedWithDateBase() {
-        Map<Integer, Event> giveEventById = new TreeMap<>();
+    private void synchronizedWithDateBase() {
+        taskList.clear();
 
-        Cursor cursor = mSQLiteDatabase.query("events", new String[]{DatabaseHelper._ID, DatabaseHelper.EVENT_NAME,
-                        DatabaseHelper.EVENT_PARENT_TEMPLATE},
-                null, null,
-                null, null, null) ;
-
-        while (cursor.moveToNext()) {
-            Event currentEvent = new Event();
-            int id = cursor.getInt(cursor.getColumnIndex(DatabaseHelper._ID));
-            currentEvent.setText(cursor.getString(cursor
-                    .getColumnIndex(DatabaseHelper.EVENT_NAME)));
-
-            giveEventById.put(id, currentEvent);
-
-        }
-
-        cursor.close();
-
-        cursor = mSQLiteDatabase.query("tasks", new String[]{DatabaseHelper._ID, DatabaseHelper.TASK_NAME_COLUMN,
-                        DatabaseHelper.TASK_PARENT_EVENT_ID,DatabaseHelper.TASK_IS_DONE},
+        Cursor cursor = mSQLiteDatabase.query("tasks", new String[]{DatabaseHelper._ID,
+                        DatabaseHelper.TASK_NAME_COLUMN,
+                        DatabaseHelper.TASK_PRIORITY,
+                        DatabaseHelper.TASK_COMMENT,
+                        DatabaseHelper.TASK_DURATION,
+                        DatabaseHelper.TASK_START_TIME,
+                        DatabaseHelper.TASK_DEADLINE,
+                        DatabaseHelper.TASK_IS_DONE},
                 null, null,
                 null, null, null);
 
         while (cursor.moveToNext()) {
             Task currentTask = new Task();
-            int parentEventId = cursor.getInt(cursor.getColumnIndex(DatabaseHelper.TASK_PARENT_EVENT_ID));
+
             currentTask.changeText(cursor.getString(cursor.getColumnIndex(DatabaseHelper.TASK_NAME_COLUMN)));
+            currentTask.setComment(cursor.getString(cursor.getColumnIndex(DatabaseHelper.TASK_COMMENT)));
             currentTask.changeIsDone(cursor.getInt(cursor.getColumnIndex(DatabaseHelper.TASK_IS_DONE)) == 1);
             currentTask.setId(cursor.getInt(cursor.getColumnIndex(DatabaseHelper._ID)));
 
-            Event eventOfThisTask = giveEventById.get(parentEventId);
-            if (eventOfThisTask != null) {
-                eventOfThisTask.addTask(currentTask);
-
-                giveEventById.put(parentEventId, eventOfThisTask);
-            }
-        }
-
-        eventList.clear();
-        for (Event event: giveEventById.values()) {
-            eventList.add(event);
+            taskList.add(currentTask);
         }
         cursor.close();
-    }*/
+    }
 }

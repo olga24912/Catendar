@@ -79,7 +79,7 @@ public class CreateEventActivity extends AppCompatActivity
 
         duration = 1;
 
-        mDatabaseHelper = new DatabaseHelper(this, "mydatabase12.db", null, 1);
+        mDatabaseHelper = new DatabaseHelper(this, "mydatabase13.db", null, 1);
         mSQLiteDatabase = mDatabaseHelper.getWritableDatabase();
 
         Calendar today = Calendar.getInstance();

@@ -52,7 +52,7 @@ public class CreateWeekActivity extends AppCompatActivity {
 
         setContentView(R.layout.activity_create_week);
 
-        mDatabaseHelper = new DatabaseHelper(this, "mydatabase12.db", null, 1);
+        mDatabaseHelper = new DatabaseHelper(this, "mydatabase13.db", null, 1);
         mSQLiteDatabase = mDatabaseHelper.getWritableDatabase();
 
         tvInfo = (TextView)findViewById(R.id.Selected_date);

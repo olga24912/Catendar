@@ -9,7 +9,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseExpandableListAdapter;
 import android.widget.Button;
+import android.widget.ExpandableListView;
 import android.widget.TextView;
+
+import org.w3c.dom.Text;
 
 import java.util.ArrayList;
 
@@ -17,13 +20,13 @@ import java.util.ArrayList;
  * Created by olga on 21.11.15.
  */
 public class ExpListAdapter extends BaseExpandableListAdapter {
-    private ArrayList<Event> mGroups;
+    private ArrayList<Task> mGroups;
     private Context mContext;
 
     private SQLiteDatabase mSQLiteDatabase;
 
 
-    public ExpListAdapter (Context context, ArrayList<Event> groups, SQLiteDatabase sQLiteDatabase) {
+    public ExpListAdapter (Context context, ArrayList<Task> groups, SQLiteDatabase sQLiteDatabase) {
         mContext = context;
         mGroups = groups;
 
@@ -37,17 +40,17 @@ public class ExpListAdapter extends BaseExpandableListAdapter {
 
     @Override
     public int getChildrenCount(int groupPosition) {
-        return mGroups.get(groupPosition).getTaskList().size();
+        return 1;
     }
 
     @Override
     public Object getGroup(int groupPosition) {
-        return mGroups.get(groupPosition).getTaskList();
+        return mGroups.get(groupPosition);
     }
 
     @Override
     public Object getChild(int groupPosition, int childPosition) {
-        return mGroups.get(groupPosition).getTaskList().get(childPosition);
+        return mGroups.get(groupPosition);
     }
 
     @Override
@@ -80,7 +83,7 @@ public class ExpListAdapter extends BaseExpandableListAdapter {
         }
 
         TextView textGroup = (TextView) convertView.findViewById(R.id.textGroup);
-        textGroup.setText(mGroups.get(groupPosition).getText());
+        textGroup.setText(mGroups.get(groupPosition).getTaskText());
 
         return convertView;
     }
@@ -92,10 +95,15 @@ public class ExpListAdapter extends BaseExpandableListAdapter {
             convertView = inflater.inflate(R.layout.child_view, null);
         }
 
-        final TextView textChild = (TextView) convertView.findViewById(R.id.textChild);
-        textChild.setText(mGroups.get(groupPosition).getTaskList().get(childPosition).getTaskText());
+        final TextView textPriority = (TextView) convertView.findViewById(R.id.itemToDoTextViewPriority);
+        final TextView textDuration = (TextView) convertView.findViewById(R.id.itemToDoTextViewDuration);
+        final TextView textStartTime = (TextView) convertView.findViewById(R.id.itemToDoTextViewTime);
+        final TextView textComment = (TextView) convertView.findViewById(R.id.itemToDoTextViewComment);
 
-        Button button = (Button)convertView.findViewById(R.id.buttonChild);
+        textComment.setText(mGroups.get(groupPosition).getCommentText());
+        //textChild.setText(mGroups.get(groupPosition).getTaskList().get(childPosition).getTaskText());
+
+/*        Button button = (Button)convertView.findViewById(R.id.buttonChild);
 
         button.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -105,7 +113,7 @@ public class ExpListAdapter extends BaseExpandableListAdapter {
                 int dataBaseId = mGroups.get(groupPosition).getTaskList().get(childPosition).getId();
                 Boolean isDone = mGroups.get(groupPosition).getTaskList().get(childPosition).getIsDone();
 
-                /*Cursor cursor = mSQLiteDatabase.query("tasks", new String[]{DatabaseHelper._ID, DatabaseHelper.TASK_NAME_COLUMN,
+                Cursor cursor = mSQLiteDatabase.query("tasks", new String[]{DatabaseHelper._ID, DatabaseHelper.TASK_NAME_COLUMN,
                                 DatabaseHelper.TASK_PARENT_EVENT_ID, DatabaseHelper.TASK_IS_DONE},
                         null, null,
                         null, null, null);
@@ -125,10 +133,10 @@ public class ExpListAdapter extends BaseExpandableListAdapter {
                     }
                 }
 
-                cursor.close();*/
+                cursor.close();
             }
         });
-
+        */
         return convertView;
     }
 

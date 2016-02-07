@@ -71,7 +71,7 @@ public class CreateTaskActivity extends AppCompatActivity
 
         commentText = (EditText)findViewById(R.id.createTaskEditTextComments);
 
-        mDatabaseHelper = new DatabaseHelper(this, "mydatabase12.db", null, 1);
+        mDatabaseHelper = new DatabaseHelper(this, "mydatabase13.db", null, 1);
         mSQLiteDatabase = mDatabaseHelper.getWritableDatabase();
 
         final SeekBar seekbar = (SeekBar)findViewById(R.id.createTaskSeekBar);
