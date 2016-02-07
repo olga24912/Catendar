@@ -19,6 +19,7 @@ import android.widget.ExpandableListView;
 import android.widget.Switch;
 
 import java.util.ArrayList;
+import java.util.GregorianCalendar;
 import java.util.Map;
 import java.util.TreeMap;
 
@@ -112,6 +113,11 @@ public class TaskListFragment extends Fragment implements CompoundButton.OnCheck
             currentTask.setComment(cursor.getString(cursor.getColumnIndex(DatabaseHelper.TASK_COMMENT)));
             currentTask.changeIsDone(cursor.getInt(cursor.getColumnIndex(DatabaseHelper.TASK_IS_DONE)) == 1);
             currentTask.setId(cursor.getInt(cursor.getColumnIndex(DatabaseHelper._ID)));
+
+            GregorianCalendar curDate = new GregorianCalendar();
+            curDate.setTimeInMillis(1000*cursor.getInt(cursor.getColumnIndex(DatabaseHelper.TASK_DEADLINE)));
+
+            currentTask.setDeadlineTime(curDate);
 
             taskList.add(currentTask);
         }

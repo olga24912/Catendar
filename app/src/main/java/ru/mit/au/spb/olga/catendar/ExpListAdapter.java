@@ -97,12 +97,11 @@ public class ExpListAdapter extends BaseExpandableListAdapter {
 
         final TextView textPriority = (TextView) convertView.findViewById(R.id.itemToDoTextViewPriority);
         final TextView textDuration = (TextView) convertView.findViewById(R.id.itemToDoTextViewDuration);
-        final TextView textStartTime = (TextView) convertView.findViewById(R.id.itemToDoTextViewTime);
+        final TextView textDeadlineTime = (TextView) convertView.findViewById(R.id.itemToDoTextViewTime);
         final TextView textComment = (TextView) convertView.findViewById(R.id.itemToDoTextViewComment);
 
         textComment.setText(mGroups.get(groupPosition).getCommentText());
-        //textChild.setText(mGroups.get(groupPosition).getTaskList().get(childPosition).getTaskText());
-
+        textDeadlineTime.setText("Deadline time:" + mGroups.get(groupPosition).getStringDeadlineTime());
 /*        Button button = (Button)convertView.findViewById(R.id.buttonChild);
 
         button.setOnClickListener(new View.OnClickListener() {

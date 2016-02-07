@@ -1,5 +1,6 @@
 package ru.mit.au.spb.olga.catendar;
 
+import java.util.Calendar;
 import java.util.GregorianCalendar;
 
 /**
@@ -45,5 +46,19 @@ public class Task {
 
     public  String getCommentText() {
         return comment;
+    }
+
+    public void setDeadlineTime(GregorianCalendar deadlineTime) {
+        this.deadlineTime = deadlineTime;
+    }
+
+    public String getStringDeadlineTime() {
+        String res = "";
+        res += String.valueOf(deadlineTime.get(Calendar.DAY_OF_MONTH));
+        res += ".";
+        res += String.valueOf(deadlineTime.get(Calendar.MONTH));
+        res += ".";
+        res += String.valueOf(deadlineTime.get(Calendar.YEAR));
+        return res;
     }
 }
