@@ -102,17 +102,18 @@ public class ExpListAdapter extends BaseExpandableListAdapter {
 
         textComment.setText(mGroups.get(groupPosition).getCommentText());
         textDeadlineTime.setText("Deadline time:" + mGroups.get(groupPosition).getStringDeadlineTime());
-/*        Button button = (Button)convertView.findViewById(R.id.buttonChild);
 
-        button.setOnClickListener(new View.OnClickListener() {
+        Button buttonDelete = (Button)convertView.findViewById(R.id.itemToDoButtonDelete);
+
+        buttonDelete.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                textChild.setBackgroundColor(0xffc5e384);
-                String currentTask = mGroups.get(groupPosition).getTaskList().get(childPosition).getTaskText();
-                int dataBaseId = mGroups.get(groupPosition).getTaskList().get(childPosition).getId();
-                Boolean isDone = mGroups.get(groupPosition).getTaskList().get(childPosition).getIsDone();
+                textComment.setBackgroundColor(0xffc5e384);
 
-                Cursor cursor = mSQLiteDatabase.query("tasks", new String[]{DatabaseHelper._ID, DatabaseHelper.TASK_NAME_COLUMN,
+                int dataBaseId = mGroups.get(groupPosition).getId();
+
+                mSQLiteDatabase.delete(DatabaseHelper.DATABASE_TABLE_TASK, DatabaseHelper._ID + "=" + dataBaseId, null);
+                /*Cursor cursor = mSQLiteDatabase.query("tasks", new String[]{DatabaseHelper._ID, DatabaseHelper.TASK_NAME_COLUMN,
                                 DatabaseHelper.TASK_PARENT_EVENT_ID, DatabaseHelper.TASK_IS_DONE},
                         null, null,
                         null, null, null);
@@ -132,10 +133,9 @@ public class ExpListAdapter extends BaseExpandableListAdapter {
                     }
                 }
 
-                cursor.close();
+                cursor.close();*/
             }
         });
-        */
         return convertView;
     }
 
