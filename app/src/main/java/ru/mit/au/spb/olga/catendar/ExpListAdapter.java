@@ -108,7 +108,7 @@ public class ExpListAdapter extends BaseExpandableListAdapter {
         buttonDelete.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                textComment.setBackgroundColor(0xffc5e384);
+                textPriority.setBackgroundColor(0xffc5e384);
 
                 int dataBaseId = mGroups.get(groupPosition).getId();
 
