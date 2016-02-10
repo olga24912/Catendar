@@ -102,6 +102,8 @@ public class ExpListAdapter extends BaseExpandableListAdapter {
 
         textComment.setText(mGroups.get(groupPosition).getCommentText());
         textDeadlineTime.setText("Deadline time:" + mGroups.get(groupPosition).getStringDeadlineTime());
+        textPriority.setText("Priority: " + String.valueOf(mGroups.get(groupPosition).getPriority()));
+        textDuration.setText("Duration: " + mGroups.get(groupPosition).getStringDuration());
 
         Button buttonDelete = (Button)convertView.findViewById(R.id.itemToDoButtonDelete);
 

@@ -48,6 +48,19 @@ public class Task {
         return comment;
     }
 
+    public void setDuration(GregorianCalendar duration) {
+        this.duration = duration;
+    }
+
+    public String getStringDuration() {
+        String res = "";
+        res += String.valueOf(duration.get(Calendar.HOUR));
+        res += "hours ";
+        res += String.valueOf(duration.get(Calendar.MINUTE));
+        res += "minutes";
+        return res;
+    }
+
     public void setDeadlineTime(GregorianCalendar deadlineTime) {
         this.deadlineTime = deadlineTime;
     }
@@ -60,5 +73,13 @@ public class Task {
         res += ".";
         res += String.valueOf(deadlineTime.get(Calendar.YEAR));
         return res;
+    }
+
+    public void setPriority(int priority) {
+        this.priority = priority;
+    }
+
+    public int getPriority() {
+        return priority;
     }
 }

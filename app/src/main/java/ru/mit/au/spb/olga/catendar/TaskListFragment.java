@@ -106,6 +106,11 @@ public class TaskListFragment extends Fragment implements CompoundButton.OnCheck
 
             currentTask.setDeadlineTime(curDate);
 
+            curDate.setTimeInMillis(1000 * cursor.getInt(cursor.getColumnIndex(DatabaseHelper.TASK_DURATION)));
+            currentTask.setDuration(curDate);
+
+            currentTask.setPriority(cursor.getInt(cursor.getColumnIndex(DatabaseHelper.TASK_PRIORITY)));
+
             taskList.add(currentTask);
         }
         cursor.close();
