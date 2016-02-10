@@ -8,16 +8,10 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.ArrayAdapter;
-import android.widget.CompoundButton;
 import android.widget.EditText;
-import android.widget.ExpandableListView;
 import android.widget.ListView;
-import android.widget.Switch;
 
 import java.util.ArrayList;
-import java.util.Map;
-import java.util.Objects;
-import java.util.TreeMap;
 
 /**
  * Created by olga on 16.12.15.
@@ -50,7 +44,7 @@ public class CreateTemplateActivity extends AppCompatActivity {
     }
 
 
-    private void synchronizedWithDateBase() {
+    private void synchronizedWithDataBase() {
         Cursor cursor = mSQLiteDatabase.query("events", new String[]{DatabaseHelper._ID, DatabaseHelper.EVENT_NAME,
                         DatabaseHelper.EVENT_PARENT_TEMPLATE, DatabaseHelper.EVENT_START_DATE,
                         DatabaseHelper.EVENT_END_DATE
@@ -114,7 +108,7 @@ public class CreateTemplateActivity extends AppCompatActivity {
                 templateId = idTmp;
             }
         }
-        synchronizedWithDateBase();
+        synchronizedWithDataBase();
         drawEventList();
         cursor.close();
     }
@@ -147,7 +141,7 @@ public class CreateTemplateActivity extends AppCompatActivity {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == CREATE_EVENT) {
             if (resultCode == RESULT_OK) {
-                synchronizedWithDateBase();
+                synchronizedWithDataBase();
                 drawEventList();
             }
         }

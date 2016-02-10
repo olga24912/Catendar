@@ -1,27 +1,18 @@
 package ru.mit.au.spb.olga.catendar;
 
-import android.content.Context;
-import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
-import android.os.Vibrator;
-import android.provider.BaseColumns;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.support.v7.app.AlertDialog;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.ExpandableListView;
-import android.widget.Switch;
 
 import java.util.ArrayList;
 import java.util.GregorianCalendar;
-import java.util.Map;
-import java.util.TreeMap;
 
 /**
  * Created by olga on 12.12.15.
@@ -48,18 +39,14 @@ public class TaskListFragment extends Fragment implements CompoundButton.OnCheck
         mDatabaseHelper = new DatabaseHelper(getContext(), "mydatabase13.db", null, 1);
         mSQLiteDatabase = mDatabaseHelper.getWritableDatabase();
 
-        synchronizedWithDateBase();
+        synchronizedWithDataBase();
         drawTaskList();
 
-        /*Switch mSwitch = (Switch)rootView.findViewById(R.id.switchShowAll);
-        if (mSwitch != null) {
-            mSwitch.setOnCheckedChangeListener(this);
-        }*/
 
         mShaker = new ShakeListener(getActivity());
         mShaker.setOnShakeListener(new ShakeListener.OnShakeListener() {
             public void onShake() {
-                //synchronizedWithDateBase();
+                synchronizedWithDataBase();
                 drawTaskList();
             }
         });
@@ -81,7 +68,7 @@ public class TaskListFragment extends Fragment implements CompoundButton.OnCheck
     @Override
     public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
         showAll = isChecked;
-        //synchronizedWithDateBase();
+        synchronizedWithDataBase();
         drawTaskList();
     }
 
@@ -92,7 +79,7 @@ public class TaskListFragment extends Fragment implements CompoundButton.OnCheck
     }
 
 
-    private void synchronizedWithDateBase() {
+    private void synchronizedWithDataBase() {
         taskList.clear();
 
         Cursor cursor = mSQLiteDatabase.query("tasks", new String[]{DatabaseHelper._ID,

@@ -65,4 +65,3 @@ public class Week /*implements Parcelable*/ {
         return templates;
     }
 }
-//Week and Template have similar method addEvent and similar field id. Nothing similar more.

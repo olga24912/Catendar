@@ -1,23 +1,17 @@
 package ru.mit.au.spb.olga.catendar;
 
-import android.app.Activity;
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
-import android.net.Uri;
 import android.os.Bundle;
 //import android.app.Fragment;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentTransaction;
-import android.support.v4.view.ViewPager;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.accessibility.AccessibilityManager;
 import android.widget.HorizontalScrollView;
 import android.widget.ScrollView;
 import android.widget.TableLayout;
@@ -215,7 +209,7 @@ public class CalendarFragment extends Fragment {
         return horizontalScroll;
     }
 
-    private Template getTemplateDateBase(int id) {
+    private Template getTemplateDataBase(int id) {
         Template tp = null;
 
         Cursor cursorTemplate = mSQLiteDatabase.query(DatabaseHelper.DATABASE_TABLE_TEMPLATE, new String[]{DatabaseHelper._ID,
@@ -264,7 +258,7 @@ public class CalendarFragment extends Fragment {
         return tp;
     }
 
-    private void getWeekDateBase(int id) {
+    private void getWeekDataBase(int id) {
         Cursor cursorWeek = mSQLiteDatabase.query(DatabaseHelper.DATABASE_TABLE_WEEK, new String[]{DatabaseHelper._ID, DatabaseHelper.WEEK_START_DATE},
                 null, null,
                 null, null, null);
@@ -304,7 +298,7 @@ public class CalendarFragment extends Fragment {
         cursorTemplateAndWeek.close();
 
         for (int i = 0; i < templatesInWeek.size(); i++) {
-            currentWeek.addTemplate(getTemplateDateBase(templatesInWeek.get(i)));
+            currentWeek.addTemplate(getTemplateDataBase(templatesInWeek.get(i)));
         }
 
         Cursor cursorEvent = mSQLiteDatabase.query(DatabaseHelper.DATABASE_TABLE_EVENT, new String[]{DatabaseHelper._ID,
@@ -367,7 +361,7 @@ public class CalendarFragment extends Fragment {
     private void getWeekDateBaseByDate (long sTime) {
         Integer id = findIdWithThisTime(sTime);
         if (id != null) {
-            getWeekDateBase(id);
+            getWeekDataBase(id);
         } else {
             ContentValues newValues = new ContentValues();
 
@@ -376,7 +370,7 @@ public class CalendarFragment extends Fragment {
             mSQLiteDatabase.insert(DatabaseHelper.DATABASE_TABLE_WEEK, null, newValues);
 
             id = findIdWithThisTime(sTime);
-            getWeekDateBase(id);
+            getWeekDataBase(id);
         }
     }
 

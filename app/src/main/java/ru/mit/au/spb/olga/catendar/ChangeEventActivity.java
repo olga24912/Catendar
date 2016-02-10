@@ -265,6 +265,7 @@ public class ChangeEventActivity extends AppCompatActivity
         linearLayout.addView(textView);
     }
 
+    /*This comment is currently needed here for development purposes*/
     /*private void printTask() {
         Cursor cursor = mSQLiteDatabase.query(DatabaseHelper.DATABASE_TABLE_TASK, new String[]{DatabaseHelper._ID,
                         DatabaseHelper.TASK_NAME_COLUMN, DatabaseHelper.TASK_PARENT_EVENT_ID,

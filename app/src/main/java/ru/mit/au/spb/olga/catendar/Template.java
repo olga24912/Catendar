@@ -29,14 +29,3 @@ public class Template {
         return events;
     }
 }
-
-
-/*
-TODO:
-http://stackoverflow.com/questions/10977422/how-to-create-simple-calendar-on-android
-Find out how to display Week/Template (maybe using this^^^, should look like a grid)
-
-+
-
-improve Week and Template(to be able simply to keep events and use)
- */
