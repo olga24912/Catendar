@@ -1,5 +1,6 @@
 package ru.mit.au.spb.olga.catendar;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.ContentValues;
 import android.content.Context;
@@ -57,6 +58,7 @@ public class CalendarFragment extends Fragment {
         // Required empty public constructor
     }
 
+    @SuppressLint("ValidFragment")
     public CalendarFragment(int add) {
         currentDate = new GregorianCalendar();
         currentDate.add(Calendar.SECOND, add*7*24*60*60);
