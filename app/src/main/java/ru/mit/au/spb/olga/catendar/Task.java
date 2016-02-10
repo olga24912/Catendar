@@ -48,6 +48,10 @@ public class Task {
         return comment;
     }
 
+    public void setStartTime(GregorianCalendar startTime) {
+        this.startTime = startTime;
+    }
+
     public void setDuration(GregorianCalendar duration) {
         this.duration = duration;
     }
@@ -81,5 +85,17 @@ public class Task {
 
     public int getPriority() {
         return priority;
+    }
+
+    public long getDeadlineTimeInSecond() {
+        return (deadlineTime.getTimeInMillis()/1000);
+    }
+
+    public long getDurationTimeInSecond() {
+        return (duration.getTimeInMillis()/1000);
+    }
+
+    public long getStartTimeInSecond() {
+        return (startTime.getTimeInMillis()/1000);
     }
 }

@@ -111,6 +111,9 @@ public class TaskListFragment extends Fragment implements CompoundButton.OnCheck
 
             currentTask.setPriority(cursor.getInt(cursor.getColumnIndex(DatabaseHelper.TASK_PRIORITY)));
 
+            curDate.setTimeInMillis(1000 * cursor.getInt(cursor.getColumnIndex(DatabaseHelper.TASK_START_TIME)));
+            currentTask.setStartTime(curDate);
+
             taskList.add(currentTask);
         }
         cursor.close();

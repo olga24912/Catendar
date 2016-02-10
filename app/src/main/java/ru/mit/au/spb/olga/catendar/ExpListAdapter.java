@@ -85,6 +85,10 @@ public class ExpListAdapter extends BaseExpandableListAdapter {
         TextView textGroup = (TextView) convertView.findViewById(R.id.textGroup);
         textGroup.setText(mGroups.get(groupPosition).getTaskText());
 
+        if (mGroups.get(groupPosition).getIsDone()) {
+            textGroup.setBackgroundColor(0xffc5e384);
+        }
+
         return convertView;
     }
 
@@ -106,6 +110,8 @@ public class ExpListAdapter extends BaseExpandableListAdapter {
         textDuration.setText("Duration: " + mGroups.get(groupPosition).getStringDuration());
 
         Button buttonDelete = (Button)convertView.findViewById(R.id.itemToDoButtonDelete);
+        Button buttonDone = (Button)convertView.findViewById(R.id.itemToDoToggleButtonDone);
+        Button buttonChange = (Button)convertView.findViewById(R.id.itemToDoButtonChange);
 
         buttonDelete.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -115,7 +121,41 @@ public class ExpListAdapter extends BaseExpandableListAdapter {
                 int dataBaseId = mGroups.get(groupPosition).getId();
 
                 mSQLiteDatabase.delete(DatabaseHelper.DATABASE_TABLE_TASK, DatabaseHelper._ID + "=" + dataBaseId, null);
-                /*Cursor cursor = mSQLiteDatabase.query("tasks", new String[]{DatabaseHelper._ID, DatabaseHelper.TASK_NAME_COLUMN,
+            }
+        });
+
+        buttonDone.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                textPriority.setBackgroundColor(0xffc5e384);
+
+                int dataBaseId = mGroups.get(groupPosition).getId();
+
+                Task currentTask = mGroups.get(groupPosition);
+
+                ContentValues cv = new ContentValues();
+                cv.put(DatabaseHelper.TASK_NAME_COLUMN, currentTask.getTaskText());
+                cv.put(DatabaseHelper.TASK_COMMENT, currentTask.getCommentText());
+                cv.put(DatabaseHelper.TASK_START_TIME, currentTask.getStartTimeInSecond());
+                cv.put(DatabaseHelper.TASK_DEADLINE, currentTask.getDeadlineTimeInSecond());
+                cv.put(DatabaseHelper.TASK_DURATION, currentTask.getDurationTimeInSecond());
+                cv.put(DatabaseHelper.TASK_IS_DONE, !currentTask.getIsDone());
+                cv.put(DatabaseHelper.TASK_PRIORITY, currentTask.getPriority());
+
+                mSQLiteDatabase.update(DatabaseHelper.DATABASE_TABLE_TASK, cv, DatabaseHelper._ID + " = " + dataBaseId, null);
+            }
+        });
+        return convertView;
+    }
+
+    @Override
+    public boolean isChildSelectable(int groupPosition, int childPosition) {
+        return true;
+    }
+}
+
+
+        /*Cursor cursor = mSQLiteDatabase.query("tasks", new String[]{DatabaseHelper._ID, DatabaseHelper.TASK_NAME_COLUMN,
                                 DatabaseHelper.TASK_PARENT_EVENT_ID, DatabaseHelper.TASK_IS_DONE},
                         null, null,
                         null, null, null);
@@ -136,13 +176,3 @@ public class ExpListAdapter extends BaseExpandableListAdapter {
                 }
 
                 cursor.close();*/
-            }
-        });
-        return convertView;
-    }
-
-    @Override
-    public boolean isChildSelectable(int groupPosition, int childPosition) {
-        return true;
-    }
-}
