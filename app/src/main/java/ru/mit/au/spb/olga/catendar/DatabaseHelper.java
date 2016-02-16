@@ -21,6 +21,8 @@ public class DatabaseHelper extends SQLiteOpenHelper implements BaseColumns {
     public static final String DATABASE_TABLE_TEMPLATES_IN_WEEKS = "template_in_week";
     public static final String DATABASE_TABLE_CONTEXT = "context";
     public static final String DATABASE_TABLE_TASK_CONTEXT = "task_context";
+    public static final String DATABASE_TABLE_TASK_HEAP = "task_heap";
+    public static final String DATABASE_TABLE_HEAP = "heap";
 
     public static final String TEMPLATE_NAME = "name";
     public static final String TEMPLATE_FOR_WEEK = "for_week";
@@ -48,6 +50,13 @@ public class DatabaseHelper extends SQLiteOpenHelper implements BaseColumns {
     public static final String TASK_CONTEXT_TASK_ID = "task_id";
     public static final String TASK_CONTEXT_CONTEXT_ID = "context_id";
 
+    public static final String HEAP_NAME = "name";
+    public static final String HEAP_DATE = "date";
+
+    public static final String TASK_HEAP_TASK_ID = "task_id";
+    public static final String TASK_HEAP_HEAP_ID = "heap_id";
+
+    //private static final String DATABASE_CREATE_HEAP_TABLE_SCRIPT = "";
 
     private static final String DATABASE_CREATE_CONTEXT_TABLE_SCRIPT = "create table " +
                     DATABASE_TABLE_CONTEXT + " ("

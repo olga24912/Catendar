@@ -1,11 +1,9 @@
 package ru.mit.au.spb.olga.catendar;
 
-import android.app.FragmentManager;
 import android.content.Intent;
 import android.os.Bundle;
 
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentTransaction;
 import android.content.res.Configuration;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v4.widget.DrawerLayout;
@@ -181,6 +179,12 @@ public class MainActivity extends ActionBarActivity implements SimpleGestureFilt
                 break;
             case 7:
                 currentPosition = 7;
+                intent = new Intent(MainActivity.this, CreatePlanActivity.class);
+
+                startActivityForResult(intent, 7);
+                break;
+            case 8:
+                currentPosition = 8;
                 fragment = new CompareFragment();
                 break;
             default:

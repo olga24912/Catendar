@@ -12,6 +12,7 @@
         <item>Create week</item>
         <item>Create template</item>
         <item>Delete template</item>
+        <item>Create plan</item>
         <item>Compare</item>
     </string-array>
     <string name="menu">Menu</string>
@@ -84,6 +85,11 @@
 
 
     <string name="change">Change</string>
+
+    <string name="task">Tasks:</string>
+    <string name="createTask">Create Task</string>
+    <string name="addTask">Add Task</string>
+    <string name="date">Plan on</string>
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>

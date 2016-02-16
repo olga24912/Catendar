@@ -45,5 +45,9 @@
             android:name=".DeleteTemplateActivity"
             android:label="Delete template">
         </activity>
+        <activity
+            android:name=".CreatePlanActivity"
+            android:label="Create Plan">
+        </activity>
     </application>
 </manifest>
