@@ -149,38 +149,6 @@
             android:onClick="onSetFinishTime" />
     </RelativeLayout>
 
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="43dp"
-        android:layout_weight="0.06">
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textAppearance="?android:attr/textAppearanceMedium"
-            android:text="@string/context"
-            android:id="@+id/createTaskTextViewContext"
-            android:layout_alignTop="@+id/createTaskButtonContext"
-            android:layout_alignParentStart="true" />
-
-        <Button
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/change"
-            android:id="@+id/createTaskButtonContext"
-            android:layout_alignParentTop="true"
-            android:layout_alignParentEnd="true" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textAppearance="?android:attr/textAppearanceMedium"
-            android:text="everywhere"
-            android:id="@+id/createTaskTextViewContextList"
-            android:layout_alignBottom="@+id/createTaskButtonContext"
-            android:layout_alignParentStart="true" />
-    </RelativeLayout>
-
     <EditText
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

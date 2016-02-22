@@ -18,8 +18,6 @@ public class DatabaseHelper extends SQLiteOpenHelper implements BaseColumns {
     public static final String DATABASE_TABLE_WEEK = "week";
     public static final String DATABASE_TABLE_TEMPLATE = "template";
     public static final String DATABASE_TABLE_TEMPLATES_IN_WEEKS = "template_in_week";
-    public static final String DATABASE_TABLE_CONTEXT = "context";
-    public static final String DATABASE_TABLE_TASK_CONTEXT = "task_context";
     public static final String DATABASE_TABLE_TASK_HEAP = "task_heap";
     public static final String DATABASE_TABLE_HEAP = "heap";
 
@@ -44,11 +42,6 @@ public class DatabaseHelper extends SQLiteOpenHelper implements BaseColumns {
     public static final String TASK_DEADLINE = "deadline";
     public static final String TASK_IS_DONE = "is_done";
 
-    public static final String CONTEXT_NAME = "context";
-
-    public static final String TASK_CONTEXT_TASK_ID = "task_id";
-    public static final String TASK_CONTEXT_CONTEXT_ID = "context_id";
-
     public static final String HEAP_NAME = "name";
     public static final String HEAP_DATE = "date";
 
@@ -66,11 +59,6 @@ public class DatabaseHelper extends SQLiteOpenHelper implements BaseColumns {
             + BaseColumns._ID + " integer primary key autoincrement, "
             + TASK_HEAP_HEAP_ID + " integer, "
             + TASK_HEAP_TASK_ID + " integer);";
-
-    private static final String DATABASE_CREATE_CONTEXT_TABLE_SCRIPT = "create table " +
-                    DATABASE_TABLE_CONTEXT + " ("
-                    + BaseColumns._ID + " integer primary key autoincrement, "
-                    + CONTEXT_NAME + " text not null);";
 
     private static final String DATABASE_CREATE_TEMPLATE_TABLE_SCRIPT = "create table " +
                     DATABASE_TABLE_TEMPLATE + " ("
@@ -108,12 +96,6 @@ public class DatabaseHelper extends SQLiteOpenHelper implements BaseColumns {
             + TEMPLATES_IN_WEEKS_WEEK_ID + " integer, "
             + TEMPLATES_IN_WEEKS_TEMPLATE_ID + " integer);";
 
-    private static final String DATABASE_CREATE_TASK_CONTEXT_SCRIPT = "create table " +
-            DATABASE_TABLE_TASK_CONTEXT + " ("
-            + BaseColumns._ID + " integer primary key autoincrement, "
-            + TASK_CONTEXT_CONTEXT_ID + " integer, "
-            + TASK_CONTEXT_TASK_ID + " integer);";
-
     DatabaseHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
     }
@@ -134,8 +116,6 @@ public class DatabaseHelper extends SQLiteOpenHelper implements BaseColumns {
         db.execSQL(DATABASE_CREATE_TEMPLATE_TABLE_SCRIPT);
         db.execSQL(DATABASE_CREATE_EVENT_TABLE_SCRIPT);
         db.execSQL(DATABASE_CREATE_TASK_TABLE_SCRIPT);
-        db.execSQL(DATABASE_CREATE_CONTEXT_TABLE_SCRIPT);
-        db.execSQL(DATABASE_CREATE_TASK_CONTEXT_SCRIPT);
         db.execSQL(DATABASE_CREATE_TASK_HEAP_TABLE_SCRIPT);
         db.execSQL(DATABASE_CREATE_HEAP_TABLE_SCRIPT);
     }
