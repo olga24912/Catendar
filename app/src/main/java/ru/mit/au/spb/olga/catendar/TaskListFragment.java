@@ -6,10 +6,13 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CompoundButton;
 import android.widget.ExpandableListView;
+import android.widget.PopupMenu;
+import android.widget.TextView;
 
 import java.util.ArrayList;
 import java.util.GregorianCalendar;
@@ -24,7 +27,12 @@ public class TaskListFragment extends Fragment implements CompoundButton.OnCheck
     private ArrayList<Task> taskList = new ArrayList<>();
     private ExpandableListView listOfTask;
 
+    private ArrayList<String> heapName = new ArrayList<>();
+    private ArrayList<Long> heapId = new ArrayList<>();
+
     private boolean showAll;
+
+    private int heap_id = -1;
 
     private ShakeListener mShaker;
 
@@ -42,6 +50,7 @@ public class TaskListFragment extends Fragment implements CompoundButton.OnCheck
         synchronizedWithDataBase();
         drawTaskList();
 
+        initHeapList();
 
         mShaker = new ShakeListener(getActivity());
         mShaker.setOnShakeListener(new ShakeListener.OnShakeListener() {
@@ -50,8 +59,51 @@ public class TaskListFragment extends Fragment implements CompoundButton.OnCheck
                 drawTaskList();
             }
         });
+
+        TextView changePlan = (TextView) rootView.findViewById(R.id.toDoTextView);
+        changePlan.setOnClickListener(viewClickListener);
+
         return rootView;
     }
+
+    View.OnClickListener viewClickListener = new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            showPopupMenu(v);
+        }
+    };
+
+    private void showPopupMenu(View v) {
+        PopupMenu popupMenu = new PopupMenu(this.getActivity(), v);
+        popupMenu.inflate(R.menu.popupmenu);
+        for (String nm: heapName) {
+            popupMenu.getMenu().add(0, 0, 0, nm);
+        }
+        popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+
+            @Override
+            public boolean onMenuItemClick(MenuItem item) {
+                switch (item.getItemId()) {
+                    case 1:
+                        return true;
+                    case R.id.menu1:
+                        return true;
+                    default:
+                        return false;
+                }
+            }
+        });
+
+        popupMenu.setOnDismissListener(new PopupMenu.OnDismissListener() {
+            @Override
+            public void onDismiss(PopupMenu menu) {
+                synchronizedWithDataBase();
+                drawTaskList();
+            }
+        });
+        popupMenu.show();
+    }
+
     @Override
     public void onResume()
     {
@@ -115,6 +167,24 @@ public class TaskListFragment extends Fragment implements CompoundButton.OnCheck
             currentTask.setStartTime(curDate);
 
             taskList.add(currentTask);
+        }
+        cursor.close();
+    }
+
+    private void initHeapList() {
+        heapId.clear();
+        heapName.clear();
+
+        Cursor cursor = mSQLiteDatabase.query(DatabaseHelper.DATABASE_TABLE_HEAP,
+                new String[]{DatabaseHelper._ID,
+                        DatabaseHelper.HEAP_NAME,
+                        DatabaseHelper.HEAP_DATE},
+                null, null,
+                null, null, null);
+
+        while (cursor.moveToNext()) {
+            heapId.add(cursor.getLong(cursor.getColumnIndex(DatabaseHelper._ID)));
+            heapName.add(cursor.getString(cursor.getColumnIndex(DatabaseHelper.HEAP_NAME)));
         }
         cursor.close();
     }
