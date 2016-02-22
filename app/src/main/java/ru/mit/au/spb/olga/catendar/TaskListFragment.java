@@ -83,6 +83,8 @@ public class TaskListFragment extends Fragment implements CompoundButton.OnCheck
 
     private ShakeListener mShaker;
 
+    private TextView planTitle;
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -90,6 +92,8 @@ public class TaskListFragment extends Fragment implements CompoundButton.OnCheck
                 inflater.inflate(R.layout.activity_task_list, container, false);
 
         listOfTask = (ExpandableListView) rootView.findViewById(R.id.toDoExpandableListView);
+
+        planTitle = (TextView) rootView.findViewById(R.id.toDoTextView);
 
         mDatabaseHelper = new DatabaseHelper(getContext(), "mydatabase14.db", null, 1);
         mSQLiteDatabase = mDatabaseHelper.getWritableDatabase();
@@ -136,6 +140,7 @@ public class TaskListFragment extends Fragment implements CompoundButton.OnCheck
                     return true;
                 } else if (0 < item.getItemId() && item.getItemId() <= heapId.size()) {
                     heap_id = heapId.get(item.getItemId() - 1);
+                    planTitle.setText(heapName.get(item.getItemId() - 1));
                     return true;
                 } else {
                     return false;
