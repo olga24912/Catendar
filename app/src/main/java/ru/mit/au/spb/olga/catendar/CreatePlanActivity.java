@@ -3,6 +3,7 @@ package ru.mit.au.spb.olga.catendar;
 
 import android.app.DatePickerDialog;
 import android.app.Dialog;
+import android.content.ContentValues;
 import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
@@ -16,6 +17,7 @@ import android.widget.TextView;
 
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.GregorianCalendar;
 
 /**
  * Created by olga on 16.02.16.
@@ -123,5 +125,29 @@ public class CreatePlanActivity extends AppCompatActivity {
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,
                 android.R.layout.simple_list_item_1, tasksName);
         listView.setAdapter(adapter);
+    }
+
+    public void onOKClickInPlan(View view) {
+        String heapName = new String("Plan on");
+        GregorianCalendar currentDate = new GregorianCalendar(startYear, startMonth, startDay);
+        Long time = currentDate.getTimeInMillis()/1000;
+
+        ContentValues newValues = new ContentValues();
+
+        newValues.put(DatabaseHelper.HEAP_DATE, time);
+        newValues.put(DatabaseHelper.HEAP_NAME, heapName);
+
+        long heapId = mSQLiteDatabase.insert(DatabaseHelper.DATABASE_TABLE_HEAP, null, newValues);
+
+        for (int i = 0; i < taskId.size(); ++i) {
+            ContentValues values = new ContentValues();
+
+            newValues.put(DatabaseHelper.TASK_HEAP_HEAP_ID, heapId);
+            newValues.put(DatabaseHelper.TASK_HEAP_TASK_ID, taskId.get(i));
+
+            mSQLiteDatabase.insert(DatabaseHelper.DATABASE_TABLE_TASK_HEAP,null,newValues);
+        }
+
+        finish();
     }
 }

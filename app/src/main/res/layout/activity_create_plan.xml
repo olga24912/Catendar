@@ -51,7 +51,8 @@
             android:text="@string/ok_button"
             android:id="@+id/createPlanButtonOK"
             android:layout_alignParentBottom="true"
-            android:layout_alignParentStart="true" />
+            android:layout_alignParentStart="true"
+            android:onClick="onOKClickInPlan" />
 
         <Button
             android:layout_width="wrap_content"
