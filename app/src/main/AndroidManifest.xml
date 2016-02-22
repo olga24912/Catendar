@@ -49,5 +49,9 @@
             android:name=".CreatePlanActivity"
             android:label="Create Plan">
         </activity>
+        <activity
+            android:name=".AddTaskActivity"
+            android:label="Add task">
+        </activity>
     </application>
 </manifest>

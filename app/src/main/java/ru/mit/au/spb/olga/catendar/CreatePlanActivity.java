@@ -150,4 +150,10 @@ public class CreatePlanActivity extends AppCompatActivity {
 
         finish();
     }
+
+    public void onAddTaskInPlanClick(View view) {
+        Intent intent = new Intent(this, AddTaskActivity.class);
+
+        startActivityForResult(intent, 0);
+    }
 }

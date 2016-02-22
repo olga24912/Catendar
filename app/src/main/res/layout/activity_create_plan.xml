@@ -69,7 +69,8 @@
             android:text="@string/addTask"
             android:id="@+id/createPlanButtonAddTask"
             android:layout_alignParentBottom="true"
-            android:layout_alignParentEnd="true" />
+            android:layout_alignParentEnd="true"
+            android:onClick="onAddTaskInPlanClick" />
     </RelativeLayout>
 
 </LinearLayout>
