@@ -37,6 +37,7 @@ public class MainActivity extends ActionBarActivity implements SimpleGestureFilt
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         setContentView(R.layout.activity_main);
 
         /*if(savedInstanceState == null) {
@@ -203,7 +204,11 @@ public class MainActivity extends ActionBarActivity implements SimpleGestureFilt
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.main, menu);
+        if (currentPosition == 1) {
+            getMenuInflater().inflate(R.menu.menu_main, menu);
+        } else {
+            getMenuInflater().inflate(R.menu.main, menu);
+        }
         return true;
     }
 
@@ -214,11 +219,28 @@ public class MainActivity extends ActionBarActivity implements SimpleGestureFilt
             return true;
         }
         // Handle action bar actions click
-        switch (item.getItemId()) {
-            case R.id.action_settings:
-                return true;
-            default:
-                return super.onOptionsItemSelected(item);
+        if (currentPosition != 1) {
+            switch (item.getItemId()) {
+                case R.id.action_settings:
+                    return true;
+                default:
+                    return super.onOptionsItemSelected(item);
+            }
+        } else {
+            switch (item.getItemId()) {
+                case R.id.action_deadline:
+                    return false;
+                case R.id.action_duration:
+                    return false;
+                case R.id.action_not_show_all:
+                    return false;
+                case R.id.action_show_all:
+                    return false;
+                case R.id.action_priority:
+                    return false;
+                default:
+                    return super.onOptionsItemSelected(item);
+            }
         }
     }
 
@@ -228,8 +250,8 @@ public class MainActivity extends ActionBarActivity implements SimpleGestureFilt
     @Override
     public boolean onPrepareOptionsMenu(Menu menu) {
         // if navigation drawer is opened, hide the action items
-        boolean drawerOpen = myDrawerLayout.isDrawerOpen(myDrawerList);
-        menu.findItem(R.id.action_settings).setVisible(!drawerOpen);
+        //boolean drawerOpen = myDrawerLayout.isDrawerOpen(myDrawerList);
+        //menu.findItem(R.id.action_settings).setVisible(!drawerOpen);
         return super.onPrepareOptionsMenu(menu);
     }
 

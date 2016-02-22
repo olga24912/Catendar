@@ -36,7 +36,6 @@ public class CreatePlanActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         setContentView(R.layout.activity_create_plan);
 
         mDatabaseHelper = new DatabaseHelper(this, "mydatabase14.db", null, 1);
@@ -129,7 +128,7 @@ public class CreatePlanActivity extends AppCompatActivity {
 
     public void onOKClickInPlan(View view) {
         String heapName = startDateTextView.getText().toString();
-        
+
         GregorianCalendar currentDate = new GregorianCalendar(startYear, startMonth, startDay);
         Long time = currentDate.getTimeInMillis()/1000;
 

@@ -6,6 +6,8 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,13 +17,57 @@ import android.widget.PopupMenu;
 import android.widget.TextView;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.GregorianCalendar;
 import java.util.HashSet;
+
+import static java.util.Collections.sort;
 
 /**
  * Created by olga on 12.12.15.
  */
 public class TaskListFragment extends Fragment implements CompoundButton.OnCheckedChangeListener {
+    private class cmpDuration implements Comparator<Task> {
+        @Override
+        public int compare(Task lhs, Task rhs) {
+            if (lhs.getDurationTimeInSecond() - rhs.getDurationTimeInSecond() < 0) {
+                return -1;
+            } else if (lhs.getDurationTimeInSecond() - rhs.getDurationTimeInSecond() == 0) {
+                return 0;
+            } else {
+                return 1;
+            }
+        }
+    }
+
+    private class cmpDeadline implements Comparator<Task> {
+        @Override
+        public int compare(Task lhs, Task rhs) {
+            if (lhs.getDeadlineTimeInSecond() - rhs.getDeadlineTimeInSecond() < 0) {
+                return -1;
+            } else if (lhs.getDeadlineTimeInSecond() - rhs.getDeadlineTimeInSecond() == 0) {
+                return 0;
+            } else {
+                return 1;
+            }
+        }
+    }
+
+    private class cmpPriority implements Comparator<Task> {
+        @Override
+        public int compare(Task lhs, Task rhs) {
+            if (lhs.getPriority() - rhs.getPriority() > 0) {
+                return -1;
+            } else if (lhs.getPriority() - rhs.getPriority() == 0) {
+                return 0;
+            } else {
+                return 1;
+            }
+        }
+    }
+
+    private Comparator<Task> cmp = new cmpDeadline();
+
     private DatabaseHelper mDatabaseHelper;
     private SQLiteDatabase mSQLiteDatabase;
 
@@ -64,6 +110,7 @@ public class TaskListFragment extends Fragment implements CompoundButton.OnCheck
         TextView changePlan = (TextView) rootView.findViewById(R.id.toDoTextView);
         changePlan.setOnClickListener(viewClickListener);
 
+        setHasOptionsMenu(true);
         return rootView;
     }
 
@@ -127,6 +174,7 @@ public class TaskListFragment extends Fragment implements CompoundButton.OnCheck
     }
 
     private void drawTaskList() {
+        sort(taskList, cmp);
         ExpListAdapter adapter;
         adapter = new ExpListAdapter(getActivity().getApplicationContext(), taskList, mSQLiteDatabase);
         listOfTask.setAdapter(adapter);
@@ -213,5 +261,39 @@ public class TaskListFragment extends Fragment implements CompoundButton.OnCheck
             heapName.add(cursor.getString(cursor.getColumnIndex(DatabaseHelper.HEAP_NAME)));
         }
         cursor.close();
+    }
+
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        super.onCreateOptionsMenu(menu, inflater);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.action_deadline:
+                cmp = new cmpDeadline();
+                drawTaskList();
+                return true;
+            case R.id.action_duration:
+                cmp = new cmpDuration();
+                drawTaskList();
+                return true;
+            case R.id.action_not_show_all:
+                showAll = false;
+                return true;
+            case R.id.action_show_all:
+                showAll = true;
+                return true;
+            case R.id.action_priority:
+                cmp = new cmpPriority();
+                drawTaskList();
+                return true;
+            default:
+                break;
+        }
+
+        return false;
     }
 }
