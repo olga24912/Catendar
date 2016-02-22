@@ -8,7 +8,7 @@
     <string name="action_sort_by_deadline">Deadline</string>
     <string name="action_sort_by_duration">Duration</string>
     <string name="action_show_all">Show all</string>
-    <string name="action_not_show_all">Not show all</string>
+    <string name="action_not_show_all">Show actually</string>
 
     <string-array name="views_array">
         <item>Calendar</item>
