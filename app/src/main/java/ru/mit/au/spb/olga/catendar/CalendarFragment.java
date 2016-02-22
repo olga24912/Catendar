@@ -1,14 +1,12 @@
 package ru.mit.au.spb.olga.catendar;
 
 import android.annotation.SuppressLint;
-import android.app.Activity;
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
-//import android.app.Fragment;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.view.LayoutInflater;
@@ -26,6 +24,8 @@ import java.util.GregorianCalendar;
 import java.util.Random;
 
 import static java.lang.Math.min;
+
+//import android.app.Fragment;
 
 
 public class CalendarFragment extends Fragment {
@@ -65,7 +65,7 @@ public class CalendarFragment extends Fragment {
         super.onCreate(savedInstanceState);
 
 
-        mDatabaseHelper = new DatabaseHelper(getContext(), "mydatabase13.db", null, 1);
+        mDatabaseHelper = new DatabaseHelper(getContext(), "mydatabase14.db", null, 1);
         mSQLiteDatabase = mDatabaseHelper.getWritableDatabase();
 
         Week tmpWeek = new Week(currentDate);

@@ -2,19 +2,15 @@ package ru.mit.au.spb.olga.catendar;
 
 import android.app.DatePickerDialog;
 import android.app.Dialog;
-import android.app.TimePickerDialog;
 import android.content.ContentValues;
-import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
-import android.provider.ContactsContract;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Gravity;
 import android.view.View;
 import android.widget.CheckBox;
 import android.widget.DatePicker;
-import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.RadioGroup;
 import android.widget.TextView;
@@ -52,7 +48,7 @@ public class CreateWeekActivity extends AppCompatActivity {
 
         setContentView(R.layout.activity_create_week);
 
-        mDatabaseHelper = new DatabaseHelper(this, "mydatabase13.db", null, 1);
+        mDatabaseHelper = new DatabaseHelper(this, "mydatabase14.db", null, 1);
         mSQLiteDatabase = mDatabaseHelper.getWritableDatabase();
 
         tvInfo = (TextView)findViewById(R.id.Selected_date);

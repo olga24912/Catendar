@@ -1,6 +1,5 @@
 package ru.mit.au.spb.olga.catendar;
 
-import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.app.TimePickerDialog;
 import android.content.ContentValues;
@@ -59,7 +58,7 @@ public class AddEventForTemplateActivity  extends AppCompatActivity
         lenOfEvent = (TextView)findViewById(R.id.durationValForTemplate);
         lenOfEvent.setText("1");
 
-        mDatabaseHelper = new DatabaseHelper(this, "mydatabase13.db", null, 1);
+        mDatabaseHelper = new DatabaseHelper(this, "mydatabase14.db", null, 1);
         mSQLiteDatabase = mDatabaseHelper.getWritableDatabase();
 
         final SeekBar seekbar = (SeekBar)findViewById(R.id.seekBar);

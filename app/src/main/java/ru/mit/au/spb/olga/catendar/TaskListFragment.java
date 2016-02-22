@@ -36,7 +36,7 @@ public class TaskListFragment extends Fragment implements CompoundButton.OnCheck
 
         listOfTask = (ExpandableListView) rootView.findViewById(R.id.toDoExpandableListView);
 
-        mDatabaseHelper = new DatabaseHelper(getContext(), "mydatabase13.db", null, 1);
+        mDatabaseHelper = new DatabaseHelper(getContext(), "mydatabase14.db", null, 1);
         mSQLiteDatabase = mDatabaseHelper.getWritableDatabase();
 
         synchronizedWithDataBase();

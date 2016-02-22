@@ -5,13 +5,12 @@ import android.database.DatabaseErrorHandler;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.provider.BaseColumns;
-import android.util.Log;
 
 /**
  * Created by olga on 31.10.15.
  */
 public class DatabaseHelper extends SQLiteOpenHelper implements BaseColumns {
-    private static final String DATABASE_NAME = "mydatabase13.db";
+    private static final String DATABASE_NAME = "mydatabase14.db";
     private static final int DATABASE_VERSION = 1;
 
     public static final String DATABASE_TABLE_EVENT = "events";
@@ -56,7 +55,17 @@ public class DatabaseHelper extends SQLiteOpenHelper implements BaseColumns {
     public static final String TASK_HEAP_TASK_ID = "task_id";
     public static final String TASK_HEAP_HEAP_ID = "heap_id";
 
-    //private static final String DATABASE_CREATE_HEAP_TABLE_SCRIPT = "";
+    private static final String DATABASE_CREATE_HEAP_TABLE_SCRIPT = "create table " +
+            DATABASE_TABLE_HEAP + " ("
+            + BaseColumns._ID + " integer primary key autoincrement, "
+            + HEAP_DATE + " integer, "
+            + HEAP_NAME + " text not null);";
+
+    private static final String DATABASE_CREATE_TASK_HEAP_TABLE_SCRIPT = "create table " +
+            DATABASE_TABLE_TASK_HEAP + " ("
+            + BaseColumns._ID + " integer primary key autoincrement, "
+            + TASK_HEAP_HEAP_ID + " integer, "
+            + TASK_HEAP_TASK_ID + " integer);";
 
     private static final String DATABASE_CREATE_CONTEXT_TABLE_SCRIPT = "create table " +
                     DATABASE_TABLE_CONTEXT + " ("
@@ -127,6 +136,8 @@ public class DatabaseHelper extends SQLiteOpenHelper implements BaseColumns {
         db.execSQL(DATABASE_CREATE_TASK_TABLE_SCRIPT);
         db.execSQL(DATABASE_CREATE_CONTEXT_TABLE_SCRIPT);
         db.execSQL(DATABASE_CREATE_TASK_CONTEXT_SCRIPT);
+        db.execSQL(DATABASE_CREATE_TASK_HEAP_TABLE_SCRIPT);
+        db.execSQL(DATABASE_CREATE_HEAP_TABLE_SCRIPT);
     }
 
     @Override

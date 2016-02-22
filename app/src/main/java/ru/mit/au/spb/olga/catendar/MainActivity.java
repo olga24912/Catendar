@@ -260,7 +260,7 @@ public class MainActivity extends ActionBarActivity implements SimpleGestureFilt
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (2 <= requestCode && requestCode <= 6) {
+        if (2 <= requestCode && requestCode <= 7) {
             displayView(0);
         }
     }

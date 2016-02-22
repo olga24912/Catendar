@@ -9,7 +9,6 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.text.Editable;
 import android.view.Gravity;
 import android.view.View;
 import android.widget.DatePicker;
@@ -67,7 +66,7 @@ public class ChangeEventActivity extends AppCompatActivity
 
         setContentView(R.layout.activity_change_event);
 
-        mDatabaseHelper = new DatabaseHelper(this, "mydatabase13.db", null, 1);
+        mDatabaseHelper = new DatabaseHelper(this, "mydatabase14.db", null, 1);
         mSQLiteDatabase = mDatabaseHelper.getWritableDatabase();
 
         eventId = getIntent().getIntExtra("id", 0);

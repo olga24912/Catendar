@@ -3,15 +3,18 @@ package ru.mit.au.spb.olga.catendar;
 
 import android.app.DatePickerDialog;
 import android.app.Dialog;
-import android.app.TimePickerDialog;
 import android.content.Intent;
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.DatePicker;
+import android.widget.ListView;
 import android.widget.TextView;
 
+import java.util.ArrayList;
 import java.util.Calendar;
 
 /**
@@ -26,13 +29,15 @@ public class CreatePlanActivity extends AppCompatActivity {
     private TextView startDateTextView;
     private int startYear, startMonth, startDay;
 
+    ArrayList<Task> taskArrayList = new ArrayList<>();
+    ArrayList<Integer> taskId = new ArrayList<>();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.activity_create_plan);
 
-        mDatabaseHelper = new DatabaseHelper(this, "mydatabase13.db", null, 1);
+        mDatabaseHelper = new DatabaseHelper(this, "mydatabase14.db", null, 1);
         mSQLiteDatabase = mDatabaseHelper.getWritableDatabase();
 
         startDateTextView = (TextView)findViewById(R.id.createPlanTextViewDate);
@@ -43,10 +48,12 @@ public class CreatePlanActivity extends AppCompatActivity {
         startDay = today.get(Calendar.DAY_OF_MONTH);
     }
 
+    static final int CREATE_TASK = 0;
+
     public void onCreateTaskClick(View view) {
         Intent intent = new Intent(CreatePlanActivity.this, CreateTaskActivity.class);
 
-        startActivityForResult(intent, 0);
+        startActivityForResult(intent, CREATE_TASK);
     }
 
     public void onSetDate(View view) {
@@ -69,4 +76,52 @@ public class CreatePlanActivity extends AppCompatActivity {
             startDateTextView.setText("Plan on: " + startDay + "." + startMonth + "." + startYear);
         }
     };
+
+    private void synchronizedWithDataBase() {
+        taskArrayList.clear();
+        for (int i = 0; i < taskId.size(); ++i) {
+            Task current = new Task();
+            Cursor cursor = mSQLiteDatabase.query(DatabaseHelper.DATABASE_TABLE_TASK, new String[]
+                            {DatabaseHelper._ID,
+                            DatabaseHelper.TASK_NAME_COLUMN,
+                            DatabaseHelper.TASK_COMMENT,
+                            DatabaseHelper.TASK_START_TIME,
+                            DatabaseHelper.TASK_PRIORITY,
+                            DatabaseHelper.TASK_IS_DONE,
+                            DatabaseHelper.TASK_DURATION,
+                            DatabaseHelper.TASK_DEADLINE,
+                            },
+                    DatabaseHelper._ID + "=" + taskId.get(i), null, null, null, null, null);
+
+            cursor.moveToFirst();
+            current.changeText(cursor.getString(cursor.getColumnIndex(DatabaseHelper.TASK_NAME_COLUMN)));
+            taskArrayList.add(current);
+            cursor.close();
+        }
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == CREATE_TASK) {
+            if (resultCode == RESULT_OK) {
+                taskId.add(data.getIntExtra("id", -1));
+                synchronizedWithDataBase();
+                drawTaskList();
+            }
+        }
+    }
+
+    private void drawTaskList() {
+        ListView listView = (ListView)findViewById(R.id.createPlanListView);
+
+        final String[] tasksName = new String[taskArrayList.size()];
+        for (int i = 0; i < taskArrayList.size(); i++) {
+            tasksName[i] = taskArrayList.get(i).getTaskText();
+        }
+
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,
+                android.R.layout.simple_list_item_1, tasksName);
+        listView.setAdapter(adapter);
+    }
 }

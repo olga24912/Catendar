@@ -71,7 +71,7 @@ public class CreateTaskActivity extends AppCompatActivity
 
         commentText = (EditText)findViewById(R.id.createTaskEditTextComments);
 
-        mDatabaseHelper = new DatabaseHelper(this, "mydatabase13.db", null, 1);
+        mDatabaseHelper = new DatabaseHelper(this, "mydatabase14.db", null, 1);
         mSQLiteDatabase = mDatabaseHelper.getWritableDatabase();
 
         final SeekBar seekbar = (SeekBar)findViewById(R.id.createTaskSeekBar);
@@ -215,9 +215,10 @@ public class CreateTaskActivity extends AppCompatActivity
         newValues.put(DatabaseHelper.TASK_IS_DONE, 0);
         newValues.put(DatabaseHelper.TASK_PRIORITY, priority);
 
-        mSQLiteDatabase.insert(DatabaseHelper.DATABASE_TABLE_TASK, null, newValues);
+        int idVal = (int) mSQLiteDatabase.insert(DatabaseHelper.DATABASE_TABLE_TASK, null, newValues);
 
         setResult(RESULT_OK, answerIntent);
+        answerIntent.putExtra("id", idVal);
         finish();
     }
 
