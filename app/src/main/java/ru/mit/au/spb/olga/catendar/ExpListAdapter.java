@@ -2,17 +2,13 @@ package ru.mit.au.spb.olga.catendar;
 
 import android.content.ContentValues;
 import android.content.Context;
-import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseExpandableListAdapter;
 import android.widget.Button;
-import android.widget.ExpandableListView;
 import android.widget.TextView;
-
-import org.w3c.dom.Text;
 
 import java.util.ArrayList;
 
@@ -118,7 +114,7 @@ public class ExpListAdapter extends BaseExpandableListAdapter {
             public void onClick(View view) {
                 textPriority.setBackgroundColor(0xffc5e384);
 
-                int dataBaseId = mGroups.get(groupPosition).getId();
+                Long dataBaseId = mGroups.get(groupPosition).getId();
 
                 mSQLiteDatabase.delete(DatabaseHelper.DATABASE_TABLE_TASK, DatabaseHelper._ID + "=" + dataBaseId, null);
             }
@@ -129,7 +125,7 @@ public class ExpListAdapter extends BaseExpandableListAdapter {
             public void onClick(View v) {
                 textPriority.setBackgroundColor(0xffc5e384);
 
-                int dataBaseId = mGroups.get(groupPosition).getId();
+                Long dataBaseId = mGroups.get(groupPosition).getId();
 
                 Task currentTask = mGroups.get(groupPosition);
 

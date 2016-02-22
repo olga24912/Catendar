@@ -16,6 +16,7 @@ import android.widget.TextView;
 
 import java.util.ArrayList;
 import java.util.GregorianCalendar;
+import java.util.HashSet;
 
 /**
  * Created by olga on 12.12.15.
@@ -32,7 +33,7 @@ public class TaskListFragment extends Fragment implements CompoundButton.OnCheck
 
     private boolean showAll;
 
-    private int heap_id = -1;
+    private long heap_id = -1;
 
     private ShakeListener mShaker;
 
@@ -76,20 +77,21 @@ public class TaskListFragment extends Fragment implements CompoundButton.OnCheck
     private void showPopupMenu(View v) {
         PopupMenu popupMenu = new PopupMenu(this.getActivity(), v);
         popupMenu.inflate(R.menu.popupmenu);
-        for (String nm: heapName) {
-            popupMenu.getMenu().add(0, 0, 0, nm);
+        for (int i = 0; i < heapName.size(); ++i) {
+            String nm = heapName.get(i);
+            popupMenu.getMenu().add(0, i + 1, 0, nm).getItemId();
         }
         popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
-
             @Override
             public boolean onMenuItemClick(MenuItem item) {
-                switch (item.getItemId()) {
-                    case 1:
-                        return true;
-                    case R.id.menu1:
-                        return true;
-                    default:
-                        return false;
+                if (item.getItemId() == R.id.menu1) {
+                    heap_id = -1;
+                    return true;
+                } else if (0 < item.getItemId() && item.getItemId() <= heapId.size()) {
+                    heap_id = heapId.get(item.getItemId() - 1);
+                    return true;
+                } else {
+                    return false;
                 }
             }
         });
@@ -131,7 +133,26 @@ public class TaskListFragment extends Fragment implements CompoundButton.OnCheck
     }
 
 
+    private HashSet<Long> taskIDHeap = new HashSet<>();
+
+    private void createTaskIDHeap () {
+        taskIDHeap.clear();
+        Cursor cursor = mSQLiteDatabase.query(DatabaseHelper.DATABASE_TABLE_TASK_HEAP,
+                new String[]{DatabaseHelper._ID,
+                        DatabaseHelper.TASK_HEAP_TASK_ID,
+                        DatabaseHelper.TASK_HEAP_HEAP_ID},
+                DatabaseHelper.TASK_HEAP_HEAP_ID + "=" + heap_id, null,
+                null, null, null);
+        int val = cursor.getCount();
+        while (cursor.moveToNext()) {
+            taskIDHeap.add(cursor.getLong(cursor.getColumnIndex(DatabaseHelper.TASK_HEAP_TASK_ID)));
+        }
+        cursor.close();
+    }
+
     private void synchronizedWithDataBase() {
+        createTaskIDHeap();
+
         taskList.clear();
 
         Cursor cursor = mSQLiteDatabase.query("tasks", new String[]{DatabaseHelper._ID,
@@ -151,7 +172,12 @@ public class TaskListFragment extends Fragment implements CompoundButton.OnCheck
             currentTask.changeText(cursor.getString(cursor.getColumnIndex(DatabaseHelper.TASK_NAME_COLUMN)));
             currentTask.setComment(cursor.getString(cursor.getColumnIndex(DatabaseHelper.TASK_COMMENT)));
             currentTask.changeIsDone(cursor.getInt(cursor.getColumnIndex(DatabaseHelper.TASK_IS_DONE)) == 1);
-            currentTask.setId(cursor.getInt(cursor.getColumnIndex(DatabaseHelper._ID)));
+            currentTask.setId(cursor.getLong(cursor.getColumnIndex(DatabaseHelper._ID)));
+
+            Long idInHeap = currentTask.getId();
+            if (!(heap_id == -1 || taskIDHeap.contains(idInHeap))) {
+                continue;
+            }
 
             GregorianCalendar curDate = new GregorianCalendar();
             curDate.setTimeInMillis(1000*cursor.getInt(cursor.getColumnIndex(DatabaseHelper.TASK_DEADLINE)));

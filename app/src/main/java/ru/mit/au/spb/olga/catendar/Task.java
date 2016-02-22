@@ -14,13 +14,13 @@ public class Task {
     private GregorianCalendar duration;
     private GregorianCalendar startTime;
     private GregorianCalendar deadlineTime;
-    private int id;
+    private Long id;
 
-    public void setId(int id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
-    public int getId() {
+    public Long getId() {
         return this.id;
     }
 

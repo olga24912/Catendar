@@ -142,10 +142,10 @@ public class CreatePlanActivity extends AppCompatActivity {
         for (int i = 0; i < taskId.size(); ++i) {
             ContentValues values = new ContentValues();
 
-            newValues.put(DatabaseHelper.TASK_HEAP_HEAP_ID, heapId);
-            newValues.put(DatabaseHelper.TASK_HEAP_TASK_ID, taskId.get(i));
+            values.put(DatabaseHelper.TASK_HEAP_HEAP_ID, heapId);
+            values.put(DatabaseHelper.TASK_HEAP_TASK_ID, taskId.get(i));
 
-            mSQLiteDatabase.insert(DatabaseHelper.DATABASE_TABLE_TASK_HEAP,null,newValues);
+            mSQLiteDatabase.insert(DatabaseHelper.DATABASE_TABLE_TASK_HEAP, null, values);
         }
 
         finish();
