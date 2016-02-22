@@ -128,7 +128,8 @@ public class CreatePlanActivity extends AppCompatActivity {
     }
 
     public void onOKClickInPlan(View view) {
-        String heapName = new String("Plan on");
+        String heapName = startDateTextView.getText().toString();
+        
         GregorianCalendar currentDate = new GregorianCalendar(startYear, startMonth, startDay);
         Long time = currentDate.getTimeInMillis()/1000;
 
