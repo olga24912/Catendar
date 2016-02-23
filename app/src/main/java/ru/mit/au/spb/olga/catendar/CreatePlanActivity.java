@@ -32,7 +32,7 @@ public class CreatePlanActivity extends AppCompatActivity {
     private int startYear, startMonth, startDay;
 
     ArrayList<Task> taskArrayList = new ArrayList<>();
-    ArrayList<Integer> taskId = new ArrayList<>();
+    ArrayList<Long> taskId = new ArrayList<>();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -106,7 +106,13 @@ public class CreatePlanActivity extends AppCompatActivity {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == CREATE_TASK) {
             if (resultCode == RESULT_OK) {
-                taskId.add(data.getIntExtra("id", -1));
+                long[] args = data.getLongArrayExtra("id");
+                if (args == null) {
+                    return;
+                }
+                for (long i: args) {
+                    taskId.add(i);
+                }
                 synchronizedWithDataBase();
                 drawTaskList();
             }

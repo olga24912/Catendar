@@ -1,5 +1,6 @@
 package ru.mit.au.spb.olga.catendar;
 
+import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
@@ -34,12 +35,18 @@ public class AddTaskActivity extends AppCompatActivity {
 
         listOfTask.setOnChildClickListener(myOnChildClickListener);
 
+        listOfTask.setOnGroupExpandListener(new ExpandableListView.OnGroupExpandListener() {
+            @Override
+            public void onGroupExpand(int groupPosition) {
+                chooseTaskId.add(taskList.get(groupPosition).getId());
+            }
+        });
+
         synchronizedWithDataBase();
         drawTaskList();
     }
 
     ExpandableListView.OnChildClickListener myOnChildClickListener = new ExpandableListView.OnChildClickListener() {
-
         @Override
         public boolean onChildClick(ExpandableListView parent, View v,
                                     int groupPosition, int childPosition, long id) {
@@ -47,6 +54,7 @@ public class AddTaskActivity extends AppCompatActivity {
             return true;
         }
     };
+
 
     private void synchronizedWithDataBase() {
         taskList.clear();
@@ -92,9 +100,20 @@ public class AddTaskActivity extends AppCompatActivity {
 
     private void drawTaskList() {
         ExpListAdapterAddTask adapter;
-        adapter = new ExpListAdapterAddTask(getApplicationContext(), taskList, mSQLiteDatabase);
+        adapter = new ExpListAdapterAddTask(this, taskList, mSQLiteDatabase);
         listOfTask.setAdapter(adapter);
     }
 
+    private static final String ADD_TASK = "id";
 
+    public void onOkClickInAddTask(View view) {
+        Intent answerIntent = new Intent();
+        long[] retVal = new long[chooseTaskId.size()];
+        for (int i = 0; i < (int)chooseTaskId.size(); ++i) {
+            retVal[i] = chooseTaskId.get(i);
+        }
+        answerIntent.putExtra(ADD_TASK, retVal);
+        setResult(RESULT_OK, answerIntent);
+        finish();
+    }
 }
