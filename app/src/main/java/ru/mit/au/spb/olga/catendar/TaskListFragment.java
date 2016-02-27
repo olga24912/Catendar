@@ -264,6 +264,10 @@ public class TaskListFragment extends Fragment implements CompoundButton.OnCheck
             currentTask.changeIsDone(cursor.getInt(cursor.getColumnIndex(DatabaseHelper.TASK_IS_DONE)) == 1);
             currentTask.setId(cursor.getLong(cursor.getColumnIndex(DatabaseHelper._ID)));
 
+            if (currentTask.getIsDone() && !showAll) {
+                continue;
+            }
+
             Long idInHeap = currentTask.getId();
             if (!(heap_id == -1 || taskIDHeap.contains(idInHeap))) {
                 continue;
@@ -283,6 +287,10 @@ public class TaskListFragment extends Fragment implements CompoundButton.OnCheck
             GregorianCalendar curDate3 = new GregorianCalendar();
             curDate3.setTimeInMillis((long) cursor.getInt(cursor.getColumnIndex(DatabaseHelper.TASK_START_TIME)) * 1000);
             currentTask.setStartTime(curDate3);
+
+            if (!showAll && curDate3.getTimeInMillis() > new GregorianCalendar().getTimeInMillis()) {
+                continue;
+            }
 
             taskList.add(currentTask);
         }
@@ -325,9 +333,13 @@ public class TaskListFragment extends Fragment implements CompoundButton.OnCheck
                 return true;
             case R.id.action_not_show_all:
                 showAll = false;
+                synchronizedWithDataBase();
+                drawTaskList();
                 return true;
             case R.id.action_show_all:
                 showAll = true;
+                synchronizedWithDataBase();
+                drawTaskList();
                 return true;
             case R.id.action_priority:
                 cmp = new cmpPriority();
