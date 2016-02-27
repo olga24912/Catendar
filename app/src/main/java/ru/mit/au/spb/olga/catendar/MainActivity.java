@@ -1,14 +1,12 @@
 package ru.mit.au.spb.olga.catendar;
 
 import android.content.Intent;
-import android.os.Bundle;
-
-import android.support.v4.app.Fragment;
 import android.content.res.Configuration;
-import android.support.v7.app.ActionBarDrawerToggle;
+import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarActivity;
-
+import android.support.v7.app.ActionBarDrawerToggle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
@@ -40,10 +38,6 @@ public class MainActivity extends ActionBarActivity implements SimpleGestureFilt
 
         setContentView(R.layout.activity_main);
 
-        /*if(savedInstanceState == null) {
-            CalendarFragment calendar = new CalendarFragment();
-            getSupportFragmentManager().beginTransaction().add(android.R.id.content, calendar).commit();
-        }*/
         detector = new SimpleGestureFilter(this,this);
 
         myTitle =  getTitle();
@@ -54,26 +48,32 @@ public class MainActivity extends ActionBarActivity implements SimpleGestureFilt
         myDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
         myDrawerList = (ListView) findViewById(R.id.left_drawer);
 
-        myDrawerList.setAdapter(new ArrayAdapter<String>(this,
+        myDrawerList.setAdapter(new ArrayAdapter<>(this,
                 R.layout.drawer_list_item, viewsNames));
 
         // enabling action bar app icon and behaving it as toggle button
         android.support.v7.app.ActionBar actionBar = getSupportActionBar();
-        actionBar.setDisplayHomeAsUpEnabled(true);
-
+        if (actionBar != null) {
+            actionBar.setDisplayHomeAsUpEnabled(true);
+        }
         myDrawerToggle = new ActionBarDrawerToggle(this, myDrawerLayout,
                 R.string.open_menu,
                 R.string.close_menu
         ) {
             public void onDrawerClosed(View view) {
-                getSupportActionBar().setTitle(myTitle);
+                android.support.v7.app.ActionBar currentActionBar = getSupportActionBar();
+                if (currentActionBar != null) {
+                    setTitle(myTitle);
+                }
                 // calling onPrepareOptionsMenu() to show action bar icons
                 invalidateOptionsMenu();
             }
 
             public void onDrawerOpened(View drawerView) {
-                getSupportActionBar().setTitle(myDrawerTitle);
-                // calling onPrepareOptionsMenu() to hide action bar icons
+                android.support.v7.app.ActionBar currentActionBar = getSupportActionBar();
+                if (currentActionBar != null) {
+                    setTitle(myDrawerTitle);
+                }
                 invalidateOptionsMenu();
             }
         };
@@ -254,7 +254,10 @@ public class MainActivity extends ActionBarActivity implements SimpleGestureFilt
     @Override
     public void setTitle(CharSequence title) {
         myTitle = title;
-        getSupportActionBar().setTitle(myTitle);
+        android.support.v7.app.ActionBar titleBar = getSupportActionBar();
+        if (titleBar != null) {
+            titleBar.setTitle(myTitle);
+        }
     }
 
     /**
