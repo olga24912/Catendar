@@ -205,7 +205,7 @@ public class CreateTaskActivity extends AppCompatActivity
         }
         GregorianCalendar endCal = new GregorianCalendar(finishYear, finishMonth, finishDay, finishHours, finishMinute);
 
-        GregorianCalendar durCal = new GregorianCalendar(0, 0, 0, durationHours, durationMinute);
+        GregorianCalendar durCal = new GregorianCalendar(1969, 0, 0, durationHours, durationMinute);
 
         newValues.put(DatabaseHelper.TASK_NAME_COLUMN, taskTextString);
         newValues.put(DatabaseHelper.TASK_COMMENT, commentString);
