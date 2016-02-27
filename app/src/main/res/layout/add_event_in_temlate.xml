@@ -119,17 +119,21 @@
     <TextView
         android:id="@+id/durationValForTemplate"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content" android:text="1" android:textStyle="bold"
+        android:layout_height="wrap_content"
+        android:text="@string/one"
+        android:textStyle="bold"
         android:layout_toEndOf="@+id/durationForTemplate"
         android:layout_alignTop="@+id/durationForTemplate"
-        android:layout_toRightOf="@+id/durationForTemplate"></TextView>
+        android:layout_toRightOf="@+id/durationForTemplate"/>
 
     <TextView
         android:id="@+id/durationForTemplate"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content" android:text="The duration of the event: " android:textStyle="bold"
+        android:layout_height="wrap_content"
+        android:text="@string/duration"
+        android:textStyle="bold"
         android:layout_below="@+id/seekBar"
         android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"></TextView>
+        android:layout_alignParentStart="true"/>
 
 </RelativeLayout>

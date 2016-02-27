@@ -91,7 +91,7 @@
         android:id="@+id/durationValChange"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="1"
+        android:text="@string/one"
         android:textStyle="bold"
         android:layout_toRightOf="@+id/durationChange"
         android:layout_alignTop="@+id/durationChange">
@@ -101,7 +101,7 @@
         android:id="@+id/durationChange"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="The duration of the event: "
+        android:text="@string/duration"
         android:textStyle="bold"
         android:layout_below="@+id/changesSeekBarOfEventLen"
         android:layout_alignParentLeft="true"

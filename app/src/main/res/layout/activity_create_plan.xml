@@ -15,7 +15,8 @@
             android:text="@string/date"
             android:id="@+id/createPlanEditTextName"
             android:layout_centerVertical="true"
-            android:layout_alignParentStart="true" />
+            android:layout_alignParentStart="true"
+            android:inputType="text" />
 
         <Button
             android:layout_width="wrap_content"
@@ -36,9 +37,8 @@
 
     <ListView
         android:layout_width="match_parent"
-        android:layout_height="374dp"
-        android:id="@+id/createPlanListView"
-        android:layout_weight="0.33" />
+        android:layout_height="379dp"
+        android:id="@+id/createPlanListView" />
 
     <RelativeLayout
         android:layout_width="match_parent"
