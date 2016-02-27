@@ -1,5 +1,6 @@
 package ru.mit.au.spb.olga.catendar;
 
+import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
@@ -86,6 +87,8 @@ public class TaskListFragment extends Fragment implements CompoundButton.OnCheck
 
     private TextView planTitle;
 
+    private static final int CHANGE_PLAN = 0;
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -117,8 +120,8 @@ public class TaskListFragment extends Fragment implements CompoundButton.OnCheck
 
         setHasOptionsMenu(true);
 
-        Button DeleteButton = (Button) rootView.findViewById(R.id.toDoButtonDelete);
-        DeleteButton.setOnClickListener(new View.OnClickListener() {
+        Button deleteButton = (Button) rootView.findViewById(R.id.toDoButtonDelete);
+        deleteButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (heap_id == -1) {
@@ -134,6 +137,18 @@ public class TaskListFragment extends Fragment implements CompoundButton.OnCheck
                     synchronizedWithDataBase();
                     drawTaskList();
                 }
+            }
+        });
+
+        Button changeButton = (Button) rootView.findViewById(R.id.toDoButtonChange);
+        changeButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent answerIntent = new Intent(getActivity(), CreatePlanActivity.class);
+
+                answerIntent.putExtra("id", heap_id);
+
+                getActivity().startActivityForResult(answerIntent, CHANGE_PLAN);
             }
         });
 
@@ -321,5 +336,14 @@ public class TaskListFragment extends Fragment implements CompoundButton.OnCheck
         }
 
         return false;
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == CHANGE_PLAN) {
+            synchronizedWithDataBase();
+            drawTaskList();
+        }
     }
 }

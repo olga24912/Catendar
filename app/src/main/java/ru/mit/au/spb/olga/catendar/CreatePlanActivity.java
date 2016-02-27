@@ -33,6 +33,10 @@ public class CreatePlanActivity extends AppCompatActivity {
 
     ArrayList<Task> taskArrayList = new ArrayList<>();
     ArrayList<Long> taskId = new ArrayList<>();
+
+    private long plan_id = -1;
+    private int countTaskWas = 0;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -43,10 +47,47 @@ public class CreatePlanActivity extends AppCompatActivity {
 
         startDateTextView = (TextView)findViewById(R.id.createPlanTextViewDate);
 
-        Calendar today = Calendar.getInstance();
-        startYear = today.get(Calendar.YEAR);
-        startMonth = today.get(Calendar.MONTH);
-        startDay = today.get(Calendar.DAY_OF_MONTH);
+        plan_id = getIntent().getLongExtra("id", -1);
+
+        if (plan_id == -1) {
+            Calendar today = Calendar.getInstance();
+            startYear = today.get(Calendar.YEAR);
+            startMonth = today.get(Calendar.MONTH);
+            startDay = today.get(Calendar.DAY_OF_MONTH);
+        } else {
+            Cursor cursor = mSQLiteDatabase.query(DatabaseHelper.DATABASE_TABLE_HEAP,
+                    new String[]{DatabaseHelper._ID,
+                            DatabaseHelper.HEAP_DATE,
+                            DatabaseHelper.HEAP_NAME},
+                    DatabaseHelper._ID + "=" + plan_id, null,
+                    null, null, null);
+
+            cursor.moveToFirst();
+            GregorianCalendar curDate  = new GregorianCalendar();
+            curDate.setTimeInMillis(1000*cursor.getLong(cursor.getColumnIndex(DatabaseHelper.HEAP_DATE)));
+
+            startYear = curDate.get(Calendar.YEAR);
+            startMonth = curDate.get(Calendar.MONTH);
+            startDay = curDate.get(Calendar.DAY_OF_MONTH);
+
+            getTaskFromDataBase();
+        }
+
+        synchronizedWithDataBase();
+    }
+
+    private void getTaskFromDataBase() {
+        Cursor cursor = mSQLiteDatabase.query(DatabaseHelper.DATABASE_TABLE_TASK_HEAP,
+                new String[]{DatabaseHelper._ID,
+                        DatabaseHelper.TASK_HEAP_TASK_ID,
+                        DatabaseHelper.TASK_HEAP_HEAP_ID},
+                DatabaseHelper.TASK_HEAP_HEAP_ID + "=" + plan_id, null,
+                null, null, null);
+        int val = cursor.getCount();
+        while (cursor.moveToNext()) {
+            ++countTaskWas;
+            taskId.add(cursor.getLong(cursor.getColumnIndex(DatabaseHelper.TASK_HEAP_TASK_ID)));
+        }
     }
 
     static final int CREATE_TASK = 0;
@@ -143,9 +184,16 @@ public class CreatePlanActivity extends AppCompatActivity {
         newValues.put(DatabaseHelper.HEAP_DATE, time);
         newValues.put(DatabaseHelper.HEAP_NAME, heapName);
 
-        long heapId = mSQLiteDatabase.insert(DatabaseHelper.DATABASE_TABLE_HEAP, null, newValues);
 
-        for (int i = 0; i < taskId.size(); ++i) {
+        long heapId = plan_id;
+        if (heapId == -1) {
+            heapId = mSQLiteDatabase.insert(DatabaseHelper.DATABASE_TABLE_HEAP, null, newValues);
+        } else {
+            mSQLiteDatabase.update(DatabaseHelper.DATABASE_TABLE_HEAP, newValues, DatabaseHelper._ID
+                    + "=" + heapId, null);
+        }
+
+        for (int i = countTaskWas; i < taskId.size(); ++i) {
             ContentValues values = new ContentValues();
 
             values.put(DatabaseHelper.TASK_HEAP_HEAP_ID, heapId);
