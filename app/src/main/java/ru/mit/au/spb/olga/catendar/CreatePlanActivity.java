@@ -12,8 +12,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.DatePicker;
+import android.widget.EditText;
 import android.widget.ListView;
-import android.widget.TextView;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -28,7 +28,7 @@ public class CreatePlanActivity extends AppCompatActivity {
 
     private int DIALOG_DATE_START = 1;
     private DatePicker startDate;
-    private TextView startDateTextView;
+    private EditText nameEditText;
     private int startYear, startMonth, startDay;
 
     ArrayList<Task> taskArrayList = new ArrayList<>();
@@ -45,7 +45,7 @@ public class CreatePlanActivity extends AppCompatActivity {
         mDatabaseHelper = new DatabaseHelper(this, "mydatabase14.db", null, 1);
         mSQLiteDatabase = mDatabaseHelper.getWritableDatabase();
 
-        startDateTextView = (TextView)findViewById(R.id.createPlanTextViewDate);
+        nameEditText = (EditText)findViewById(R.id.createPlanEditTextName);
 
         plan_id = getIntent().getLongExtra("id", -1);
 
@@ -65,6 +65,8 @@ public class CreatePlanActivity extends AppCompatActivity {
             cursor.moveToFirst();
             GregorianCalendar curDate  = new GregorianCalendar();
             curDate.setTimeInMillis(1000*cursor.getLong(cursor.getColumnIndex(DatabaseHelper.HEAP_DATE)));
+
+            nameEditText.setText(cursor.getString(cursor.getColumnIndex(DatabaseHelper.HEAP_NAME)));
 
             startYear = curDate.get(Calendar.YEAR);
             startMonth = curDate.get(Calendar.MONTH);
@@ -115,7 +117,7 @@ public class CreatePlanActivity extends AppCompatActivity {
             startYear = _year;
             startMonth = monthOfYear;
             startDay = dayOfMonth;
-            startDateTextView.setText("Plan on: " + startDay + "." + startMonth + "." + startYear);
+            nameEditText.setText("Plan on: " + startDay + "." + startMonth + "." + startYear);
         }
     };
 
@@ -174,7 +176,7 @@ public class CreatePlanActivity extends AppCompatActivity {
     }
 
     public void onOKClickInPlan(View view) {
-        String heapName = startDateTextView.getText().toString();
+        String heapName = nameEditText.getText().toString();
 
         GregorianCalendar currentDate = new GregorianCalendar(startYear, startMonth, startDay);
         Long time = currentDate.getTimeInMillis()/1000;
