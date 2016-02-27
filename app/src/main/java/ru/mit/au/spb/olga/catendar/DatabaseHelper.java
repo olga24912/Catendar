@@ -6,9 +6,6 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.provider.BaseColumns;
 
-/**
- * Created by olga on 31.10.15.
- */
 public class DatabaseHelper extends SQLiteOpenHelper implements BaseColumns {
     private static final String DATABASE_NAME = "mydatabase14.db";
     private static final int DATABASE_VERSION = 1;
