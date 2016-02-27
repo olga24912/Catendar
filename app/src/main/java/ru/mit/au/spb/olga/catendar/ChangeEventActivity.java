@@ -22,12 +22,8 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 
-/**
- * Created by olga on 17.12.15.
- */
 public class ChangeEventActivity extends AppCompatActivity
         implements SeekBar.OnSeekBarChangeListener {
-    private DatabaseHelper mDatabaseHelper;
     private SQLiteDatabase mSQLiteDatabase;
 
     private EditText eventText;
@@ -36,7 +32,7 @@ public class ChangeEventActivity extends AppCompatActivity
 
     private int DIALOG_TIME = 2;
     private int hour = 14;
-    private int minute = 00;
+    private int minute = 0;
 
     private TextView tvInfo;
     private TextView tvInfoStartTime;
@@ -66,7 +62,7 @@ public class ChangeEventActivity extends AppCompatActivity
 
         setContentView(R.layout.activity_change_event);
 
-        mDatabaseHelper = new DatabaseHelper(this, "mydatabase14.db", null, 1);
+        DatabaseHelper mDatabaseHelper = new DatabaseHelper(this, "mydatabase14.db", null, 1);
         mSQLiteDatabase = mDatabaseHelper.getWritableDatabase();
 
         eventId = getIntent().getIntExtra("id", 0);
@@ -124,8 +120,6 @@ public class ChangeEventActivity extends AppCompatActivity
 
         tvInfoStartTime.setText("Start time is " + hour + " hours " + minute + " minutes");
         tvInfo.setText("Event day is " + day + "/" + (month + 1) + "/" + year);
-
-        //printTask();
     }
 
     public void onSetDateClick(View view) {
@@ -139,11 +133,9 @@ public class ChangeEventActivity extends AppCompatActivity
 
     protected Dialog onCreateDialog(int id) {
         if (id == DIALOG_DATE) {
-            DatePickerDialog tpd = new DatePickerDialog(this, (DatePickerDialog.OnDateSetListener) myCallBackDate, year, month, day);
-            return tpd;
+            return new DatePickerDialog(this, myCallBackDate, year, month, day);
         } else if (id == DIALOG_TIME) {
-            TimePickerDialog tpd = new TimePickerDialog(this, (TimePickerDialog.OnTimeSetListener) myCallBackTime, hour, minute, true);
-            return tpd;
+            return new TimePickerDialog(this, myCallBackTime, hour, minute, true);
         }
         return super.onCreateDialog(id);
     }
@@ -188,8 +180,7 @@ public class ChangeEventActivity extends AppCompatActivity
         ContentValues newValues = new ContentValues();
 
         GregorianCalendar startCal = new GregorianCalendar(year, month, day, hour, minute);
-
-        GregorianCalendar endCal = startCal;
+        GregorianCalendar endCal = new GregorianCalendar(year, month, day, hour, minute);
 
         newValues.put(DatabaseHelper.EVENT_NAME, String.valueOf(createEvent.getText()));
         newValues.put(DatabaseHelper.EVENT_PARENT_TEMPLATE, 0);
@@ -200,14 +191,11 @@ public class ChangeEventActivity extends AppCompatActivity
 
         mSQLiteDatabase.update(DatabaseHelper.DATABASE_TABLE_EVENT, newValues, "_id " + "=" + eventId, null);
 
-        int parentID = eventId;
-
         for (int i = 0; i < taskText.size(); i++) {
             EditText currentTask = taskText.get(i);
             newValues = new ContentValues();
 
             newValues.put(DatabaseHelper.TASK_NAME_COLUMN, String.valueOf(currentTask.getText()));
-            //newValues.put(DatabaseHelper.TASK_PARENT_EVENT_ID, parentID);
             newValues.put(DatabaseHelper.TASK_IS_DONE, 0);
 
             if (i >= taskId.size()) {
@@ -263,33 +251,4 @@ public class ChangeEventActivity extends AppCompatActivity
         taskText.add(textView);
         linearLayout.addView(textView);
     }
-
-    /*This comment is currently needed here for development purposes*/
-    /*private void printTask() {
-        Cursor cursor = mSQLiteDatabase.query(DatabaseHelper.DATABASE_TABLE_TASK, new String[]{DatabaseHelper._ID,
-                        DatabaseHelper.TASK_NAME_COLUMN, DatabaseHelper.TASK_PARENT_EVENT_ID,
-                        DatabaseHelper.TASK_IS_DONE},
-                null, null,
-                null, null, null);
-        while (cursor.moveToNext()) {
-            String taskName = cursor.getString(cursor.getColumnIndex(DatabaseHelper.TASK_NAME_COLUMN));
-            int prId = cursor.getInt(cursor.getColumnIndex(DatabaseHelper.TASK_PARENT_EVENT_ID));
-            int tId = cursor.getInt(cursor.getColumnIndex(DatabaseHelper._ID));
-            if (prId == eventId) {
-                LinearLayout linearLayout = (LinearLayout)findViewById(R.id.LinearLayoutInChangeEvent);
-
-                LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT,
-                        LinearLayout.LayoutParams.WRAP_CONTENT);
-
-                layoutParams.gravity = Gravity.LEFT;
-                layoutParams.setMargins(0, 10, 10, 10);
-                EditText textView = new EditText(this);
-                textView.setLayoutParams(layoutParams);
-                textView.setText(taskName);
-                taskText.add(textView);
-                taskId.add(tId);
-                linearLayout.addView(textView);
-            }
-        }
-    }*/
 }
