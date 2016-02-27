@@ -11,6 +11,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.ExpandableListView;
 import android.widget.PopupMenu;
@@ -115,6 +116,27 @@ public class TaskListFragment extends Fragment implements CompoundButton.OnCheck
         changePlan.setOnClickListener(viewClickListener);
 
         setHasOptionsMenu(true);
+
+        Button DeleteButton = (Button) rootView.findViewById(R.id.toDoButtonDelete);
+        DeleteButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (heap_id == -1) {
+                    return;
+                } else {
+                    mSQLiteDatabase.delete(DatabaseHelper.DATABASE_TABLE_TASK_HEAP,
+                            DatabaseHelper.TASK_HEAP_HEAP_ID + " = " + heap_id, null);
+
+                    mSQLiteDatabase.delete(DatabaseHelper.DATABASE_TABLE_HEAP,
+                            DatabaseHelper._ID + " = " + heap_id, null);
+                    heap_id = -1;
+                    initHeapList();
+                    synchronizedWithDataBase();
+                    drawTaskList();
+                }
+            }
+        });
+
         return rootView;
     }
 
@@ -267,7 +289,6 @@ public class TaskListFragment extends Fragment implements CompoundButton.OnCheck
         }
         cursor.close();
     }
-
 
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {

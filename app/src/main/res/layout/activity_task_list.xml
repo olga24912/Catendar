@@ -17,5 +17,26 @@
         android:layout_height="wrap_content"
         android:id="@+id/toDoExpandableListView"
         android:layout_below="@+id/toDoTextView"
-        android:layout_alignParentStart="true" />
+        android:layout_alignParentStart="true"
+        android:layout_above="@+id/toDoButtonDelete" />
+
+    <Button
+        style="?android:attr/buttonStyleSmall"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/deletePlan"
+        android:id="@+id/toDoButtonDelete"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/changePlan"
+        android:id="@+id/toDoButtonChange"
+        android:layout_below="@+id/toDoExpandableListView"
+        android:layout_toLeftOf="@+id/toDoButtonDelete"
+        android:layout_toStartOf="@+id/toDoButtonDelete" />
+
 </RelativeLayout>

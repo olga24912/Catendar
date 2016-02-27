@@ -97,6 +97,9 @@
     <string name="addTask">Add Task</string>
     <string name="date">Plan on</string>
 
+    <string name="deletePlan">Delete this plan</string>
+    <string name="changePlan">Change this plan</string>
+
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>
