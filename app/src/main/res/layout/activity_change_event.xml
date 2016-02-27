@@ -129,21 +129,10 @@
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/add_task_extra"
-        android:id="@+id/add_new_task_in_change"
-        android:layout_alignBottom="@+id/OKinChangeEvent"
-        android:layout_toLeftOf="@+id/OKinChangeEvent"
-        android:layout_toStartOf="@+id/OKinChangeEvent"
-        android:onClick="onAddTaskClick"/>
-
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
         android:text="@string/delete"
         android:id="@+id/delete_event"
-        android:layout_alignTop="@+id/add_new_task_in_change"
-        android:layout_toRightOf="@+id/CancelButtonInChange"
-        android:layout_toEndOf="@+id/CancelButtonInChange"
         android:onClick="onDeleteClick"
-        />
+        android:layout_alignParentBottom="true"
+        android:layout_toRightOf="@+id/CancelButtonInChange"
+        android:layout_toEndOf="@+id/CancelButtonInChange" />
 </RelativeLayout>

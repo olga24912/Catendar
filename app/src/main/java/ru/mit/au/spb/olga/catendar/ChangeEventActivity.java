@@ -9,16 +9,13 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.view.Gravity;
 import android.view.View;
 import android.widget.DatePicker;
 import android.widget.EditText;
-import android.widget.LinearLayout;
 import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.TimePicker;
 
-import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 
@@ -47,9 +44,6 @@ public class ChangeEventActivity extends AppCompatActivity
 
     private int eventId;
     private int parentId;
-
-    private ArrayList<EditText> taskText = new ArrayList<>();
-    private ArrayList<Integer> taskId = new ArrayList<>();
 
     public final static String EVENT_NAME = "ru.mit.au.spb.olga.catendar.eventName";
 
@@ -164,9 +158,6 @@ public class ChangeEventActivity extends AppCompatActivity
 
         mSQLiteDatabase.delete(DatabaseHelper.DATABASE_TABLE_EVENT, "_id " + "=" + eventId, null);
 
-        for (int tId : taskId) {
-            mSQLiteDatabase.delete(DatabaseHelper.DATABASE_TABLE_TASK, "_id " + "=" + tId, null);
-        }
         setResult(RESULT_OK, answerIntent);
         finish();
     }
@@ -190,25 +181,6 @@ public class ChangeEventActivity extends AppCompatActivity
         newValues.put(DatabaseHelper.EVENT_PARENT_TEMPLATE, parentId);
 
         mSQLiteDatabase.update(DatabaseHelper.DATABASE_TABLE_EVENT, newValues, "_id " + "=" + eventId, null);
-
-        for (int i = 0; i < taskText.size(); i++) {
-            EditText currentTask = taskText.get(i);
-            newValues = new ContentValues();
-
-            newValues.put(DatabaseHelper.TASK_NAME_COLUMN, String.valueOf(currentTask.getText()));
-            newValues.put(DatabaseHelper.TASK_IS_DONE, 0);
-
-            if (i >= taskId.size()) {
-                mSQLiteDatabase.insert("tasks", null, newValues);
-            } else {
-                if (String.valueOf(currentTask.getText()).equals("")) {
-                    mSQLiteDatabase.delete(DatabaseHelper.DATABASE_TABLE_TASK, "_id " + "=" + taskId.get(i), null);
-                } else {
-                    mSQLiteDatabase.update(DatabaseHelper.DATABASE_TABLE_TASK, newValues, "_id " + "=" + taskId.get(i), null);
-                }
-            }
-        }
-
 
         answerIntent.putExtra(EVENT_NAME, createEvent.getText());
 
@@ -235,20 +207,5 @@ public class ChangeEventActivity extends AppCompatActivity
     public void onStopTrackingTouch(SeekBar seekBar) {
         lenOfEvent.setText(String.valueOf(seekBar.getProgress()));
         duration = seekBar.getProgress();
-    }
-
-    public void onAddTaskClick(View view) {
-        LinearLayout linearLayout = (LinearLayout)findViewById(R.id.LinearLayoutInChangeEvent);
-
-        LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT,
-                LinearLayout.LayoutParams.WRAP_CONTENT);
-
-        layoutParams.gravity = Gravity.LEFT;
-        layoutParams.setMargins(0, 10, 10, 10);
-        EditText textView = new EditText(this);
-        textView.setLayoutParams(layoutParams);
-        textView.setHint("Task text");
-        taskText.add(textView);
-        linearLayout.addView(textView);
     }
 }

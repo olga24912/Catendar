@@ -120,13 +120,4 @@
         </LinearLayout>
     </ScrollView>
 
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/add_task_extra"
-        android:id="@+id/add_new_task"
-        android:layout_alignBottom="@+id/OKinCreateEvent"
-        android:layout_toLeftOf="@+id/OKinCreateEvent"
-        android:layout_toStartOf="@+id/OKinCreateEvent"
-        android:onClick="onAddTaskClick"/>
 </RelativeLayout>
