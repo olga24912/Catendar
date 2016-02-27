@@ -17,12 +17,8 @@ import android.widget.TimePicker;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 
-/**
- * Created by olga on 16.12.15.
- */
 public class AddEventForTemplateActivity  extends AppCompatActivity
         implements SeekBar.OnSeekBarChangeListener {
-    private DatabaseHelper mDatabaseHelper;
     private SQLiteDatabase mSQLiteDatabase;
 
     private EditText eventText;
@@ -37,7 +33,7 @@ public class AddEventForTemplateActivity  extends AppCompatActivity
 
     private int DIALOG_TIME = 2;
     private int hour = 14;
-    private int minute = 00;
+    private int minute = 0;
     private TextView tvInfoStartTime;
 
     private TextView lenOfEvent;
@@ -58,7 +54,7 @@ public class AddEventForTemplateActivity  extends AppCompatActivity
         lenOfEvent = (TextView)findViewById(R.id.durationValForTemplate);
         lenOfEvent.setText("1");
 
-        mDatabaseHelper = new DatabaseHelper(this, "mydatabase14.db", null, 1);
+        DatabaseHelper mDatabaseHelper = new DatabaseHelper(this, "mydatabase14.db", null, 1);
         mSQLiteDatabase = mDatabaseHelper.getWritableDatabase();
 
         final SeekBar seekbar = (SeekBar)findViewById(R.id.seekBar);
@@ -112,8 +108,7 @@ public class AddEventForTemplateActivity  extends AppCompatActivity
 
     protected Dialog onCreateDialog(int id) {
         if (id == DIALOG_TIME) {
-            TimePickerDialog tpd = new TimePickerDialog(this, (TimePickerDialog.OnTimeSetListener) myCallBackTime, hour, minute, true);
-            return tpd;
+            return new TimePickerDialog(this, myCallBackTime, hour, minute, true);
         }
         return super.onCreateDialog(id);
     }
@@ -137,7 +132,8 @@ public class AddEventForTemplateActivity  extends AppCompatActivity
         GregorianCalendar startCal = new GregorianCalendar(year, month, day[selectedRadioButton],
                 hour, minute);
 
-        GregorianCalendar endCal = startCal;
+        GregorianCalendar endCal =  new GregorianCalendar(year, month, day[selectedRadioButton],
+                hour, minute);
 
         newValues.put(DatabaseHelper.EVENT_NAME, String.valueOf(createEvent.getText()));
         newValues.put(DatabaseHelper.EVENT_PARENT_TEMPLATE, idTemplate);
