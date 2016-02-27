@@ -19,18 +19,12 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 
-/**
- * Created by olga on 15.12.15.
- */
 public class CreateWeekActivity extends AppCompatActivity {
-    private DatabaseHelper mDatabaseHelper;
     private SQLiteDatabase mSQLiteDatabase;
 
     private ArrayList<CheckBox> existsTemplate = new ArrayList<>();
     private ArrayList<Integer> templateId = new ArrayList<>();
     private ArrayList<String> templateText = new ArrayList<>();
-
-    private int selectedRadioButton = -1;
 
     private int DIALOG_DATE = 1;
 
@@ -48,7 +42,7 @@ public class CreateWeekActivity extends AppCompatActivity {
 
         setContentView(R.layout.activity_create_week);
 
-        mDatabaseHelper = new DatabaseHelper(this, "mydatabase14.db", null, 1);
+        DatabaseHelper mDatabaseHelper = new DatabaseHelper(this, "mydatabase14.db", null, 1);
         mSQLiteDatabase = mDatabaseHelper.getWritableDatabase();
 
         tvInfo = (TextView)findViewById(R.id.Selected_date);
@@ -74,7 +68,6 @@ public class CreateWeekActivity extends AppCompatActivity {
                         year = week.getStartDate().get(Calendar.YEAR);
                         month = week.getStartDate().get(Calendar.MONTH);
                         day = week.getStartDate().get(Calendar.DAY_OF_MONTH);
-                        selectedRadioButton = 0;
                         tvInfo.setText("");
                         break;
                     case R.id.next_week:
@@ -88,12 +81,10 @@ public class CreateWeekActivity extends AppCompatActivity {
                         year = week.getStartDate().get(Calendar.YEAR);
                         month = week.getStartDate().get(Calendar.MONTH);
                         day = week.getStartDate().get(Calendar.DAY_OF_MONTH);
-                        selectedRadioButton = 1;
                         tvInfo.setText("");
                         break;
                     case R.id.other_week:
                         showDialog(DIALOG_DATE);
-                        selectedRadioButton = 2;
                         break;
 
                     default:
@@ -153,8 +144,7 @@ public class CreateWeekActivity extends AppCompatActivity {
 
     protected Dialog onCreateDialog(int id) {
         if (id == DIALOG_DATE) {
-            DatePickerDialog tpd = new DatePickerDialog(this, (DatePickerDialog.OnDateSetListener) myCallBackDate, year, month, day);
-            return tpd;
+            return new DatePickerDialog(this, myCallBackDate, year, month, day);
         }
         return super.onCreateDialog(id);
     }
