@@ -4,9 +4,6 @@ import android.content.Context;
 import android.hardware.SensorListener;
 import android.hardware.SensorManager;
 
-/**
- * Created by olga on 16.12.15.
- */
 public class ShakeListener implements SensorListener
 {
     private static final int FORCE_THRESHOLD = 350;
@@ -26,7 +23,7 @@ public class ShakeListener implements SensorListener
 
     public interface OnShakeListener
     {
-        public void onShake();
+        void onShake();
     }
 
     public ShakeListener(Context context)
@@ -48,7 +45,7 @@ public class ShakeListener implements SensorListener
         }
         boolean supported = mSensorMgr.registerListener(this, SensorManager.SENSOR_ACCELEROMETER, SensorManager.SENSOR_DELAY_GAME);
         if (!supported) {
-            mSensorMgr.unregisterListener((SensorListener) this, SensorManager.SENSOR_ACCELEROMETER);
+            mSensorMgr.unregisterListener(this, SensorManager.SENSOR_ACCELEROMETER);
             throw new UnsupportedOperationException("Accelerometer not supported");
         }
     }
