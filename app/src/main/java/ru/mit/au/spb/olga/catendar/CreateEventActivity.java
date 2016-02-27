@@ -8,35 +8,28 @@ import android.content.Intent;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.view.Gravity;
 import android.view.View;
 import android.widget.DatePicker;
 import android.widget.EditText;
-import android.widget.LinearLayout;
 import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.TimePicker;
 
-import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 
-/**
- * Created by olga on 18.10.15.
- */
 public class CreateEventActivity extends AppCompatActivity
         implements SeekBar.OnSeekBarChangeListener {
-    private DatabaseHelper mDatabaseHelper;
-    private SQLiteDatabase mSQLiteDatabase;
+
+    SQLiteDatabase mSQLiteDatabase;
 
     private EditText eventText;
 
     private int DIALOG_DATE = 1;
-    private DatePicker pickerDate;
 
     private int DIALOG_TIME = 2;
     private int hour = 14;
-    private int minute = 00;
+    private int minute = 0;
 
     private TextView tvInfo;
     private TextView tvInfoStartTime;
@@ -48,8 +41,6 @@ public class CreateEventActivity extends AppCompatActivity
     private int day;
 
     private int duration;
-
-    private ArrayList<EditText> taskText = new ArrayList<>();
 
     public final static String EVENT_NAME = "ru.mit.au.spb.olga.catendar.eventName";
 
@@ -77,7 +68,7 @@ public class CreateEventActivity extends AppCompatActivity
 
         duration = 1;
 
-        mDatabaseHelper = new DatabaseHelper(this, "mydatabase14.db", null, 1);
+        DatabaseHelper mDatabaseHelper = new DatabaseHelper(this, "mydatabase14.db", null, 1);
         mSQLiteDatabase = mDatabaseHelper.getWritableDatabase();
 
         Calendar today = Calendar.getInstance();
@@ -99,11 +90,9 @@ public class CreateEventActivity extends AppCompatActivity
 
     protected Dialog onCreateDialog(int id) {
         if (id == DIALOG_DATE) {
-            DatePickerDialog tpd = new DatePickerDialog(this, (DatePickerDialog.OnDateSetListener) myCallBackDate, year, month, day);
-            return tpd;
+            return new DatePickerDialog(this, myCallBackDate, year, month, day);
         } else if (id == DIALOG_TIME) {
-            TimePickerDialog tpd = new TimePickerDialog(this, (TimePickerDialog.OnTimeSetListener) myCallBackTime, hour, minute, true);
-            return tpd;
+            return new TimePickerDialog(this, myCallBackTime, hour, minute, true);
         }
         return super.onCreateDialog(id);
     }
@@ -136,8 +125,7 @@ public class CreateEventActivity extends AppCompatActivity
         ContentValues newValues = new ContentValues();
 
         GregorianCalendar startCal = new GregorianCalendar(year, month, day, hour, minute);
-
-        GregorianCalendar endCal = startCal;
+        GregorianCalendar endCal = new GregorianCalendar(year, month, day, hour, minute);
 
         newValues.put(DatabaseHelper.EVENT_NAME, String.valueOf(createEvent.getText()));
         newValues.put(DatabaseHelper.EVENT_PARENT_TEMPLATE, 0);
@@ -145,18 +133,7 @@ public class CreateEventActivity extends AppCompatActivity
         endCal.add(Calendar.HOUR_OF_DAY, duration);
         newValues.put(DatabaseHelper.EVENT_END_DATE, endCal.getTimeInMillis() / 1000);
 
-        int parentID = (int)mSQLiteDatabase.insert(DatabaseHelper.DATABASE_TABLE_EVENT, null, newValues);
-
-        /*for (EditText currentTask : taskText) {
-            newValues = new ContentValues();
-
-            newValues.put(DatabaseHelper.TASK_NAME_COLUMN, String.valueOf(currentTask.getText()));
-            newValues.put(DatabaseHelper.TASK_PARENT_EVENT_ID, parentID);
-            newValues.put(DatabaseHelper.TASK_IS_DONE, 0);
-
-            mSQLiteDatabase.insert("tasks", null, newValues);
-        }*/
-
+        mSQLiteDatabase.insert(DatabaseHelper.DATABASE_TABLE_EVENT, null, newValues);
 
         answerIntent.putExtra(EVENT_NAME, createEvent.getText());
 
@@ -183,20 +160,5 @@ public class CreateEventActivity extends AppCompatActivity
     public void onStopTrackingTouch(SeekBar seekBar) {
         lenOfEvent.setText(String.valueOf(seekBar.getProgress()));
         duration = seekBar.getProgress();
-    }
-
-    public void onAddTaskClick(View view) {
-        LinearLayout linearLayout = (LinearLayout)findViewById(R.id.LinearLayoutInCreateTask);
-
-        LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT,
-                LinearLayout.LayoutParams.WRAP_CONTENT);
-
-        layoutParams.gravity = Gravity.LEFT;
-        layoutParams.setMargins(0, 10, 10, 10);
-        EditText textView = new EditText(this);
-        textView.setLayoutParams(layoutParams);
-        textView.setHint("Task text");
-        taskText.add(textView);
-        linearLayout.addView(textView);
     }
 }
