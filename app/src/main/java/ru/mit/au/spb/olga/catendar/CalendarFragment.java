@@ -25,9 +25,6 @@ import java.util.Random;
 
 import static java.lang.Math.min;
 
-//import android.app.Fragment;
-
-
 public class CalendarFragment extends Fragment {
     public static final int HOURS_PER_DAY = 24;
     public static final int DAYS_PER_WEEK = 7;
@@ -40,11 +37,9 @@ public class CalendarFragment extends Fragment {
     public static TextView[][] table = new TextView[HOURS_PER_DAY][DAYS_PER_WEEK];
 
     private static int[][] tableId = new int[HOURS_PER_DAY][DAYS_PER_WEEK];
-    private static Week sampleWeek = new Week();
 
     private static Week currentWeek = null;
 
-    private DatabaseHelper mDatabaseHelper;
     private SQLiteDatabase mSQLiteDatabase;
 
     private GregorianCalendar currentDate = new GregorianCalendar();
@@ -65,7 +60,7 @@ public class CalendarFragment extends Fragment {
         super.onCreate(savedInstanceState);
 
 
-        mDatabaseHelper = new DatabaseHelper(getContext(), "mydatabase14.db", null, 1);
+        DatabaseHelper mDatabaseHelper = new DatabaseHelper(getContext(), "mydatabase14.db", null, 1);
         mSQLiteDatabase = mDatabaseHelper.getWritableDatabase();
 
         Week tmpWeek = new Week(currentDate);
@@ -76,8 +71,8 @@ public class CalendarFragment extends Fragment {
             displaySampleTemplate(currentWeek);
         }
 
-        getActivity().setTitle(months[currentWeek.getStartDate().get(Calendar.MONTH)] + ", " +
-                String.valueOf(currentWeek.getStartDate().get(Calendar.YEAR)));
+        getActivity().setTitle(months[(currentWeek != null ? currentWeek.getStartDate().get(Calendar.MONTH) : 0)] + ", " +
+                String.valueOf(currentWeek != null ? currentWeek.getStartDate().get(Calendar.YEAR) : 0));
 
         return result;
     }
@@ -122,16 +117,6 @@ public class CalendarFragment extends Fragment {
     private int getColor() {
         Random randColor = new Random();
         return 0x50000000 + randColor.nextInt() % (0xffffff);
-    }
-
-    private int createDayId(int i, int j) {
-        return (i + j) * (i + j) + j;
-    }
-
-    private int getCellIdByDate(GregorianCalendar date) {
-        int day = (date.get(java.util.Calendar.DAY_OF_WEEK) + (DAYS_PER_WEEK - 2)) % DAYS_PER_WEEK;
-        int hour = date.get(java.util.Calendar.HOUR_OF_DAY);
-        return createDayId(hour, day);
     }
 
     private View setCalendarView() {
@@ -261,7 +246,7 @@ public class CalendarFragment extends Fragment {
         return tp;
     }
 
-    private void getWeekDataBase(int id) {
+    private void getWeekDataBase(Integer id) {
         Cursor cursorWeek = mSQLiteDatabase.query(DatabaseHelper.DATABASE_TABLE_WEEK, new String[]{DatabaseHelper._ID, DatabaseHelper.WEEK_START_DATE},
                 null, null,
                 null, null, null);
@@ -318,8 +303,6 @@ public class CalendarFragment extends Fragment {
 
             long weekTimeForEvent = weekForEvent.getTimeInMS();
 
-            GregorianCalendar nc = currentWeek.getStartDate();
-
             if (weekTimeForEvent == currentWeek.getTimeInMS()) {
                 Event newEvent = new Event();
                 String name = cursorEvent.getString(cursorEvent.getColumnIndex(DatabaseHelper.EVENT_NAME));
@@ -372,8 +355,7 @@ public class CalendarFragment extends Fragment {
 
             mSQLiteDatabase.insert(DatabaseHelper.DATABASE_TABLE_WEEK, null, newValues);
 
-            id = findIdWithThisTime(sTime);
-            getWeekDataBase(id);
+            getWeekDataBase(findIdWithThisTime(sTime));
         }
     }
 
