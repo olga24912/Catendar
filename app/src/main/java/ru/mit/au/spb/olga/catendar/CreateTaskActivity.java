@@ -18,13 +18,9 @@ import android.widget.TimePicker;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 
-/**
- * Created by olga on 05.02.16.
- */
 public class CreateTaskActivity extends AppCompatActivity
         implements SeekBar.OnSeekBarChangeListener {
 
-    private DatabaseHelper mDatabaseHelper;
     private SQLiteDatabase mSQLiteDatabase;
 
     private EditText taskText;
@@ -35,29 +31,23 @@ public class CreateTaskActivity extends AppCompatActivity
     private EditText commentText;
 
     private int DIALOG_DATE_START = 1;
-    private DatePicker startDate;
     private TextView startDateTextView;
     private int startYear, startMonth, startDay;
-    private int startFlag = 0;
 
     private int DIALOG_DATE_FINISH = 2;
-    private DatePicker finishDate;
     private TextView finishDateTextView;
     private int finishYear, finishMonth, finishDay;
     private int finishFlag = 0;
 
     private int DIALOG_TIME_DURATION = 3;
-    private TimePicker durationTime;
     private TextView durationTimeTextView;
     private int durationHours = 2, durationMinute = 0;
 
     private int DIALOG_TIME_START = 4;
-    private TimePicker startTime;
     private TextView startTimeTextView;
     private int startHours = 0, startMinute = 0;
 
     private int DIALOG_TIME_FINISH = 5;
-    private TimePicker finishTime;
     private TextView finishTimeTextView;
     private int finishHours = 23, finishMinute = 59;
 
@@ -71,7 +61,7 @@ public class CreateTaskActivity extends AppCompatActivity
 
         commentText = (EditText)findViewById(R.id.createTaskEditTextComments);
 
-        mDatabaseHelper = new DatabaseHelper(this, "mydatabase14.db", null, 1);
+        DatabaseHelper mDatabaseHelper = new DatabaseHelper(this, "mydatabase14.db", null, 1);
         mSQLiteDatabase = mDatabaseHelper.getWritableDatabase();
 
         final SeekBar seekbar = (SeekBar)findViewById(R.id.createTaskSeekBar);
@@ -120,20 +110,15 @@ public class CreateTaskActivity extends AppCompatActivity
 
     protected Dialog onCreateDialog(int id) {
         if (id == DIALOG_DATE_START) {
-            DatePickerDialog tpd = new DatePickerDialog(this, (DatePickerDialog.OnDateSetListener) myCallBackStartDate, startYear, startMonth, startDay);
-            return tpd;
+            return new DatePickerDialog(this, myCallBackStartDate, startYear, startMonth, startDay);
         } else if (id == DIALOG_DATE_FINISH) {
-            DatePickerDialog tpd = new DatePickerDialog(this, (DatePickerDialog.OnDateSetListener) myCallBackFinishDate, finishYear, finishMonth, finishDay);
-            return tpd;
+            return new DatePickerDialog(this, myCallBackFinishDate, finishYear, finishMonth, finishDay);
         } else if (id == DIALOG_TIME_START) {
-            TimePickerDialog tpd = new TimePickerDialog(this, (TimePickerDialog.OnTimeSetListener) myCallBackStartTime, startHours, startMinute, true);
-            return tpd;
+            return new TimePickerDialog(this, myCallBackStartTime, startHours, startMinute, true);
         } else if (id == DIALOG_TIME_FINISH) {
-            TimePickerDialog tpd = new TimePickerDialog(this, (TimePickerDialog.OnTimeSetListener) myCallBackFinishTime, finishHours, finishMinute, true);
-            return tpd;
+            return new TimePickerDialog(this, myCallBackFinishTime, finishHours, finishMinute, true);
         } else if (id == DIALOG_TIME_DURATION) {
-            TimePickerDialog tpd = new TimePickerDialog(this, (TimePickerDialog.OnTimeSetListener) myCallBackDurationTime, durationHours, durationMinute, true);
-            return tpd;
+            return new TimePickerDialog(this, myCallBackDurationTime, durationHours, durationMinute, true);
         }
         return super.onCreateDialog(id);
     }
@@ -143,7 +128,6 @@ public class CreateTaskActivity extends AppCompatActivity
 
         public void onDateSet(DatePicker view, int _year, int monthOfYear,
                               int dayOfMonth) {
-            startFlag = 1;
             startYear = _year;
             startMonth = monthOfYear;
             startDay = dayOfMonth;
