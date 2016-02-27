@@ -44,6 +44,10 @@ public class Event {
         return eventStartDate;
     }
 
+    public GregorianCalendar getEndDate() {
+        return eventEndDate;
+    }
+
     public long getStart() {
         return eventStartDate.getTimeInMillis() / 1000;
     }

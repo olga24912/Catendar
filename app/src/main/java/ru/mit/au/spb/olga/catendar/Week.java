@@ -17,11 +17,14 @@ public class Week /*implements Parcelable*/ {
         g.set(g.get(Calendar.YEAR), g.get(Calendar.MONTH), g.get(Calendar.DAY_OF_MONTH), 0, 0, 0);
     }
 
-
     public static GregorianCalendar formDate(GregorianCalendar startDate) {
         GregorianCalendar res = (startDate != null) ? startDate : new GregorianCalendar();
         toWeekStart(res);
         return res;
+    }
+
+    public static long getCurrentWeekStartTime() {
+        return formDate(null).getTimeInMillis();
     }
 
     public Week() {
@@ -54,5 +57,13 @@ public class Week /*implements Parcelable*/ {
 
     public ArrayList<Template> getTemplates() {
         return templates;
+    }
+
+    public ArrayList<Event> getEvents() {
+        ArrayList<Event> result = new ArrayList<>();
+        for(Template template: templates) {
+            result.addAll(template.getEvents());
+        }
+        return result;
     }
 }
