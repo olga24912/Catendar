@@ -11,11 +11,7 @@ import android.widget.ExpandableListView;
 import java.util.ArrayList;
 import java.util.GregorianCalendar;
 
-/**
- * Created by olga on 22.02.16.
- */
 public class AddTaskActivity extends AppCompatActivity {
-    private DatabaseHelper mDatabaseHelper;
     private SQLiteDatabase mSQLiteDatabase;
 
     private ExpandableListView listOfTask;
@@ -28,7 +24,7 @@ public class AddTaskActivity extends AppCompatActivity {
 
         setContentView(R.layout.activity_add_tasks);
 
-        mDatabaseHelper = new DatabaseHelper(this, "mydatabase14.db", null, 1);
+        DatabaseHelper mDatabaseHelper = new DatabaseHelper(this, "mydatabase14.db", null, 1);
         mSQLiteDatabase = mDatabaseHelper.getWritableDatabase();
 
         listOfTask = (ExpandableListView)findViewById(R.id.addTaskExpandableListViw);
@@ -78,8 +74,6 @@ public class AddTaskActivity extends AppCompatActivity {
             currentTask.changeIsDone(cursor.getInt(cursor.getColumnIndex(DatabaseHelper.TASK_IS_DONE)) == 1);
             currentTask.setId(cursor.getLong(cursor.getColumnIndex(DatabaseHelper._ID)));
 
-            Long idInHeap = currentTask.getId();
-
             GregorianCalendar curDate = new GregorianCalendar();
             curDate.setTimeInMillis(1000 * cursor.getInt(cursor.getColumnIndex(DatabaseHelper.TASK_DEADLINE)));
 
@@ -109,7 +103,7 @@ public class AddTaskActivity extends AppCompatActivity {
     public void onOkClickInAddTask(View view) {
         Intent answerIntent = new Intent();
         long[] retVal = new long[chooseTaskId.size()];
-        for (int i = 0; i < (int)chooseTaskId.size(); ++i) {
+        for (int i = 0; i < chooseTaskId.size(); ++i) {
             retVal[i] = chooseTaskId.get(i);
         }
         answerIntent.putExtra(ADD_TASK, retVal);
