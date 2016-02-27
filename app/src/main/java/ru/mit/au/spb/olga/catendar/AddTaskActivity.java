@@ -94,7 +94,7 @@ public class AddTaskActivity extends AppCompatActivity {
 
     private void drawTaskList() {
         ExpListAdapterAddTask adapter;
-        adapter = new ExpListAdapterAddTask(this, taskList, mSQLiteDatabase);
+        adapter = new ExpListAdapterAddTask(this, taskList);
         listOfTask.setAdapter(adapter);
     }
 
