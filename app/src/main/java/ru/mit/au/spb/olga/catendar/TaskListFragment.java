@@ -270,17 +270,19 @@ public class TaskListFragment extends Fragment implements CompoundButton.OnCheck
             }
 
             GregorianCalendar curDate = new GregorianCalendar();
-            curDate.setTimeInMillis(1000 * cursor.getInt(cursor.getColumnIndex(DatabaseHelper.TASK_DEADLINE)));
+            curDate.setTimeInMillis((long) cursor.getInt(cursor.getColumnIndex(DatabaseHelper.TASK_DEADLINE)) * 1000);
 
             currentTask.setDeadlineTime(curDate);
 
-            curDate.setTimeInMillis(1000 * cursor.getInt(cursor.getColumnIndex(DatabaseHelper.TASK_DURATION)));
-            currentTask.setDuration(curDate);
+            GregorianCalendar curDate2 = new GregorianCalendar();
+            curDate2.setTimeInMillis((long) cursor.getInt(cursor.getColumnIndex(DatabaseHelper.TASK_DURATION)) * 1000);
+            currentTask.setDuration(curDate2);
 
             currentTask.setPriority(cursor.getInt(cursor.getColumnIndex(DatabaseHelper.TASK_PRIORITY)));
 
-            curDate.setTimeInMillis(1000 * cursor.getInt(cursor.getColumnIndex(DatabaseHelper.TASK_START_TIME)));
-            currentTask.setStartTime(curDate);
+            GregorianCalendar curDate3 = new GregorianCalendar();
+            curDate3.setTimeInMillis((long) cursor.getInt(cursor.getColumnIndex(DatabaseHelper.TASK_START_TIME)) * 1000);
+            currentTask.setStartTime(curDate3);
 
             taskList.add(currentTask);
         }

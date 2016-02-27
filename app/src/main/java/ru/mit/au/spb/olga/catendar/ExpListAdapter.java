@@ -149,26 +149,3 @@ public class ExpListAdapter extends BaseExpandableListAdapter {
         return true;
     }
 }
-
-
-        /*Cursor cursor = mSQLiteDatabase.query("tasks", new String[]{DatabaseHelper._ID, DatabaseHelper.TASK_NAME_COLUMN,
-                                DatabaseHelper.TASK_PARENT_EVENT_ID, DatabaseHelper.TASK_IS_DONE},
-                        null, null,
-                        null, null, null);
-
-                while (cursor.moveToNext()) {
-                    int id = cursor.getInt(cursor.getColumnIndex(DatabaseHelper._ID));
-                    String name = cursor.getString(cursor
-                            .getColumnIndex(DatabaseHelper.TASK_NAME_COLUMN));
-                    int parentId = cursor.getInt(cursor.getColumnIndex(DatabaseHelper.TASK_PARENT_EVENT_ID));
-                    if (dataBaseId == id) {
-                        ContentValues cv = new ContentValues();
-                        cv.put(DatabaseHelper.TASK_NAME_COLUMN, currentTask);
-                        cv.put(DatabaseHelper.TASK_PARENT_EVENT_ID, parentId);
-                        cv.put(DatabaseHelper.TASK_IS_DONE, !isDone);
-
-                        mSQLiteDatabase.update("tasks", cv, "_id " + "=" + id, null);
-                    }
-                }
-
-                cursor.close();*/
