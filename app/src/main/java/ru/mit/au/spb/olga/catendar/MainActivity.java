@@ -184,10 +184,6 @@ public class MainActivity extends ActionBarActivity implements SimpleGestureFilt
 
                 startActivityForResult(intent, 7);
                 break;
-            case 8:
-                currentPosition = 8;
-                fragment = new CompareFragment();
-                break;
             default:
                 break;
         }

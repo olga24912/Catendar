@@ -19,7 +19,6 @@
         <item>Create template</item>
         <item>Delete template</item>
         <item>Create plan</item>
-        <item>Compare</item>
     </string-array>
     <string name="menu">Menu</string>
     <string name="first_screen">Calendar</string>

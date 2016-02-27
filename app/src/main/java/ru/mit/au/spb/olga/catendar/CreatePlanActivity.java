@@ -19,15 +19,9 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 
-/**
- * Created by olga on 16.02.16.
- */
 public class CreatePlanActivity extends AppCompatActivity {
-    private DatabaseHelper mDatabaseHelper;
     private SQLiteDatabase mSQLiteDatabase;
 
-    private int DIALOG_DATE_START = 1;
-    private DatePicker startDate;
     private EditText nameEditText;
     private int startYear, startMonth, startDay;
 
@@ -42,7 +36,7 @@ public class CreatePlanActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_create_plan);
 
-        mDatabaseHelper = new DatabaseHelper(this, "mydatabase14.db", null, 1);
+        DatabaseHelper mDatabaseHelper = new DatabaseHelper(this, "mydatabase14.db", null, 1);
         mSQLiteDatabase = mDatabaseHelper.getWritableDatabase();
 
         nameEditText = (EditText)findViewById(R.id.createPlanEditTextName);
@@ -73,6 +67,8 @@ public class CreatePlanActivity extends AppCompatActivity {
             startDay = curDate.get(Calendar.DAY_OF_MONTH);
 
             getTaskFromDataBase();
+
+            cursor.close();
         }
 
         synchronizedWithDataBase();
@@ -85,11 +81,11 @@ public class CreatePlanActivity extends AppCompatActivity {
                         DatabaseHelper.TASK_HEAP_HEAP_ID},
                 DatabaseHelper.TASK_HEAP_HEAP_ID + "=" + plan_id, null,
                 null, null, null);
-        int val = cursor.getCount();
         while (cursor.moveToNext()) {
             ++countTaskWas;
             taskId.add(cursor.getLong(cursor.getColumnIndex(DatabaseHelper.TASK_HEAP_TASK_ID)));
         }
+        cursor.close();
     }
 
     static final int CREATE_TASK = 0;
@@ -101,17 +97,15 @@ public class CreatePlanActivity extends AppCompatActivity {
     }
 
     public void onSetDate(View view) {
+        int DIALOG_DATE_START = 1;
         showDialog(DIALOG_DATE_START);
     }
 
     protected Dialog onCreateDialog(int id) {
-        DatePickerDialog tpd = new DatePickerDialog(this,
-                (DatePickerDialog.OnDateSetListener) myCallBackStartDate, startYear, startMonth, startDay);
-        return tpd;
+        return new DatePickerDialog(this, myCallBackStartDate, startYear, startMonth, startDay);
     }
 
     DatePickerDialog.OnDateSetListener myCallBackStartDate = new DatePickerDialog.OnDateSetListener() {
-
         public void onDateSet(DatePicker view, int _year, int monthOfYear,
                               int dayOfMonth) {
             startYear = _year;
@@ -170,7 +164,7 @@ public class CreatePlanActivity extends AppCompatActivity {
             tasksName[i] = taskArrayList.get(i).getTaskText();
         }
 
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(this,
                 android.R.layout.simple_list_item_1, tasksName);
         listView.setAdapter(adapter);
     }
