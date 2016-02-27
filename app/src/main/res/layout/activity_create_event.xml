@@ -90,34 +90,21 @@
     <TextView
         android:id="@+id/durationVal"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content" android:text="1" android:textStyle="bold"
+        android:layout_height="wrap_content"
+        android:text="@string/one"
+        android:textStyle="bold"
         android:layout_toRightOf="@+id/duration"
-        android:layout_alignTop="@+id/duration"></TextView>
+        android:layout_alignTop="@+id/duration">
+    </TextView>
 
     <TextView
         android:id="@+id/duration"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content" android:text="The duration of the event: " android:textStyle="bold"
+        android:layout_height="wrap_content"
+        android:text="@string/duration"
+        android:textStyle="bold"
         android:layout_below="@+id/seekBarOfEventLen"
         android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"></TextView>
-
-    <ScrollView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:id="@+id/scrollView"
-        android:layout_gravity="right"
-        android:layout_above="@+id/OKinCreateEvent"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_below="@+id/duration">
-
-        <LinearLayout
-            android:orientation="vertical"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:id="@+id/LinearLayoutInCreateTask">
-        </LinearLayout>
-    </ScrollView>
-
+        android:layout_alignParentStart="true">
+    </TextView>
 </RelativeLayout>

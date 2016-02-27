@@ -145,13 +145,12 @@
             android:id="@+id/createTaskButtonFinishTime"
             android:layout_alignParentTop="true"
             android:layout_alignParentEnd="true"
-            android:nestedScrollingEnabled="true"
             android:onClick="onSetFinishTime" />
     </RelativeLayout>
 
     <EditText
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="0dp"
         android:inputType="textMultiLine"
         android:ems="10"
         android:id="@+id/createTaskEditTextComments"
