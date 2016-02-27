@@ -218,7 +218,7 @@ public class TaskListFragment extends Fragment implements CompoundButton.OnCheck
     private void drawTaskList() {
         sort(taskList, cmp);
         ExpListAdapter adapter;
-        adapter = new ExpListAdapter(getActivity().getApplicationContext(), taskList, mSQLiteDatabase);
+        adapter = new ExpListAdapter(getActivity(), taskList, mSQLiteDatabase);
         listOfTask.setAdapter(adapter);
     }
 

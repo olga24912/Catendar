@@ -5,6 +5,7 @@ import android.app.Dialog;
 import android.app.TimePickerDialog;
 import android.content.ContentValues;
 import android.content.Intent;
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -51,26 +52,57 @@ public class CreateTaskActivity extends AppCompatActivity
     private TextView finishTimeTextView;
     private int finishHours = 23, finishMinute = 59;
 
+    private long id;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        setContentView(R.layout.activity_create_task);
-
-        taskText = (EditText)findViewById(R.id.createTaskEditTextTaskText);
-
-        commentText = (EditText)findViewById(R.id.createTaskEditTextComments);
+        id = getIntent().getLongExtra("id", -1);
 
         DatabaseHelper mDatabaseHelper = new DatabaseHelper(this, "mydatabase14.db", null, 1);
         mSQLiteDatabase = mDatabaseHelper.getWritableDatabase();
+
+        setContentView(R.layout.activity_create_task);
+
+        Cursor cursor = mSQLiteDatabase.query(DatabaseHelper.DATABASE_TABLE_TASK,
+                new String[]{DatabaseHelper._ID,
+                        DatabaseHelper.TASK_DEADLINE,
+                        DatabaseHelper.TASK_NAME_COLUMN,
+                        DatabaseHelper.TASK_IS_DONE,
+                        DatabaseHelper.TASK_COMMENT,
+                        DatabaseHelper.TASK_DURATION,
+                        DatabaseHelper.TASK_START_TIME,
+                        DatabaseHelper.TASK_PRIORITY},
+                DatabaseHelper._ID + "=" + id, null,
+                null, null, null);
+
+        cursor.moveToFirst();
+
+        taskText = (EditText)findViewById(R.id.createTaskEditTextTaskText);
+
+        if (id != -1) {
+            taskText.setText(cursor.getString(cursor.getColumnIndex(DatabaseHelper.TASK_NAME_COLUMN)));
+        }
+
+        commentText = (EditText)findViewById(R.id.createTaskEditTextComments);
+
+        if (id != -1) {
+            commentText.setText(cursor.getString(cursor.getColumnIndex(DatabaseHelper.TASK_COMMENT)));
+        }
 
         final SeekBar seekbar = (SeekBar)findViewById(R.id.createTaskSeekBar);
         seekbar.setOnSeekBarChangeListener(this);
         seekbar.setMax(10);
         seekbar.setProgress(5);
         priority = 5;
+
+        if (id != -1) {
+            priority = cursor.getInt(cursor.getColumnIndex(DatabaseHelper.TASK_PRIORITY));
+            seekbar.setProgress(priority);
+        }
+
         priorityView = (TextView)findViewById(R.id.createTaskTextViewPriority);
-        priorityView.setText(String.valueOf(priorityView.getText()) + " 5");
+        priorityView.setText(String.valueOf(priorityView.getText()) + " " +  priority);
 
         startDateTextView = (TextView)findViewById(R.id.createTaskTextViewStartDate);
         finishDateTextView = (TextView)findViewById(R.id.createTaskTextViewFinishDate);
@@ -86,6 +118,36 @@ public class CreateTaskActivity extends AppCompatActivity
         finishYear = today.get(Calendar.YEAR);
         finishMonth = today.get(Calendar.MONTH);
         finishDay = today.get(Calendar.DAY_OF_MONTH);
+
+
+        if (id != -1) {
+            Calendar current = new GregorianCalendar();
+            current.setTimeInMillis((long)cursor.getInt(cursor.getColumnIndex(DatabaseHelper.TASK_START_TIME))*1000);
+
+            startYear = current.get(Calendar.YEAR);
+            startMonth = current.get(Calendar.MONTH);
+            startDay = current.get(Calendar.DAY_OF_MONTH);
+
+            startHours = current.get(Calendar.HOUR_OF_DAY);
+            startMinute = current.get(Calendar.MINUTE);
+
+
+            current.setTimeInMillis((long)cursor.getInt(cursor.getColumnIndex(DatabaseHelper.TASK_DEADLINE))*1000);
+
+
+            finishYear = current.get(Calendar.YEAR);
+            finishMonth = current.get(Calendar.MONTH);
+            finishDay = current.get(Calendar.DAY_OF_MONTH);
+
+            finishHours = current.get(Calendar.HOUR_OF_DAY);
+            finishMinute = current.get(Calendar.MINUTE);
+
+            current.setTimeInMillis((long)cursor.getInt(cursor.getColumnIndex(DatabaseHelper.TASK_DURATION))*1000);
+
+            durationHours = current.get(Calendar.HOUR_OF_DAY);
+            durationMinute = current.get(Calendar.MINUTE);
+        }
+        cursor.close();
     }
 
     public void onSetStartDate(View view) {
@@ -199,8 +261,12 @@ public class CreateTaskActivity extends AppCompatActivity
         newValues.put(DatabaseHelper.TASK_IS_DONE, 0);
         newValues.put(DatabaseHelper.TASK_PRIORITY, priority);
 
-        int idVal = (int) mSQLiteDatabase.insert(DatabaseHelper.DATABASE_TABLE_TASK, null, newValues);
-
+        long idVal = id;
+        if (idVal == -1) {
+            idVal =  mSQLiteDatabase.insert(DatabaseHelper.DATABASE_TABLE_TASK, null, newValues);
+        } else {
+            mSQLiteDatabase.update(DatabaseHelper.DATABASE_TABLE_TASK, newValues, "_id = " + id, null);
+        }
         setResult(RESULT_OK, answerIntent);
         answerIntent.putExtra("id", idVal);
         finish();

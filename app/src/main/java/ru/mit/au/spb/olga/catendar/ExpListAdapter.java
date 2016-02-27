@@ -2,6 +2,7 @@ package ru.mit.au.spb.olga.catendar;
 
 import android.content.ContentValues;
 import android.content.Context;
+import android.content.Intent;
 import android.database.sqlite.SQLiteDatabase;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,9 +13,6 @@ import android.widget.TextView;
 
 import java.util.ArrayList;
 
-/**
- * Created by olga on 21.11.15.
- */
 public class ExpListAdapter extends BaseExpandableListAdapter {
     private ArrayList<Task> mGroups;
     private Context mContext;
@@ -71,13 +69,6 @@ public class ExpListAdapter extends BaseExpandableListAdapter {
             convertView = inflater.inflate(R.layout.group_view, null);
         }
 
-        if (isExpanded){
-            //Изменяем что-нибудь, если текущая Group раскрыта
-        }
-        else{
-            //Изменяем что-нибудь, если текущая Group скрыта
-        }
-
         TextView textGroup = (TextView) convertView.findViewById(R.id.textGroup);
         textGroup.setText(mGroups.get(groupPosition).getTaskText());
 
@@ -108,6 +99,16 @@ public class ExpListAdapter extends BaseExpandableListAdapter {
         Button buttonDelete = (Button)convertView.findViewById(R.id.itemToDoButtonDelete);
         Button buttonDone = (Button)convertView.findViewById(R.id.itemToDoToggleButtonDone);
         Button buttonChange = (Button)convertView.findViewById(R.id.itemToDoButtonChange);
+
+        buttonChange.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent= new Intent(mContext, CreateTaskActivity.class);
+
+                intent.putExtra("id", mGroups.get(groupPosition).getId());
+                mContext.startActivity(intent);
+            }
+        });
 
         buttonDelete.setOnClickListener(new View.OnClickListener() {
             @Override
