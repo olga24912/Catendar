@@ -25,9 +25,6 @@ import java.util.HashSet;
 
 import static java.util.Collections.sort;
 
-/**
- * Created by olga on 12.12.15.
- */
 public class TaskListFragment extends Fragment implements CompoundButton.OnCheckedChangeListener {
     private class cmpDuration implements Comparator<Task> {
         @Override
@@ -70,7 +67,6 @@ public class TaskListFragment extends Fragment implements CompoundButton.OnCheck
 
     private Comparator<Task> cmp = new cmpDeadline();
 
-    private DatabaseHelper mDatabaseHelper;
     private SQLiteDatabase mSQLiteDatabase;
 
     private ArrayList<Task> taskList = new ArrayList<>();
@@ -99,7 +95,7 @@ public class TaskListFragment extends Fragment implements CompoundButton.OnCheck
 
         planTitle = (TextView) rootView.findViewById(R.id.toDoTextView);
 
-        mDatabaseHelper = new DatabaseHelper(getContext(), "mydatabase14.db", null, 1);
+        DatabaseHelper mDatabaseHelper = new DatabaseHelper(getContext(), "mydatabase14.db", null, 1);
         mSQLiteDatabase = mDatabaseHelper.getWritableDatabase();
 
         synchronizedWithDataBase();
@@ -115,8 +111,7 @@ public class TaskListFragment extends Fragment implements CompoundButton.OnCheck
             }
         });
 
-        TextView changePlan = (TextView) rootView.findViewById(R.id.toDoTextView);
-        changePlan.setOnClickListener(viewClickListener);
+        planTitle.setOnClickListener(viewClickListener);
 
         setHasOptionsMenu(true);
 
@@ -124,9 +119,7 @@ public class TaskListFragment extends Fragment implements CompoundButton.OnCheck
         deleteButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (heap_id == -1) {
-                    return;
-                } else {
+                if (heap_id != -1) {
                     mSQLiteDatabase.delete(DatabaseHelper.DATABASE_TABLE_TASK_HEAP,
                             DatabaseHelper.TASK_HEAP_HEAP_ID + " = " + heap_id, null);
 
@@ -233,7 +226,6 @@ public class TaskListFragment extends Fragment implements CompoundButton.OnCheck
                         DatabaseHelper.TASK_HEAP_HEAP_ID},
                 DatabaseHelper.TASK_HEAP_HEAP_ID + "=" + heap_id, null,
                 null, null, null);
-        int val = cursor.getCount();
         while (cursor.moveToNext()) {
             taskIDHeap.add(cursor.getLong(cursor.getColumnIndex(DatabaseHelper.TASK_HEAP_TASK_ID)));
         }

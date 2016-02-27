@@ -3,8 +3,6 @@ package ru.mit.au.spb.olga.catendar;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
-import java.util.UUID;
-import com.google.gson.*;
 
 public class Week /*implements Parcelable*/ {
     private transient GregorianCalendar startDate;
@@ -14,18 +12,11 @@ public class Week /*implements Parcelable*/ {
     private static final int SINGLE_EVENTS_INDEX = 0;
     public static final String SINGLE_EVENTS = "singleEvents";
 
-    public void nextWeek() {
-        startDate.add(Calendar.WEEK_OF_YEAR, 1);
-    }
-
     public static void toWeekStart(GregorianCalendar g) {
         g.add(Calendar.DAY_OF_WEEK, WEEK_START - g.get(Calendar.DAY_OF_WEEK));
         g.set(g.get(Calendar.YEAR), g.get(Calendar.MONTH), g.get(Calendar.DAY_OF_MONTH), 0, 0, 0);
     }
 
-    public static GregorianCalendar formDate() {
-        return formDate(null);
-    }
 
     public static GregorianCalendar formDate(GregorianCalendar startDate) {
         GregorianCalendar res = (startDate != null) ? startDate : new GregorianCalendar();

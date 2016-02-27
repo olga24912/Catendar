@@ -1,7 +1,6 @@
 package ru.mit.au.spb.olga.catendar;
 
 import java.util.ArrayList;
-import java.util.UUID;
 
 public class Template {
     private ArrayList<Event> events;
@@ -22,7 +21,7 @@ public class Template {
     }
 
     public String getName() {
-        return (name == Week.SINGLE_EVENTS) ? "" : name;
+        return (name.equals(Week.SINGLE_EVENTS)) ? "" : name;
     }
 
     public ArrayList<Event> getEvents() {
