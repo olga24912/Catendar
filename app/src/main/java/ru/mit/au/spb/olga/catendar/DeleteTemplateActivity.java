@@ -11,11 +11,7 @@ import android.widget.LinearLayout;
 
 import java.util.ArrayList;
 
-/**
- * Created by olga on 18.12.15.
- */
 public class DeleteTemplateActivity extends AppCompatActivity {
-    private DatabaseHelper mDatabaseHelper;
     private SQLiteDatabase mSQLiteDatabase;
 
     private ArrayList<CheckBox> existsTemplate = new ArrayList<>();
@@ -27,7 +23,7 @@ public class DeleteTemplateActivity extends AppCompatActivity {
 
         setContentView(R.layout.activity_delete_template);
 
-        mDatabaseHelper = new DatabaseHelper(this, "mydatabase14.db", null, 1);
+        DatabaseHelper mDatabaseHelper = new DatabaseHelper(this, "mydatabase14.db", null, 1);
         mSQLiteDatabase = mDatabaseHelper.getWritableDatabase();
 
         createCheckBox();
