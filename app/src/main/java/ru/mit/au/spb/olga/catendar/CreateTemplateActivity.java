@@ -13,11 +13,7 @@ import android.widget.ListView;
 
 import java.util.ArrayList;
 
-/**
- * Created by olga on 16.12.15.
- */
 public class CreateTemplateActivity extends AppCompatActivity {
-    private DatabaseHelper mDatabaseHelper;
     private SQLiteDatabase mSQLiteDatabase;
 
     private ArrayList<Event> eventList = new ArrayList<>();
@@ -27,8 +23,6 @@ public class CreateTemplateActivity extends AppCompatActivity {
 
     private int templateId = -1;
 
-    private String newTemplate = "unknownTemplate179";
-
     private void drawEventList() {
         String[] myEventInString = new String[eventList.size()];
 
@@ -37,7 +31,7 @@ public class CreateTemplateActivity extends AppCompatActivity {
             myEventInString[i] = currentEvent.getText() + " " + currentEvent.getDayOfWeekAndTime();
         }
 
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(this,
                 android.R.layout.simple_list_item_1, myEventInString);
 
         listOfEvent.setAdapter(adapter);
@@ -82,13 +76,14 @@ public class CreateTemplateActivity extends AppCompatActivity {
 
         listOfEvent = (ListView) findViewById(R.id.listViewInCreateTemplate);
 
-        mDatabaseHelper = new DatabaseHelper(this, "mydatabase14.db", null, 1);
+        DatabaseHelper mDatabaseHelper = new DatabaseHelper(this, "mydatabase14.db", null, 1);
         mSQLiteDatabase = mDatabaseHelper.getWritableDatabase();
 
         templateName = (EditText) findViewById(R.id.editTemplate);
 
         ContentValues newValues = new ContentValues();
 
+        String newTemplate = "unknownTemplate179";
         newValues.put(DatabaseHelper.TEMPLATE_NAME, newTemplate);
 
         mSQLiteDatabase.insert(DatabaseHelper.DATABASE_TABLE_TEMPLATE, null, newValues);
@@ -101,7 +96,7 @@ public class CreateTemplateActivity extends AppCompatActivity {
 
 
         while (cursor.moveToNext()) {
-            int idTmp = cursor.getInt(cursor.getColumnIndex(DatabaseHelper._ID));;
+            int idTmp = cursor.getInt(cursor.getColumnIndex(DatabaseHelper._ID));
             String name = cursor.getString(cursor.getColumnIndex(DatabaseHelper.TEMPLATE_NAME));
 
             if (name.equals(newTemplate)) {
