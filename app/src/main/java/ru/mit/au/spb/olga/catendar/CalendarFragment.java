@@ -76,6 +76,7 @@ public class CalendarFragment extends Fragment {
         getActivity().setTitle(months[(currentWeek != null ? currentWeek.getStartDate().get(Calendar.MONTH) : 0)] + ", " +
                 String.valueOf(currentWeek != null ? currentWeek.getStartDate().get(Calendar.YEAR) : 0));
 
+        setHasOptionsMenu(true);
         return result;
     }
 
