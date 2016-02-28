@@ -84,7 +84,9 @@ public class CalendarToICSWriter {
         exportWeekByTime(weekStart.getTimeInMillis(), filePath, mSQLiteDatabase);
     }
 
+    /*
     public static void exportCurrentWeek (String filePath, SQLiteDatabase mSQLiteDatabase) {
         exportWeekByTime(Week.getCurrentWeekStartTime(), filePath, mSQLiteDatabase);
     }
+    */
 }
