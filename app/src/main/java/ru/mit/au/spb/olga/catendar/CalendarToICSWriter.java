@@ -40,7 +40,17 @@ public class CalendarToICSWriter {
         calendar.getProperties().add(e);
     }
 
-    public static void exportWeekByTime(long weekStart, SQLiteDatabase mSQLiteDatabase) {
+    public static String getDefaultFileName(Week currentWeek) {
+        long time = currentWeek == null ? System.currentTimeMillis() : currentWeek.getTimeInMS();
+        return "calendar" + Long.toString(time) + ".ics";
+    }
+
+    public static String getFileName(String path, Week currentWeek) {
+        String prefix = path == null ? "" : path;
+        return prefix + getDefaultFileName(currentWeek);
+    }
+
+    public static void exportWeekByTime(long weekStart, String filePath, SQLiteDatabase mSQLiteDatabase) {
         Calendar calendar = new Calendar();
         initCalendar(calendar);
 
@@ -54,7 +64,7 @@ public class CalendarToICSWriter {
 
         FileOutputStream fout = null;
         try {
-            fout = new FileOutputStream("calendar" + Long.toString(currentWeek.getTimeInMS()) + ".ics");
+            fout = new FileOutputStream(getFileName(filePath, currentWeek));
         } catch (FileNotFoundException e) {
             throw new RuntimeException("File not found", e);
         }
@@ -69,11 +79,12 @@ public class CalendarToICSWriter {
         }
     }
 
-    public static void exportWeekByDate (GregorianCalendar weekStart, SQLiteDatabase mSQLiteDatabase) {
-        exportWeekByTime(weekStart.getTimeInMillis(), mSQLiteDatabase);
+    public static void exportWeekByDate (GregorianCalendar weekStart,
+                                         String filePath, SQLiteDatabase mSQLiteDatabase) {
+        exportWeekByTime(weekStart.getTimeInMillis(), filePath, mSQLiteDatabase);
     }
 
-    public static void exportCurrentWeek (SQLiteDatabase mSQLiteDatabase) {
-        exportWeekByTime(Week.getCurrentWeekStartTime(), mSQLiteDatabase);
+    public static void exportCurrentWeek (String filePath, SQLiteDatabase mSQLiteDatabase) {
+        exportWeekByTime(Week.getCurrentWeekStartTime(), filePath, mSQLiteDatabase);
     }
 }

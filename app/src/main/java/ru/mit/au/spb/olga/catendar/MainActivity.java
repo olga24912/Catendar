@@ -200,10 +200,16 @@ public class MainActivity extends ActionBarActivity implements SimpleGestureFilt
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        if (currentPosition == 1) {
-            getMenuInflater().inflate(R.menu.menu_main, menu);
-        } else {
-            getMenuInflater().inflate(R.menu.main, menu);
+        switch(currentPosition) {
+            case 0:
+                getMenuInflater().inflate(R.menu.calendar_fragment_menu, menu);
+                break;
+            case 1:
+                getMenuInflater().inflate(R.menu.menu_main, menu);
+                break;
+            default:
+                getMenuInflater().inflate(R.menu.main, menu);
+                break;
         }
         return true;
     }
@@ -215,7 +221,7 @@ public class MainActivity extends ActionBarActivity implements SimpleGestureFilt
             return true;
         }
         // Handle action bar actions click
-        if (currentPosition != 1) {
+        if (currentPosition != 1 && currentPosition != 0) {
             switch (item.getItemId()) {
                 case R.id.action_settings:
                     return true;
@@ -223,15 +229,13 @@ public class MainActivity extends ActionBarActivity implements SimpleGestureFilt
                     return super.onOptionsItemSelected(item);
             }
         } else {
-            switch (item.getItemId()) {
+            switch(item.getItemId()) {
+                case R.id.export:
+                    return true;
                 case R.id.action_deadline:
-                    return false;
                 case R.id.action_duration:
-                    return false;
                 case R.id.action_not_show_all:
-                    return false;
                 case R.id.action_show_all:
-                    return false;
                 case R.id.action_priority:
                     return false;
                 default:

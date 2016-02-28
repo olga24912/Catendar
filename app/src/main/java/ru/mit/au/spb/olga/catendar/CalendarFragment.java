@@ -8,6 +8,9 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.HorizontalScrollView;
@@ -197,6 +200,35 @@ public class CalendarFragment extends Fragment {
     }
 
     @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        super.onCreateOptionsMenu(menu, inflater);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.export:
+                /*
+                System.err.println("Entered export processing");
+
+                FileSaveDialog fileSaveDialog = new FileSaveDialog(
+                        getActivity(), new FileSaveDialog.FileSaveDialogListener() {
+                    @Override
+                    public void onChosenDir(String chosenDir) {
+                        CalendarToICSWriter.exportWeekByDate(
+                                currentWeek.getStartDate(), chosenDir, mSQLiteDatabase);
+                    }
+                });
+                fileSaveDialog.chooseFile();
+                return true;
+                */
+                throw new RuntimeException("export");
+            default:
+                return false;
+        }
+    }
+
+    @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         currentWeek = DataBaseUtils.getWeekFromDataBaseByDate(currentWeek.getTimeInMS(),
@@ -209,4 +241,5 @@ public class CalendarFragment extends Fragment {
         fragTransaction.attach(currentFragment);
         fragTransaction.commit();
     }
+
 }

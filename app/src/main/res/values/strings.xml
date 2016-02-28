@@ -53,6 +53,7 @@
     <string name="next_week">Next week</string>
     <string name="other_week">Other week</string>
     <string name="put_date">Date on week(dd.mm.yyyy)</string>
+    <string name="export">Export current week</string>
 
     <string name="connect">Connect</string>
     <string name="discover">Discover</string>
