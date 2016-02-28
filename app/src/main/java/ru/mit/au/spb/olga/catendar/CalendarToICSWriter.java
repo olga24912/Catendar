@@ -30,7 +30,7 @@ public class CalendarToICSWriter {
         VEvent e = new VEvent(new net.fortuna.ical4j.model.Date(event.getStartDate().getTime()),
                 new net.fortuna.ical4j.model.Date(event.getEndDate().getTime()),
                 event.getText());
-        UidGenerator uidGen = null;
+        UidGenerator uidGen;
         try {
             uidGen = new UidGenerator("1");
         } catch (SocketException e1) {
@@ -62,7 +62,7 @@ public class CalendarToICSWriter {
             addEvent(event, calendar);
         }
 
-        FileOutputStream fout = null;
+        FileOutputStream fout;
         try {
             fout = new FileOutputStream(getFileName(filePath, currentWeek));
         } catch (FileNotFoundException e) {
