@@ -221,22 +221,28 @@ public class MainActivity extends ActionBarActivity implements SimpleGestureFilt
             return true;
         }
         // Handle action bar actions click
-        if (currentPosition != 1 && currentPosition != 0) {
-            switch (item.getItemId()) {
-                case R.id.action_settings:
-                    return true;
+        if (currentPosition == 0) {
+            switch(item.getItemId()) {
+                case R.id.export:
+                    return false;
                 default:
                     return super.onOptionsItemSelected(item);
             }
-        } else {
+        } else if (currentPosition == 1) {
             switch(item.getItemId()) {
-                case R.id.export:
                 case R.id.action_deadline:
                 case R.id.action_duration:
                 case R.id.action_not_show_all:
                 case R.id.action_show_all:
                 case R.id.action_priority:
                     return false;
+                default:
+                    return super.onOptionsItemSelected(item);
+            }
+        } else {
+            switch (item.getItemId()) {
+                case R.id.action_settings:
+                    return true;
                 default:
                     return super.onOptionsItemSelected(item);
             }
