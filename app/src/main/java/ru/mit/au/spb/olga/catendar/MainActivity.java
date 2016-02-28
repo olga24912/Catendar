@@ -231,7 +231,6 @@ public class MainActivity extends ActionBarActivity implements SimpleGestureFilt
         } else {
             switch(item.getItemId()) {
                 case R.id.export:
-                    return true;
                 case R.id.action_deadline:
                 case R.id.action_duration:
                 case R.id.action_not_show_all:
