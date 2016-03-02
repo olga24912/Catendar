@@ -1,5 +1,7 @@
 package ru.mit.au.spb.olga.catendar.model;
 
+import android.support.annotation.Nullable;
+
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
@@ -7,7 +9,9 @@ import java.util.Calendar;
 import java.util.GregorianCalendar;
 
 public class Week {
+    @NotNull
     private transient GregorianCalendar startDate;
+    @NotNull
     private ArrayList<Template> templates;
 
     private static final int WEEK_START = Calendar.SUNDAY;
@@ -20,7 +24,7 @@ public class Week {
     }
 
     @NotNull
-    private static GregorianCalendar formDate(GregorianCalendar startDate) {
+    private static GregorianCalendar formDate(@Nullable GregorianCalendar startDate) {
         GregorianCalendar res = (startDate != null) ? startDate : new GregorianCalendar();
         toWeekStart(res);
         return res;
@@ -35,7 +39,7 @@ public class Week {
         TEMPLATE_FOR_SINGLE_EVENTS = templates.get(0);
     }
 
-    public Week (GregorianCalendar startDate) {
+    public Week (@NotNull GregorianCalendar startDate) {
         this.startDate = formDate(startDate);
 
         this.templates = new ArrayList<>();
@@ -44,11 +48,11 @@ public class Week {
         TEMPLATE_FOR_SINGLE_EVENTS = templates.get(0);
     }
 
-    public void addTemplate(Template newTemplate) {
+    public void addTemplate(@NotNull Template newTemplate) {
         templates.add(newTemplate);
     }
 
-    public void addEvent(Event newEvent) {
+    public void addEvent(@NotNull Event newEvent) {
         TEMPLATE_FOR_SINGLE_EVENTS.addEvent(newEvent);
     }
 

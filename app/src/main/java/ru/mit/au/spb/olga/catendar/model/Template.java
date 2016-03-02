@@ -1,14 +1,18 @@
 package ru.mit.au.spb.olga.catendar.model;
 
+import android.support.annotation.NonNull;
+
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 
 public class Template {
+    @NotNull
     private ArrayList<Event> events = new ArrayList<>();
+    @NotNull
     private String name;
 
-    public Template(String newName) {
+    public Template(@NonNull String newName) {
         name = newName;
     }
 

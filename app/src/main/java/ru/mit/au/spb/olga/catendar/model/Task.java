@@ -1,21 +1,30 @@
 package ru.mit.au.spb.olga.catendar.model;
 
+import android.support.annotation.NonNull;
+
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 
 public class Task {
+    @NotNull
     private Boolean isDone = false;
+    @NotNull
     private String taskText = "";
+    @NotNull
     private String comment = "";
     private int priority = 5;
+    @NotNull
     private GregorianCalendar duration = new GregorianCalendar(1970, 1, 1, 2, 0);
+    @NotNull
     private GregorianCalendar startTime = new GregorianCalendar();
+    @NotNull
     private GregorianCalendar deadlineTime = new GregorianCalendar(2050, 1, 1, 2, 0);
+    @NotNull
     private Long id = 0L;
 
-    public void setId(Long id) {
+    public void setId(@NonNull Long id) {
         this.id = id;
     }
 
@@ -29,11 +38,11 @@ public class Task {
         return taskText;
     }
 
-    public void changeText(String text) {
+    public void changeText(@NotNull String text) {
         taskText = text;
     }
 
-    public void changeIsDone(Boolean isDone) {
+    public void changeIsDone(@NotNull Boolean isDone) {
         this.isDone = isDone;
     }
 
@@ -42,7 +51,7 @@ public class Task {
         return isDone;
     }
 
-    public void setComment(String text) {
+    public void setComment(@NonNull String text) {
         comment = text;
     }
 
@@ -51,11 +60,11 @@ public class Task {
         return comment;
     }
 
-    public void setStartTime(GregorianCalendar startTime) {
+    public void setStartTime(@NonNull GregorianCalendar startTime) {
         this.startTime = startTime;
     }
 
-    public void setDuration(GregorianCalendar duration) {
+    public void setDuration(@NonNull GregorianCalendar duration) {
         this.duration = duration;
     }
 
@@ -69,7 +78,7 @@ public class Task {
         return res;
     }
 
-    public void setDeadlineTime(GregorianCalendar deadlineTime) {
+    public void setDeadlineTime(@NonNull GregorianCalendar deadlineTime) {
         this.deadlineTime = deadlineTime;
     }
 

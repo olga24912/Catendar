@@ -5,8 +5,11 @@ import org.jetbrains.annotations.NotNull;
 import java.util.GregorianCalendar;
 
 public class Event {
+    @NotNull
     private String eventText = "";
+    @NotNull
     private GregorianCalendar eventStartDate = new GregorianCalendar();
+    @NotNull
     private GregorianCalendar eventDuration = new GregorianCalendar();
 
     private int id;
