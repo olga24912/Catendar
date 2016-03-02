@@ -217,7 +217,6 @@ public class CalendarFragment extends Fragment {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.export:
-
                 System.err.println("Entered export processing");
 
                 FileSaveDialog fileSaveDialog = new FileSaveDialog(
@@ -230,8 +229,6 @@ public class CalendarFragment extends Fragment {
                 });
                 fileSaveDialog.chooseFile();
                 return true;
-
-                //throw new RuntimeException("export");
             default:
                 return false;
         }
