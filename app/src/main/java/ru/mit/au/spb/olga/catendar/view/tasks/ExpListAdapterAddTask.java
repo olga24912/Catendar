@@ -70,7 +70,7 @@ public class ExpListAdapterAddTask extends BaseExpandableListAdapter {
         }
 
         TextView textGroup = (TextView) convertView.findViewById(R.id.textGroup);
-        textGroup.setText(mGroups.get(groupPosition).getTaskText());
+        textGroup.setText(mGroups.get(groupPosition).getText());
 
         if (mGroups.get(groupPosition).getIsDone()) {
             textGroup.setBackgroundColor(0xffc5e384);
@@ -92,7 +92,7 @@ public class ExpListAdapterAddTask extends BaseExpandableListAdapter {
         final TextView textDeadlineTime = (TextView) convertView.findViewById(R.id.itemAddTaskTextViewTime);
         final TextView textComment = (TextView) convertView.findViewById(R.id.itemAddTaskTextViewComment);
 
-        textComment.setText(mGroups.get(groupPosition).getCommentText());
+        textComment.setText(mGroups.get(groupPosition).getComment());
         textDeadlineTime.setText("Deadline time:" + mGroups.get(groupPosition).getStringDeadlineTime());
         textPriority.setText("Priority: " + String.valueOf(mGroups.get(groupPosition).getPriority()));
         textDuration.setText("Duration: " + mGroups.get(groupPosition).getStringDuration());

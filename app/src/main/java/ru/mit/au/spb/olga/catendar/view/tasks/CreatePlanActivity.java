@@ -142,7 +142,8 @@ public class CreatePlanActivity extends AppCompatActivity {
             if (cursor.getCount() == 0) {
                 continue;
             }
-            current.changeText(cursor.getString(cursor.getColumnIndex(DatabaseHelper.TASK_NAME_COLUMN)));
+            current.setText(cursor.getString(cursor.getColumnIndex(DatabaseHelper.TASK_NAME_COLUMN)));
+
             taskArrayList.add(current);
             cursor.close();
         }
@@ -171,7 +172,7 @@ public class CreatePlanActivity extends AppCompatActivity {
 
         final String[] tasksName = new String[taskArrayList.size()];
         for (int i = 0; i < taskArrayList.size(); i++) {
-            tasksName[i] = taskArrayList.get(i).getTaskText();
+            tasksName[i] = taskArrayList.get(i).getText();
         }
 
         ArrayAdapter<String> adapter = new ArrayAdapter<>(this,

@@ -73,7 +73,7 @@ public class AddTaskActivity extends AppCompatActivity {
         while (cursor.moveToNext()) {
             Task currentTask = new Task();
 
-            currentTask.changeText(cursor.getString(cursor.getColumnIndex(DatabaseHelper.TASK_NAME_COLUMN)));
+            currentTask.setText(cursor.getString(cursor.getColumnIndex(DatabaseHelper.TASK_NAME_COLUMN)));
             currentTask.setComment(cursor.getString(cursor.getColumnIndex(DatabaseHelper.TASK_COMMENT)));
             currentTask.changeIsDone(cursor.getInt(cursor.getColumnIndex(DatabaseHelper.TASK_IS_DONE)) == 1);
             currentTask.setId(cursor.getLong(cursor.getColumnIndex(DatabaseHelper._ID)));
@@ -89,7 +89,7 @@ public class AddTaskActivity extends AppCompatActivity {
             currentTask.setPriority(cursor.getInt(cursor.getColumnIndex(DatabaseHelper.TASK_PRIORITY)));
 
             curDate.setTimeInMillis(1000 * cursor.getInt(cursor.getColumnIndex(DatabaseHelper.TASK_START_TIME)));
-            currentTask.setStartTime(curDate);
+            currentTask.setStartDate(curDate);
 
             taskList.add(currentTask);
         }
