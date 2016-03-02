@@ -1,13 +1,15 @@
 package ru.mit.au.spb.olga.catendar.model;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.text.DateFormatSymbols;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 
 public class Event {
-    private String eventText;
-    private GregorianCalendar eventStartDate;
-    private GregorianCalendar eventDuration;
+    private String eventText = "";
+    private GregorianCalendar eventStartDate = new GregorianCalendar();
+    private GregorianCalendar eventDuration = new GregorianCalendar();
 
     private int id;
 
@@ -21,6 +23,7 @@ public class Event {
         return id;
     }
 
+    @NotNull
     public String getDayOfWeekAndTime() {
         return "(" + days[eventStartDate.get(Calendar.DAY_OF_WEEK) - 1] + " "
                 + eventStartDate.get(Calendar.HOUR_OF_DAY) + ":"
@@ -33,14 +36,17 @@ public class Event {
         eventText = newText;
     }
 
+    @NotNull
     public String getText() {
         return eventText;
     }
 
+    @NotNull
     public GregorianCalendar getStartDate() {
         return eventStartDate;
     }
 
+    @NotNull
     public GregorianCalendar getEndDate() {
         GregorianCalendar endDate = new GregorianCalendar();
         endDate.setTimeInMillis(eventStartDate.getTimeInMillis() + eventDuration.getTimeInMillis());

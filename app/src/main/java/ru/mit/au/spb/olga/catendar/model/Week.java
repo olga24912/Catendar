@@ -1,5 +1,7 @@
 package ru.mit.au.spb.olga.catendar.model;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
@@ -17,6 +19,7 @@ public class Week {
         g.set(g.get(Calendar.YEAR), g.get(Calendar.MONTH), g.get(Calendar.DAY_OF_MONTH), 0, 0, 0);
     }
 
+    @NotNull
     private static GregorianCalendar formDate(GregorianCalendar startDate) {
         GregorianCalendar res = (startDate != null) ? startDate : new GregorianCalendar();
         toWeekStart(res);
@@ -24,6 +27,8 @@ public class Week {
     }
 
     public Week() {
+        this.startDate = new GregorianCalendar();
+
         this.templates = new ArrayList<>();
         templates.add(new Template(SINGLE_EVENTS));
 
@@ -47,6 +52,7 @@ public class Week {
         TEMPLATE_FOR_SINGLE_EVENTS.addEvent(newEvent);
     }
 
+    @NotNull
     public GregorianCalendar getStartDate() {
         return startDate;
     }
@@ -55,10 +61,12 @@ public class Week {
         return this.startDate.getTimeInMillis()/1000;
     }
 
+    @NotNull
     public ArrayList<Template> getTemplates() {
         return templates;
     }
 
+    @NotNull
     public ArrayList<Event> getEvents() {
         ArrayList<Event> result = new ArrayList<>();
         for(Template template: templates) {

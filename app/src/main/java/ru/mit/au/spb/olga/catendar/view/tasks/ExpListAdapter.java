@@ -16,7 +16,6 @@ import java.util.ArrayList;
 import ru.mit.au.spb.olga.catendar.R;
 import ru.mit.au.spb.olga.catendar.model.DatabaseHelper;
 import ru.mit.au.spb.olga.catendar.model.Task;
-import ru.mit.au.spb.olga.catendar.view.tasks.CreateTaskActivity;
 
 public class ExpListAdapter extends BaseExpandableListAdapter {
     private ArrayList<Task> mGroups;
