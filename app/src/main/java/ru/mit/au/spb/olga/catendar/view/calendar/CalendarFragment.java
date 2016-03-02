@@ -19,6 +19,8 @@ import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
@@ -66,6 +68,7 @@ public class CalendarFragment extends Fragment {
         currentDate.add(Calendar.SECOND, add*7*24*60*60);
     }
 
+    @NotNull
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -133,6 +136,7 @@ public class CalendarFragment extends Fragment {
         return 0x50000000 + randColor.nextInt() % (0xffffff);
     }
 
+    @NotNull
     private View setCalendarView() {
         final Context context = getActivity();
         ScrollView verticalScroll = new ScrollView(context);

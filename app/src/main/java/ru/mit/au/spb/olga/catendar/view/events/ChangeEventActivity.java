@@ -16,6 +16,8 @@ import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.TimePicker;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 
@@ -129,6 +131,7 @@ public class ChangeEventActivity extends AppCompatActivity
     }
 
 
+    @NotNull
     protected Dialog onCreateDialog(int id) {
         if (id == DIALOG_DATE) {
             return new DatePickerDialog(this, myCallBackDate, year, month, day);

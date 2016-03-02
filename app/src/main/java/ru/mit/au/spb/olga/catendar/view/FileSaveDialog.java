@@ -41,6 +41,8 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -169,6 +171,7 @@ public class FileSaveDialog {
         return !newDirFile.exists() && newDirFile.mkdir();
     }
 
+    @NotNull
     private List<String> getDirectories(String dir) {
         List<String> dirs = new ArrayList<>();
         try {
@@ -207,6 +210,7 @@ public class FileSaveDialog {
     //////////////////////////////////////////////////////////////////////////////////////////////////////////
     //////                                   START DIALOG DEFINITION                                    //////
     //////////////////////////////////////////////////////////////////////////////////////////////////////////
+    @NotNull
     private AlertDialog.Builder createDirectoryChooserDialog(String title, List<String> listItems,
                                                              DialogInterface.OnClickListener onClickListener) {
         AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(mContext);
@@ -300,6 +304,7 @@ public class FileSaveDialog {
         inputText.setText(SelectedFileName);
     }
 
+    @NotNull
     private ArrayAdapter<String> createListAdapter(List<String> items) {
         return new ArrayAdapter<String>(mContext, android.R.layout.select_dialog_item, android.R.id.text1, items) {
             @Override

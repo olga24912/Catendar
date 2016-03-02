@@ -14,6 +14,8 @@ import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.TimePicker;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 
@@ -110,6 +112,7 @@ public class AddEventForTemplateActivity  extends AppCompatActivity
         showDialog(DIALOG_TIME);
     }
 
+    @NotNull
     protected Dialog onCreateDialog(int id) {
         if (id == DIALOG_TIME) {
             return new TimePickerDialog(this, myCallBackTime, hour, minute, true);

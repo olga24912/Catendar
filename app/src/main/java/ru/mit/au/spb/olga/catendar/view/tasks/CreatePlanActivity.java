@@ -15,6 +15,8 @@ import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ListView;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
@@ -105,6 +107,7 @@ public class CreatePlanActivity extends AppCompatActivity {
         showDialog(DIALOG_DATE_START);
     }
 
+    @NotNull
     protected Dialog onCreateDialog(int id) {
         return new DatePickerDialog(this, myCallBackStartDate, startYear, startMonth, startDay);
     }

@@ -11,6 +11,8 @@ import android.widget.BaseExpandableListAdapter;
 import android.widget.Button;
 import android.widget.TextView;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.util.ArrayList;
 
 import ru.mit.au.spb.olga.catendar.R;
@@ -41,11 +43,14 @@ public class ExpListAdapter extends BaseExpandableListAdapter {
         return 1;
     }
 
+
+    @NotNull
     @Override
     public Object getGroup(int groupPosition) {
         return mGroups.get(groupPosition);
     }
 
+    @NotNull
     @Override
     public Object getChild(int groupPosition, int childPosition) {
         return mGroups.get(groupPosition);
@@ -66,6 +71,7 @@ public class ExpListAdapter extends BaseExpandableListAdapter {
         return true;
     }
 
+    @NotNull
     @Override
     public View getGroupView(int groupPosition, boolean isExpanded, View convertView, ViewGroup parent) {
         if (convertView == null) {
@@ -83,6 +89,7 @@ public class ExpListAdapter extends BaseExpandableListAdapter {
         return convertView;
     }
 
+    @NotNull
     @Override
     public View getChildView(final int groupPosition, final int childPosition, boolean isLastChild, View convertView, ViewGroup parent) {
         if (convertView == null) {
