@@ -1,4 +1,4 @@
-package ru.mit.au.spb.olga.catendar;
+package ru.mit.au.spb.olga.catendar.view;
 
 import android.content.Intent;
 import android.database.Cursor;
@@ -10,6 +10,10 @@ import android.widget.ExpandableListView;
 
 import java.util.ArrayList;
 import java.util.GregorianCalendar;
+
+import ru.mit.au.spb.olga.catendar.R;
+import ru.mit.au.spb.olga.catendar.model.DatabaseHelper;
+import ru.mit.au.spb.olga.catendar.model.Task;
 
 public class AddTaskActivity extends AppCompatActivity {
     private SQLiteDatabase mSQLiteDatabase;

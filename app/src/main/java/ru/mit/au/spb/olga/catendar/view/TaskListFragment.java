@@ -1,4 +1,4 @@
-package ru.mit.au.spb.olga.catendar;
+package ru.mit.au.spb.olga.catendar.view;
 
 import android.content.Intent;
 import android.database.Cursor;
@@ -22,6 +22,10 @@ import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.GregorianCalendar;
 import java.util.HashSet;
+
+import ru.mit.au.spb.olga.catendar.R;
+import ru.mit.au.spb.olga.catendar.model.DatabaseHelper;
+import ru.mit.au.spb.olga.catendar.model.Task;
 
 import static java.util.Collections.sort;
 

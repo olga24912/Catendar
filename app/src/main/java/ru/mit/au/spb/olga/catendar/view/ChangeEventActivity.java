@@ -1,4 +1,4 @@
-package ru.mit.au.spb.olga.catendar;
+package ru.mit.au.spb.olga.catendar.view;
 
 import android.app.DatePickerDialog;
 import android.app.Dialog;
@@ -18,6 +18,10 @@ import android.widget.TimePicker;
 
 import java.util.Calendar;
 import java.util.GregorianCalendar;
+
+import ru.mit.au.spb.olga.catendar.R;
+import ru.mit.au.spb.olga.catendar.model.DatabaseHelper;
+import ru.mit.au.spb.olga.catendar.model.Event;
 
 public class ChangeEventActivity extends AppCompatActivity
         implements SeekBar.OnSeekBarChangeListener {

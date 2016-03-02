@@ -1,4 +1,4 @@
-package ru.mit.au.spb.olga.catendar;
+package ru.mit.au.spb.olga.catendar.model;
 
 import java.util.ArrayList;
 
@@ -9,11 +9,6 @@ public class Template {
     public Template(String newName) {
         name = newName;
         events = new ArrayList<>();
-    }
-
-    public Template(String newName, ArrayList<Event> newEvents) {
-        name = newName;
-        events = new ArrayList<>(newEvents);
     }
 
     public void addEvent(Event newEvent) {

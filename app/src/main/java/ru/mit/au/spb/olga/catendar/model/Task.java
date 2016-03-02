@@ -1,4 +1,4 @@
-package ru.mit.au.spb.olga.catendar;
+package ru.mit.au.spb.olga.catendar.model;
 
 import java.util.Calendar;
 import java.util.GregorianCalendar;
@@ -29,8 +29,8 @@ public class Task {
         taskText = text;
     }
 
-    public void changeIsDone(Boolean fl) {
-        isDone = fl;
+    public void changeIsDone(Boolean isDone) {
+        this.isDone = isDone;
     }
 
     public Boolean getIsDone() {

@@ -1,4 +1,4 @@
-package ru.mit.au.spb.olga.catendar;
+package ru.mit.au.spb.olga.catendar.view;
 
 import android.content.ContentValues;
 import android.content.Intent;
@@ -12,6 +12,10 @@ import android.widget.EditText;
 import android.widget.ListView;
 
 import java.util.ArrayList;
+
+import ru.mit.au.spb.olga.catendar.R;
+import ru.mit.au.spb.olga.catendar.model.DatabaseHelper;
+import ru.mit.au.spb.olga.catendar.model.Event;
 
 public class CreateTemplateActivity extends AppCompatActivity {
     private SQLiteDatabase mSQLiteDatabase;
@@ -60,8 +64,10 @@ public class CreateTemplateActivity extends AppCompatActivity {
             currentEvent.setStartDate(cursor.getInt(cursor
                     .getColumnIndex(DatabaseHelper.EVENT_START_DATE)));
 
-            currentEvent.setEndDate(cursor.getInt(cursor
-                    .getColumnIndex(DatabaseHelper.EVENT_END_DATE)));
+            currentEvent.setEventDuration(cursor.getInt(cursor
+                    .getColumnIndex(DatabaseHelper.EVENT_END_DATE)) -
+                    cursor.getInt(cursor
+                            .getColumnIndex(DatabaseHelper.EVENT_START_DATE)));
             eventList.add(currentEvent);
         }
 

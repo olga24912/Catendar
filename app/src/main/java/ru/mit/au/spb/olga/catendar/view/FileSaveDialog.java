@@ -1,5 +1,5 @@
 // SimpleFileDialog.java
-package ru.mit.au.spb.olga.catendar;
+package ru.mit.au.spb.olga.catendar.view;
 
 /*
 * 
@@ -24,13 +24,6 @@ package ru.mit.au.spb.olga.catendar;
 *  (See Links above for full license text)
 */
 
-import java.io.File;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.List;
-
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -47,6 +40,15 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import java.io.File;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.List;
+
+import ru.mit.au.spb.olga.catendar.utils.CalendarToICSWriter;
 
 public class FileSaveDialog {
 

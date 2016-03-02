@@ -1,4 +1,4 @@
-package ru.mit.au.spb.olga.catendar;
+package ru.mit.au.spb.olga.catendar.view;
 
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
@@ -10,6 +10,9 @@ import android.widget.CheckBox;
 import android.widget.LinearLayout;
 
 import java.util.ArrayList;
+
+import ru.mit.au.spb.olga.catendar.R;
+import ru.mit.au.spb.olga.catendar.model.DatabaseHelper;
 
 public class DeleteTemplateActivity extends AppCompatActivity {
     private SQLiteDatabase mSQLiteDatabase;

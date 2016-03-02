@@ -1,4 +1,4 @@
-package ru.mit.au.spb.olga.catendar;
+package ru.mit.au.spb.olga.catendar.view;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
@@ -23,6 +23,14 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.Random;
+
+import ru.mit.au.spb.olga.catendar.R;
+import ru.mit.au.spb.olga.catendar.utils.CalendarToICSWriter;
+import ru.mit.au.spb.olga.catendar.utils.DataBaseUtils;
+import ru.mit.au.spb.olga.catendar.model.DatabaseHelper;
+import ru.mit.au.spb.olga.catendar.model.Event;
+import ru.mit.au.spb.olga.catendar.model.Template;
+import ru.mit.au.spb.olga.catendar.model.Week;
 
 import static java.lang.Math.min;
 
@@ -209,7 +217,7 @@ public class CalendarFragment extends Fragment {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.export:
-                /*
+
                 System.err.println("Entered export processing");
 
                 FileSaveDialog fileSaveDialog = new FileSaveDialog(
@@ -222,8 +230,8 @@ public class CalendarFragment extends Fragment {
                 });
                 fileSaveDialog.chooseFile();
                 return true;
-                */
-                throw new RuntimeException("export");
+
+                //throw new RuntimeException("export");
             default:
                 return false;
         }

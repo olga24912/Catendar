@@ -1,4 +1,4 @@
-package ru.mit.au.spb.olga.catendar;
+package ru.mit.au.spb.olga.catendar.view;
 
 import android.content.Intent;
 import android.content.res.Configuration;
@@ -14,6 +14,8 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+
+import ru.mit.au.spb.olga.catendar.R;
 
 
 public class MainActivity extends ActionBarActivity implements SimpleGestureFilter.SimpleGestureListener{

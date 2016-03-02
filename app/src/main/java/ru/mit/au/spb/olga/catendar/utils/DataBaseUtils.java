@@ -1,4 +1,4 @@
-package ru.mit.au.spb.olga.catendar;
+package ru.mit.au.spb.olga.catendar.utils;
 
 import android.content.ContentValues;
 import android.database.Cursor;
@@ -6,6 +6,11 @@ import android.database.sqlite.SQLiteDatabase;
 
 import java.util.ArrayList;
 import java.util.GregorianCalendar;
+
+import ru.mit.au.spb.olga.catendar.model.DatabaseHelper;
+import ru.mit.au.spb.olga.catendar.model.Event;
+import ru.mit.au.spb.olga.catendar.model.Template;
+import ru.mit.au.spb.olga.catendar.model.Week;
 
 public class DataBaseUtils {
 
@@ -75,7 +80,7 @@ public class DataBaseUtils {
                 newEvent.setStartDate(startTime);
 
                 int endTime = cursorEvent.getInt(cursorEvent.getColumnIndex(DatabaseHelper.EVENT_END_DATE));
-                newEvent.setEndDate(endTime);
+                newEvent.setEventDuration(endTime - startTime);
                 int evId = cursorEvent.getInt(cursorEvent.getColumnIndex(DatabaseHelper._ID));
                 newEvent.setId(evId);
                 resultingWeek.addEvent(newEvent);
@@ -123,7 +128,7 @@ public class DataBaseUtils {
                 newEvent.setStartDate(startTime);
 
                 int endTime = cursorEvent.getInt(cursorEvent.getColumnIndex(DatabaseHelper.EVENT_END_DATE));
-                newEvent.setEndDate(endTime);
+                newEvent.setEventDuration(endTime - startTime);
 
                 int evId = cursorEvent.getInt(cursorEvent.getColumnIndex(DatabaseHelper._ID));
                 newEvent.setId(evId);

@@ -1,4 +1,4 @@
-package ru.mit.au.spb.olga.catendar;
+package ru.mit.au.spb.olga.catendar.view;
 
 import android.content.ContentValues;
 import android.content.Context;
@@ -12,6 +12,11 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import java.util.ArrayList;
+
+import ru.mit.au.spb.olga.catendar.R;
+import ru.mit.au.spb.olga.catendar.model.DatabaseHelper;
+import ru.mit.au.spb.olga.catendar.model.Task;
+import ru.mit.au.spb.olga.catendar.view.CreateTaskActivity;
 
 public class ExpListAdapter extends BaseExpandableListAdapter {
     private ArrayList<Task> mGroups;

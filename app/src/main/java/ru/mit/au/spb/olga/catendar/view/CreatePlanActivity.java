@@ -1,4 +1,4 @@
-package ru.mit.au.spb.olga.catendar;
+package ru.mit.au.spb.olga.catendar.view;
 
 
 import android.app.DatePickerDialog;
@@ -18,6 +18,10 @@ import android.widget.ListView;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
+
+import ru.mit.au.spb.olga.catendar.R;
+import ru.mit.au.spb.olga.catendar.model.DatabaseHelper;
+import ru.mit.au.spb.olga.catendar.model.Task;
 
 public class CreatePlanActivity extends AppCompatActivity {
     private SQLiteDatabase mSQLiteDatabase;

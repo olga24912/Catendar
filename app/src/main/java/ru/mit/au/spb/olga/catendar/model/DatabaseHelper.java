@@ -1,4 +1,4 @@
-package ru.mit.au.spb.olga.catendar;
+package ru.mit.au.spb.olga.catendar.model;
 
 import android.content.Context;
 import android.database.DatabaseErrorHandler;

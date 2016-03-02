@@ -1,4 +1,4 @@
-package ru.mit.au.spb.olga.catendar;
+package ru.mit.au.spb.olga.catendar.utils;
 
 import android.database.sqlite.SQLiteDatabase;
 
@@ -17,6 +17,9 @@ import java.io.IOException;
 import java.net.SocketException;
 import java.util.ArrayList;
 import java.util.GregorianCalendar;
+
+import ru.mit.au.spb.olga.catendar.model.Event;
+import ru.mit.au.spb.olga.catendar.model.Week;
 
 public class CalendarToICSWriter {
 
@@ -82,9 +85,5 @@ public class CalendarToICSWriter {
     public static void exportWeekByDate (GregorianCalendar weekStart,
                                          String filePath, SQLiteDatabase mSQLiteDatabase) {
         exportWeekByTime(weekStart.getTimeInMillis(), filePath, mSQLiteDatabase);
-    }
-
-    public static void exportCurrentWeek (String filePath, SQLiteDatabase mSQLiteDatabase) {
-        exportWeekByTime(Week.getCurrentWeekStartTime(), filePath, mSQLiteDatabase);
     }
 }

@@ -1,4 +1,4 @@
-package ru.mit.au.spb.olga.catendar;
+package ru.mit.au.spb.olga.catendar.view;
 import android.app.Activity;
 import android.view.GestureDetector;
 import android.view.GestureDetector.SimpleOnGestureListener;
@@ -14,7 +14,7 @@ public class SimpleGestureFilter extends SimpleOnGestureListener{
     public final static int MODE_SOLID       = 1;
     public final static int MODE_DYNAMIC     = 2;
 
-    private final static int ACTION_FAKE = -13; //just an unlikely number
+    private final static int ACTION_FAKE = -13;
 
     private int mode             = MODE_DYNAMIC;
     private boolean tapIndicator = false;
@@ -47,7 +47,6 @@ public class SimpleGestureFilter extends SimpleOnGestureListener{
             }
 
         }
-        //else just do nothing, it's Transparent
     }
 
     @Override
@@ -68,7 +67,7 @@ public class SimpleGestureFilter extends SimpleOnGestureListener{
         int swipe_Min_Velocity = 100;
         int swipe_Min_Distance = 100;
         if(velocityX > swipe_Min_Velocity && xDistance > swipe_Min_Distance){
-            if(e1.getX() > e2.getX()) // right to left
+            if(e1.getX() > e2.getX())
                 this.listener.onSwipe(SWIPE_LEFT);
             else
                 this.listener.onSwipe(SWIPE_RIGHT);
@@ -76,7 +75,7 @@ public class SimpleGestureFilter extends SimpleOnGestureListener{
             result = true;
         }
         else if(velocityY > swipe_Min_Velocity && yDistance > swipe_Min_Distance){
-            if(e1.getY() > e2.getY()) // bottom to up
+            if(e1.getY() > e2.getY())
                 this.listener.onSwipe(SWIPE_UP);
             else
                 this.listener.onSwipe(SWIPE_DOWN);
@@ -107,8 +106,8 @@ public class SimpleGestureFilter extends SimpleOnGestureListener{
     @Override
     public boolean onSingleTapConfirmed(MotionEvent arg) {
 
-        if(this.mode == MODE_DYNAMIC){        // we owe an ACTION_UP, so we fake an
-            arg.setAction(ACTION_FAKE);      //action which will be converted to an ACTION_UP later.
+        if(this.mode == MODE_DYNAMIC){
+            arg.setAction(ACTION_FAKE);
             this.context.dispatchTouchEvent(arg);
         }
 

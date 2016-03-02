@@ -1,35 +1,32 @@
-package ru.mit.au.spb.olga.catendar;
+package ru.mit.au.spb.olga.catendar.model;
 
+import java.text.DateFormatSymbols;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 
 public class Event {
     private String eventText;
     private GregorianCalendar eventStartDate;
-    private GregorianCalendar eventEndDate;
+    private GregorianCalendar eventDuration;
 
     private int id;
 
-    public static final String[] days = {"Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"};
+    private static final String[] days = new DateFormatSymbols().getShortWeekdays();
 
-    public Event() {
-    }
-
-    public void setId(int _id) {
-        id = _id;
+    public void setId(int dataBaseId) {
+        id = dataBaseId;
     }
 
     public int getId() {
         return id;
     }
 
-
     public String getDayOfWeekAndTime() {
         return "(" + days[eventStartDate.get(Calendar.DAY_OF_WEEK) - 1] + " "
                 + eventStartDate.get(Calendar.HOUR_OF_DAY) + ":"
                 + eventStartDate.get(Calendar.MINUTE) + " - "
-                + eventEndDate.get(Calendar.HOUR_OF_DAY) + ":"
-                + eventEndDate.get(Calendar.MINUTE) + ")";
+                + getEndDate().get(Calendar.HOUR_OF_DAY) + ":"
+                + getEndDate().get(Calendar.MINUTE) + ")";
     }
 
     public void setText(String newText) {
@@ -45,7 +42,9 @@ public class Event {
     }
 
     public GregorianCalendar getEndDate() {
-        return eventEndDate;
+        GregorianCalendar endDate = new GregorianCalendar();
+        endDate.setTimeInMillis(eventStartDate.getTimeInMillis() + eventDuration.getTimeInMillis());
+        return endDate;
     }
 
     public long getStart() {
@@ -53,16 +52,16 @@ public class Event {
     }
 
     public long getEnd() {
-        return eventEndDate.getTimeInMillis() / 1000;
+        return getEndDate().getTimeInMillis() / 1000;
     }
 
-    public void setStartDate(int sTime) {
+    public void setStartDate(int seconds) {
         eventStartDate = new GregorianCalendar();
-        eventStartDate.setTimeInMillis((long)sTime*1000);
+        eventStartDate.setTimeInMillis(seconds * 1000L);
     }
 
-    public void setEndDate(int sTime) {
-        eventEndDate = new GregorianCalendar();
-        eventEndDate.setTimeInMillis((long)sTime*1000);
+    public void setEventDuration(int seconds) {
+        eventDuration = new GregorianCalendar();
+        eventDuration.setTimeInMillis(seconds * 1000L);
     }
 }
