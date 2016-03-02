@@ -11,7 +11,11 @@ import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ListView;
 
+import org.jetbrains.annotations.NotNull;
+
+import java.text.DateFormatSymbols;
 import java.util.ArrayList;
+import java.util.Calendar;
 
 import ru.mit.au.spb.olga.catendar.R;
 import ru.mit.au.spb.olga.catendar.model.DatabaseHelper;
@@ -28,12 +32,23 @@ public class CreateTemplateActivity extends AppCompatActivity {
 
     private int templateId = -1;
 
+    @NotNull
+    public String getDayOfWeekAndTime(Event event) {
+        String[] days = new DateFormatSymbols().getShortWeekdays();
+
+        return "(" + days[event.getStartDate().get(Calendar.DAY_OF_WEEK) - 1] + " "
+                + event.getStartDate().get(Calendar.HOUR_OF_DAY) + ":"
+                + event.getStartDate().get(Calendar.MINUTE) + " - "
+                + event.getEndDate().get(Calendar.HOUR_OF_DAY) + ":"
+                + event.getEndDate().get(Calendar.MINUTE) + ")";
+    }
+
     private void drawEventList() {
         String[] myEventInString = new String[eventList.size()];
 
         for (int i = 0; i < eventList.size(); i++) {
             Event currentEvent = eventList.get(i);
-            myEventInString[i] = currentEvent.getText() + " " + currentEvent.getDayOfWeekAndTime();
+            myEventInString[i] = currentEvent.getText() + " " + getDayOfWeekAndTime(currentEvent);
         }
 
         ArrayAdapter<String> adapter = new ArrayAdapter<>(this,

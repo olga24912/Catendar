@@ -6,6 +6,7 @@ import android.content.ContentValues;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Gravity;
 import android.view.View;
@@ -166,6 +167,7 @@ public class CreateWeekActivity extends AppCompatActivity {
         }
     };
 
+    @Nullable
     private Integer findIdWithThisTime(long ms) {
         Cursor cursor = mSQLiteDatabase.query(DatabaseHelper.DATABASE_TABLE_WEEK, new String[]{
                         DatabaseHelper._ID, DatabaseHelper.WEEK_START_DATE
