@@ -93,7 +93,7 @@ public class DatabaseHelper extends SQLiteOpenHelper implements BaseColumns {
             + TEMPLATES_IN_WEEKS_WEEK_ID + " integer, "
             + TEMPLATES_IN_WEEKS_TEMPLATE_ID + " integer);";
 
-    DatabaseHelper(Context context) {
+    public DatabaseHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
     }
 

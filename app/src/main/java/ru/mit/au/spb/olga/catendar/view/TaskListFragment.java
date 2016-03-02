@@ -99,7 +99,7 @@ public class TaskListFragment extends Fragment implements CompoundButton.OnCheck
 
         planTitle = (TextView) rootView.findViewById(R.id.toDoTextView);
 
-        DatabaseHelper mDatabaseHelper = new DatabaseHelper(getContext(), "mydatabase14.db", null, 1);
+        DatabaseHelper mDatabaseHelper = new DatabaseHelper(getContext());
         mSQLiteDatabase = mDatabaseHelper.getWritableDatabase();
 
         synchronizedWithDataBase();

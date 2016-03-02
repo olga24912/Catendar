@@ -26,7 +26,7 @@ public class DeleteTemplateActivity extends AppCompatActivity {
 
         setContentView(R.layout.activity_delete_template);
 
-        DatabaseHelper mDatabaseHelper = new DatabaseHelper(this, "mydatabase14.db", null, 1);
+        DatabaseHelper mDatabaseHelper = new DatabaseHelper(this);
         mSQLiteDatabase = mDatabaseHelper.getWritableDatabase();
 
         createCheckBox();

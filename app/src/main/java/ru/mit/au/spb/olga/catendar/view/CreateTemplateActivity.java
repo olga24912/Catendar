@@ -82,7 +82,7 @@ public class CreateTemplateActivity extends AppCompatActivity {
 
         listOfEvent = (ListView) findViewById(R.id.listViewInCreateTemplate);
 
-        DatabaseHelper mDatabaseHelper = new DatabaseHelper(this, "mydatabase14.db", null, 1);
+        DatabaseHelper mDatabaseHelper = new DatabaseHelper(this);
         mSQLiteDatabase = mDatabaseHelper.getWritableDatabase();
 
         templateName = (EditText) findViewById(R.id.editTemplate);

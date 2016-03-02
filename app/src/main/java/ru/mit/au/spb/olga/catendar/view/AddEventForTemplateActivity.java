@@ -58,7 +58,7 @@ public class AddEventForTemplateActivity  extends AppCompatActivity
         lenOfEvent = (TextView)findViewById(R.id.durationValForTemplate);
         lenOfEvent.setText("1");
 
-        DatabaseHelper mDatabaseHelper = new DatabaseHelper(this, "mydatabase14.db", null, 1);
+        DatabaseHelper mDatabaseHelper = new DatabaseHelper(this);
         mSQLiteDatabase = mDatabaseHelper.getWritableDatabase();
 
         final SeekBar seekbar = (SeekBar)findViewById(R.id.seekBar);

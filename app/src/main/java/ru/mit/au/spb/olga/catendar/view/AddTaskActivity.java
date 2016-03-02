@@ -28,7 +28,7 @@ public class AddTaskActivity extends AppCompatActivity {
 
         setContentView(R.layout.activity_add_tasks);
 
-        DatabaseHelper mDatabaseHelper = new DatabaseHelper(this, "mydatabase14.db", null, 1);
+        DatabaseHelper mDatabaseHelper = new DatabaseHelper(this);
         mSQLiteDatabase = mDatabaseHelper.getWritableDatabase();
 
         listOfTask = (ExpandableListView)findViewById(R.id.addTaskExpandableListViw);

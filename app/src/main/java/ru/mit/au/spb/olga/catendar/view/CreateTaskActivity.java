@@ -62,7 +62,7 @@ public class CreateTaskActivity extends AppCompatActivity
         super.onCreate(savedInstanceState);
         id = getIntent().getLongExtra("id", -1);
 
-        DatabaseHelper mDatabaseHelper = new DatabaseHelper(this, "mydatabase14.db", null, 1);
+        DatabaseHelper mDatabaseHelper = new DatabaseHelper(this);
         mSQLiteDatabase = mDatabaseHelper.getWritableDatabase();
 
         setContentView(R.layout.activity_create_task);
