@@ -11,6 +11,8 @@ import net.fortuna.ical4j.model.property.ProdId;
 import net.fortuna.ical4j.model.property.Version;
 import net.fortuna.ical4j.util.UidGenerator;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -43,11 +45,13 @@ public class CalendarToICSWriter {
         calendar.getProperties().add(e);
     }
 
+    @NotNull
     public static String getDefaultFileName(Week currentWeek) {
         long time = currentWeek == null ? System.currentTimeMillis() : currentWeek.getTimeInMS();
         return "calendar" + Long.toString(time) + ".ics";
     }
 
+    @NotNull
     public static String getFileName(String path, Week currentWeek) {
         String prefix = path == null ? "" : path;
         return prefix + getDefaultFileName(currentWeek);

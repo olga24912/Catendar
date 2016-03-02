@@ -3,6 +3,9 @@ package ru.mit.au.spb.olga.catendar.utils;
 import android.content.ContentValues;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.support.annotation.Nullable;
+
+import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.GregorianCalendar;
@@ -13,11 +16,12 @@ import ru.mit.au.spb.olga.catendar.model.Template;
 import ru.mit.au.spb.olga.catendar.model.Week;
 
 public class DataBaseUtils {
-
+    @NotNull
     public static Week getWeekFromDataBase(Integer id, SQLiteDatabase mSQLiteDatabase) {
         Cursor cursorWeek = mSQLiteDatabase.query(DatabaseHelper.DATABASE_TABLE_WEEK, new String[]{DatabaseHelper._ID, DatabaseHelper.WEEK_START_DATE},
                 null, null,
                 null, null, null);
+
         Week resultingWeek = null;
 
         while (cursorWeek.moveToNext()) {
@@ -29,6 +33,7 @@ public class DataBaseUtils {
                 resultingWeek = new Week(currentTime);
             }
         }
+
         if (resultingWeek == null) {
             resultingWeek = new Week();
         }
@@ -91,6 +96,7 @@ public class DataBaseUtils {
         return resultingWeek;
     }
 
+    @NotNull
     public static Template getTemplateFromDataBase(int id, SQLiteDatabase mSQLiteDatabase) {
         Template tp = null;
 
@@ -140,6 +146,7 @@ public class DataBaseUtils {
         return tp;
     }
 
+    @Nullable
     public static Integer findIdBySpecifiedTime(long sTime, SQLiteDatabase mSQLiteDatabase) {
         Cursor cursor = mSQLiteDatabase.query(DatabaseHelper.DATABASE_TABLE_WEEK, new String[]{
                         DatabaseHelper._ID, DatabaseHelper.WEEK_START_DATE
@@ -162,6 +169,7 @@ public class DataBaseUtils {
         return null;
     }
 
+    @NotNull
     public static Week getWeekFromDataBaseByDate(long sTime, SQLiteDatabase mSQLiteDatabase) {
         Integer id = findIdBySpecifiedTime(sTime, mSQLiteDatabase);
         if (id != null) {
