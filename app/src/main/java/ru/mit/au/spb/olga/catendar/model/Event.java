@@ -25,4 +25,6 @@ public class Event extends CalendarPrimitive {
     public long getEndDateInSeconds() {
         return getEndDate().getTimeInMillis() / 1000;
     }
+
+    //meow
 }
