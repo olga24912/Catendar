@@ -114,7 +114,7 @@ public class SimpleGestureFilter extends SimpleOnGestureListener{
         return false;
     }
 
-    interface SimpleGestureListener{
+    public interface SimpleGestureListener{
         void onSwipe(int direction);
         void onDoubleTap();
     }

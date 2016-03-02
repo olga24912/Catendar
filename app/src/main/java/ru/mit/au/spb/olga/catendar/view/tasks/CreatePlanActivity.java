@@ -136,6 +136,9 @@ public class CreatePlanActivity extends AppCompatActivity {
                     DatabaseHelper._ID + "=" + taskId.get(i), null, null, null, null, null);
 
             cursor.moveToFirst();
+            if (cursor.getCount() == 0) {
+                continue;
+            }
             current.changeText(cursor.getString(cursor.getColumnIndex(DatabaseHelper.TASK_NAME_COLUMN)));
             taskArrayList.add(current);
             cursor.close();
