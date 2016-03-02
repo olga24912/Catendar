@@ -16,6 +16,15 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
 import ru.mit.au.spb.olga.catendar.R;
+import ru.mit.au.spb.olga.catendar.view.calendar.CalendarFragment;
+import ru.mit.au.spb.olga.catendar.view.calendar.SimpleGestureFilter;
+import ru.mit.au.spb.olga.catendar.view.events.CreateEventActivity;
+import ru.mit.au.spb.olga.catendar.view.tasks.CreatePlanActivity;
+import ru.mit.au.spb.olga.catendar.view.tasks.CreateTaskActivity;
+import ru.mit.au.spb.olga.catendar.view.tasks.TaskListFragment;
+import ru.mit.au.spb.olga.catendar.view.template.CreateTemplateActivity;
+import ru.mit.au.spb.olga.catendar.view.template.CreateWeekActivity;
+import ru.mit.au.spb.olga.catendar.view.template.DeleteTemplateActivity;
 
 
 public class MainActivity extends ActionBarActivity implements SimpleGestureFilter.SimpleGestureListener{

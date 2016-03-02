@@ -19,39 +19,39 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".view.CreateEventActivity"
+            android:name=".view.events.CreateEventActivity"
             android:label="@string/create_event_title" >
         </activity>
         <activity
-            android:name=".view.CreateWeekActivity"
+            android:name=".view.template.CreateWeekActivity"
             android:label="Create week">
         </activity>
         <activity
-            android:name=".view.CreateTemplateActivity"
+            android:name=".view.template.CreateTemplateActivity"
             android:label="Create template">
         </activity>
         <activity
-            android:name=".view.AddEventForTemplateActivity"
+            android:name=".view.events.AddEventForTemplateActivity"
             android:label="Create event">
         </activity>
         <activity
-            android:name=".view.CreateTaskActivity"
+            android:name=".view.tasks.CreateTaskActivity"
             android:label="Create task">
         </activity>
         <activity
-            android:name=".view.ChangeEventActivity"
+            android:name=".view.events.ChangeEventActivity"
             android:label="Change event">
         </activity>
         <activity
-            android:name=".view.DeleteTemplateActivity"
+            android:name=".view.template.DeleteTemplateActivity"
             android:label="Delete template">
         </activity>
         <activity
-            android:name=".view.CreatePlanActivity"
+            android:name=".view.tasks.CreatePlanActivity"
             android:label="Create Plan">
         </activity>
         <activity
-            android:name=".view.AddTaskActivity"
+            android:name=".view.tasks.AddTaskActivity"
             android:label="Add task">
         </activity>
     </application>
