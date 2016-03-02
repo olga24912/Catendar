@@ -65,7 +65,7 @@ public class CreateTemplateActivity extends AppCompatActivity {
             currentEvent.setStartDate(cursor.getInt(cursor
                     .getColumnIndex(DatabaseHelper.EVENT_START_DATE)));
 
-            currentEvent.setEventDuration(cursor.getInt(cursor
+            currentEvent.setDuration(cursor.getInt(cursor
                     .getColumnIndex(DatabaseHelper.EVENT_END_DATE)) -
                     cursor.getInt(cursor
                             .getColumnIndex(DatabaseHelper.EVENT_START_DATE)));

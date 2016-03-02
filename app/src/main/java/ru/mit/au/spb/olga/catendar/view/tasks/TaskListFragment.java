@@ -33,9 +33,9 @@ public class TaskListFragment extends Fragment implements CompoundButton.OnCheck
     private class cmpDuration implements Comparator<Task> {
         @Override
         public int compare(Task lhs, Task rhs) {
-            if (lhs.getDurationTimeInSecond() - rhs.getDurationTimeInSecond() < 0) {
+            if (lhs.getDurationTimeInSeconds() - rhs.getDurationTimeInSeconds() < 0) {
                 return -1;
-            } else if (lhs.getDurationTimeInSecond() - rhs.getDurationTimeInSecond() == 0) {
+            } else if (lhs.getDurationTimeInSeconds() - rhs.getDurationTimeInSeconds() == 0) {
                 return 0;
             } else {
                 return 1;
@@ -255,7 +255,7 @@ public class TaskListFragment extends Fragment implements CompoundButton.OnCheck
         while (cursor.moveToNext()) {
             Task currentTask = new Task();
 
-            currentTask.changeText(cursor.getString(cursor.getColumnIndex(DatabaseHelper.TASK_NAME_COLUMN)));
+            currentTask.setText(cursor.getString(cursor.getColumnIndex(DatabaseHelper.TASK_NAME_COLUMN)));
             currentTask.setComment(cursor.getString(cursor.getColumnIndex(DatabaseHelper.TASK_COMMENT)));
             currentTask.changeIsDone(cursor.getInt(cursor.getColumnIndex(DatabaseHelper.TASK_IS_DONE)) == 1);
             currentTask.setId(cursor.getLong(cursor.getColumnIndex(DatabaseHelper._ID)));
@@ -282,7 +282,7 @@ public class TaskListFragment extends Fragment implements CompoundButton.OnCheck
 
             GregorianCalendar curDate3 = new GregorianCalendar();
             curDate3.setTimeInMillis((long) cursor.getInt(cursor.getColumnIndex(DatabaseHelper.TASK_START_TIME)) * 1000);
-            currentTask.setStartTime(curDate3);
+            currentTask.setStartDate(curDate3);
 
             if (!showAll && curDate3.getTimeInMillis() > new GregorianCalendar().getTimeInMillis()) {
                 continue;

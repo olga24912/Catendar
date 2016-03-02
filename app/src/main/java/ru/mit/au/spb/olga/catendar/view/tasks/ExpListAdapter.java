@@ -16,7 +16,6 @@ import java.util.ArrayList;
 import ru.mit.au.spb.olga.catendar.R;
 import ru.mit.au.spb.olga.catendar.model.DatabaseHelper;
 import ru.mit.au.spb.olga.catendar.model.Task;
-import ru.mit.au.spb.olga.catendar.view.tasks.CreateTaskActivity;
 
 public class ExpListAdapter extends BaseExpandableListAdapter {
     private ArrayList<Task> mGroups;
@@ -75,7 +74,7 @@ public class ExpListAdapter extends BaseExpandableListAdapter {
         }
 
         TextView textGroup = (TextView) convertView.findViewById(R.id.textGroup);
-        textGroup.setText(mGroups.get(groupPosition).getTaskText());
+        textGroup.setText(mGroups.get(groupPosition).getText());
 
         if (mGroups.get(groupPosition).getIsDone()) {
             textGroup.setBackgroundColor(0xffc5e384);
@@ -96,7 +95,7 @@ public class ExpListAdapter extends BaseExpandableListAdapter {
         final TextView textDeadlineTime = (TextView) convertView.findViewById(R.id.itemToDoTextViewTime);
         final TextView textComment = (TextView) convertView.findViewById(R.id.itemToDoTextViewComment);
 
-        textComment.setText(mGroups.get(groupPosition).getCommentText());
+        textComment.setText(mGroups.get(groupPosition).getComment());
         textDeadlineTime.setText("Deadline time:" + mGroups.get(groupPosition).getStringDeadlineTime());
         textPriority.setText("Priority: " + String.valueOf(mGroups.get(groupPosition).getPriority()));
         textDuration.setText("Duration: " + mGroups.get(groupPosition).getStringDuration());
@@ -136,11 +135,11 @@ public class ExpListAdapter extends BaseExpandableListAdapter {
                 Task currentTask = mGroups.get(groupPosition);
 
                 ContentValues cv = new ContentValues();
-                cv.put(DatabaseHelper.TASK_NAME_COLUMN, currentTask.getTaskText());
-                cv.put(DatabaseHelper.TASK_COMMENT, currentTask.getCommentText());
-                cv.put(DatabaseHelper.TASK_START_TIME, currentTask.getStartTimeInSecond());
+                cv.put(DatabaseHelper.TASK_NAME_COLUMN, currentTask.getText());
+                cv.put(DatabaseHelper.TASK_COMMENT, currentTask.getComment());
+                cv.put(DatabaseHelper.TASK_START_TIME, currentTask.getStartDateInSeconds());
                 cv.put(DatabaseHelper.TASK_DEADLINE, currentTask.getDeadlineTimeInSecond());
-                cv.put(DatabaseHelper.TASK_DURATION, currentTask.getDurationTimeInSecond());
+                cv.put(DatabaseHelper.TASK_DURATION, currentTask.getDurationTimeInSeconds());
                 cv.put(DatabaseHelper.TASK_IS_DONE, !currentTask.getIsDone());
                 cv.put(DatabaseHelper.TASK_PRIORITY, currentTask.getPriority());
 

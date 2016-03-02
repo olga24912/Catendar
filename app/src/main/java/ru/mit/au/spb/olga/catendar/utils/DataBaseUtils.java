@@ -80,9 +80,9 @@ public class DataBaseUtils {
                 newEvent.setStartDate(startTime);
 
                 int endTime = cursorEvent.getInt(cursorEvent.getColumnIndex(DatabaseHelper.EVENT_END_DATE));
-                newEvent.setEventDuration(endTime - startTime);
+                newEvent.setDuration(endTime - startTime);
                 int evId = cursorEvent.getInt(cursorEvent.getColumnIndex(DatabaseHelper._ID));
-                newEvent.setId(evId);
+                newEvent.setId((long) evId);
                 resultingWeek.addEvent(newEvent);
             }
         }
@@ -128,10 +128,10 @@ public class DataBaseUtils {
                 newEvent.setStartDate(startTime);
 
                 int endTime = cursorEvent.getInt(cursorEvent.getColumnIndex(DatabaseHelper.EVENT_END_DATE));
-                newEvent.setEventDuration(endTime - startTime);
+                newEvent.setDuration(endTime - startTime);
 
                 int evId = cursorEvent.getInt(cursorEvent.getColumnIndex(DatabaseHelper._ID));
-                newEvent.setId(evId);
+                newEvent.setId((long) evId);
 
                 tp.addEvent(newEvent);
             }

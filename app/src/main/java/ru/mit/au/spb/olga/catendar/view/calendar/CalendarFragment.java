@@ -48,7 +48,7 @@ public class CalendarFragment extends Fragment {
 
     public static TextView[][] table = new TextView[HOURS_PER_DAY][DAYS_PER_WEEK];
 
-    private static int[][] tableId = new int[HOURS_PER_DAY][DAYS_PER_WEEK];
+    private static long[][] tableId = new long[HOURS_PER_DAY][DAYS_PER_WEEK];
 
     private static Week currentWeek = null;
 
@@ -107,7 +107,7 @@ public class CalendarFragment extends Fragment {
             int hour = e.getStartDate().get(java.util.Calendar.HOUR_OF_DAY);
             int j = (day + (DAYS_PER_WEEK - 1)) % DAYS_PER_WEEK;
             int i = (hour) % HOURS_PER_DAY;
-            long length = (e.getEnd() - e.getStart()) / HOUR_LENGTH;
+            long length = (e.getEndDateInSeconds() - e.getStartDateInSeconds()) / HOUR_LENGTH;
             String nm2 = e.getText();
             if (name.length() > 5) {
                 name = name.substring(0, 5);
