@@ -6,37 +6,27 @@ import java.util.GregorianCalendar;
 
 
 public abstract class CalendarPrimitive {
+    @NotNull
     protected String text = "";
+    @NotNull
     protected String comment = "";
+    @NotNull
     protected GregorianCalendar startDate = new GregorianCalendar();
+    @NotNull
     protected GregorianCalendar duration = new GregorianCalendar();
+    @NotNull
     protected Long id = -1L;
 
     public void setId(@NotNull Long newId) {
         id = newId;
     }
 
-    @NotNull
-    public Long getId() {
-        return id;
-    }
-
     public void setText(@NotNull String newText) {
         text = newText;
     }
 
-    @NotNull
-    public String getText() {
-        return text;
-    }
-
     public void setComment(@NotNull String newComment) {
         comment = newComment;
-    }
-
-    @NotNull
-    public  String getComment() {
-        return comment;
     }
 
     public void setDuration(int seconds) {
@@ -48,10 +38,6 @@ public abstract class CalendarPrimitive {
         this.duration = duration;
     }
 
-    public long getDurationTimeInSeconds() {
-        return (duration.getTimeInMillis() / 1000);
-    }
-
     public void setStartDate(@NotNull GregorianCalendar startDate) {
         this.startDate = startDate;
     }
@@ -59,6 +45,25 @@ public abstract class CalendarPrimitive {
     public void setStartDate(int seconds) {
         startDate = new GregorianCalendar();
         startDate.setTimeInMillis(seconds * 1000L);
+    }
+
+    @NotNull
+    public Long getId() {
+        return id;
+    }
+
+    @NotNull
+    public String getText() {
+        return text;
+    }
+
+    @NotNull
+    public  String getComment() {
+        return comment;
+    }
+
+    public long getDurationTimeInSeconds() {
+        return (duration.getTimeInMillis() / 1000);
     }
 
     @NotNull

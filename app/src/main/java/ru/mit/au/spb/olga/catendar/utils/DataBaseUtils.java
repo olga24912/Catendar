@@ -12,7 +12,7 @@ import java.util.GregorianCalendar;
 
 import ru.mit.au.spb.olga.catendar.model.DatabaseHelper;
 import ru.mit.au.spb.olga.catendar.model.Event;
-import ru.mit.au.spb.olga.catendar.model.Template;
+import ru.mit.au.spb.olga.catendar.model.EventsGroup;
 import ru.mit.au.spb.olga.catendar.model.Week;
 
 public class DataBaseUtils {
@@ -97,8 +97,8 @@ public class DataBaseUtils {
     }
 
     @NotNull
-    public static Template getTemplateFromDataBase(int id, SQLiteDatabase mSQLiteDatabase) {
-        Template tp = null;
+    public static EventsGroup getTemplateFromDataBase(int id, SQLiteDatabase mSQLiteDatabase) {
+        EventsGroup tp = null;
 
         Cursor cursorTemplate = mSQLiteDatabase.query(DatabaseHelper.DATABASE_TABLE_TEMPLATE, new String[]{DatabaseHelper._ID,
                         DatabaseHelper.TEMPLATE_NAME},
@@ -109,7 +109,7 @@ public class DataBaseUtils {
             int currentId = cursorTemplate.getInt(cursorTemplate.getColumnIndex(DatabaseHelper._ID));
             if (currentId == id) {
                 String name = cursorTemplate.getString(cursorTemplate.getColumnIndex(DatabaseHelper.TEMPLATE_NAME));
-                tp = new Template(name);
+                tp = new EventsGroup(name);
             }
         }
 
