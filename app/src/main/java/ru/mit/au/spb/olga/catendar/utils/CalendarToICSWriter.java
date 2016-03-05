@@ -4,7 +4,6 @@ import android.database.sqlite.SQLiteDatabase;
 
 import net.fortuna.ical4j.data.CalendarOutputter;
 import net.fortuna.ical4j.model.Calendar;
-import net.fortuna.ical4j.model.ValidationException;
 import net.fortuna.ical4j.model.component.VEvent;
 import net.fortuna.ical4j.model.property.CalScale;
 import net.fortuna.ical4j.model.property.ProdId;
@@ -13,17 +12,27 @@ import net.fortuna.ical4j.util.UidGenerator;
 
 import org.jetbrains.annotations.NotNull;
 
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
-import java.io.IOException;
 import java.net.SocketException;
 import java.util.ArrayList;
 import java.util.GregorianCalendar;
+import java.util.logging.Logger;
 
+import io.cloudboost.CloudException;
+import io.cloudboost.CloudFile;
+import io.cloudboost.CloudFileCallback;
+import io.cloudboost.CloudObject;
+import io.cloudboost.CloudObjectCallback;
 import ru.mit.au.spb.olga.catendar.model.Event;
 import ru.mit.au.spb.olga.catendar.model.Week;
 
 public class CalendarToICSWriter {
+
+    private static final String EXPORT_TABLE = "ExportedWeeks";
+    private static final String WEEK_DATE_COLUMN = "weekStartDate";
+    private static final String FILE_URL_COLUMN = "fileUrl";
 
     private static void initCalendar(Calendar calendar) {
         calendar.getProperties().add(new ProdId("-//Olga and Liza//Catendar 0.1//EN"));
@@ -42,22 +51,73 @@ public class CalendarToICSWriter {
             throw new RuntimeException(e1);
         }
         e.getProperties().add(uidGen.generateUid());
-        calendar.getProperties().add(e);
+        calendar.getComponents().add(e);
     }
 
     @NotNull
     public static String getDefaultFileName(Week currentWeek) {
-        long time = currentWeek == null ? System.currentTimeMillis() : currentWeek.getTimeInMS();
+        long time = currentWeek == null ? System.currentTimeMillis() : currentWeek.getTimeInSeconds();
         return "calendar" + Long.toString(time) + ".ics";
     }
 
     @NotNull
     public static String getFileName(String path, Week currentWeek) {
-        String prefix = path == null ? "" : path;
-        return prefix + getDefaultFileName(currentWeek);
+        return path + getDefaultFileName(currentWeek);
+    }
+
+    private static void saveWeekFiletoCloud(String fileName, final Week currentWeek) throws CloudException{
+        File file = new File(fileName);
+        final CloudFile cloudFileObj;
+        final CloudObject cloudObject = new CloudObject(EXPORT_TABLE);
+        final long weekStartTime = currentWeek.getTimeInSeconds();
+
+//TODO: check if the file for this week was saved before
+//        CloudQuery cloudQuery = new CloudQuery(EXPORT_TABLE);
+//        cloudQuery.equalTo(WEEK_DATE_COLUMN, weekStartTime);
+//        cloudQuery.findOne(new CloudObjectCallback() {
+//            @Override
+//            public void done(CloudObject cloudObject, CloudException t) throws CloudException {
+//                if(cloudObject != null) {
+//                    //TODO: fetch file
+//                } else {
+//                    //TODO: all the following below
+//                }
+//            }
+//        });
+
+
+        try {
+            cloudFileObj = new CloudFile(file, "txt");
+            cloudFileObj.save(new CloudFileCallback() {
+                @Override
+                public void done(CloudFile x, CloudException e) throws CloudException {
+                    if (e != null) {
+                        throw e;
+                    } else if (x != null) {
+                        cloudObject.set(FILE_URL_COLUMN, x.getFileUrl());
+                        cloudObject.set(WEEK_DATE_COLUMN, weekStartTime);
+                        cloudObject.save(new CloudObjectCallback(){
+                            @Override
+                            public void done(CloudObject x, CloudException t) {
+                                if(x != null){
+                                    Logger logger = Logger.getLogger("SAVE_FILE");
+                                    logger.info("File information was successfully saved to the cloud");
+                                }
+                                if(t != null){
+                                    throw new RuntimeException(t.getMessage(), t);
+                                }
+                            }
+                        });
+                    }
+                }
+            });
+        } catch (Exception e) {
+            throw new RuntimeException(e.getMessage(), e);
+        }
     }
 
     public static void exportWeekByTime(long weekStart, String filePath, SQLiteDatabase mSQLiteDatabase) {
+
         Calendar calendar = new Calendar();
         initCalendar(calendar);
 
@@ -65,24 +125,36 @@ public class CalendarToICSWriter {
                 mSQLiteDatabase);
         ArrayList<Event> events = currentWeek.getEvents();
 
+        if(events.size() == 0) {
+            //TODO: implement more intelligent handling
+            System.out.println("The week connot be empty!");
+            return;
+        }
+
         for(Event event: events) {
             addEvent(event, calendar);
         }
 
         FileOutputStream fout;
+        String fileName = getFileName(filePath, currentWeek);
         try {
-            fout = new FileOutputStream(getFileName(filePath, currentWeek));
+            fout = new FileOutputStream(fileName);
         } catch (FileNotFoundException e) {
-            throw new RuntimeException("File not found", e);
+            throw new RuntimeException(e.getMessage(), e);
         }
 
         CalendarOutputter outputter = new CalendarOutputter();
         try {
             outputter.output(calendar, fout);
-        } catch (IOException e) {
-            throw new RuntimeException("Failed to output an .ics file", e);
-        } catch (ValidationException e) {
-            throw new RuntimeException("Validation Exception", e);
+        } catch (Exception e) {
+            throw new RuntimeException(e.getMessage(), e);
+        }
+
+        try {
+            saveWeekFiletoCloud(fileName, currentWeek);
+        } catch(CloudException e) {
+            System.err.println("Failed to save the file!");
+            throw new RuntimeException(e.getMessage(), e);
         }
     }
 

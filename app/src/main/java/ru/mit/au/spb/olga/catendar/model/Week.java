@@ -61,7 +61,7 @@ public class Week {
         return startDate;
     }
 
-    public long getTimeInMS() {
+    public long getTimeInSeconds() {
         return this.startDate.getTimeInMillis()/1000;
     }
 

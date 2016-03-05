@@ -74,9 +74,9 @@ public class DataBaseUtils {
             currentEvent.setTimeInMillis(msTime*1000);
             Week weekForEvent = new Week(currentEvent);
 
-            long weekTimeForEvent = weekForEvent.getTimeInMS();
+            long weekTimeForEvent = weekForEvent.getTimeInSeconds();
 
-            if (weekTimeForEvent == resultingWeek.getTimeInMS()) {
+            if (weekTimeForEvent == resultingWeek.getTimeInSeconds()) {
                 Event newEvent = new Event();
                 String name = cursorEvent.getString(cursorEvent.getColumnIndex(DatabaseHelper.EVENT_NAME));
                 newEvent.setText(name);

@@ -15,6 +15,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
+import io.cloudboost.CloudApp;
 import ru.mit.au.spb.olga.catendar.R;
 import ru.mit.au.spb.olga.catendar.view.calendar.CalendarFragment;
 import ru.mit.au.spb.olga.catendar.view.calendar.SimpleGestureFilter;
@@ -35,6 +36,7 @@ public class MainActivity extends ActionBarActivity implements SimpleGestureFilt
     private DrawerLayout myDrawerLayout;
     private ListView myDrawerList;
     private ActionBarDrawerToggle myDrawerToggle;
+    private static final String APP_LOG = "CATENDAR_MAIN";
 
     // navigation drawer title
     private CharSequence myDrawerTitle;
@@ -96,7 +98,15 @@ public class MainActivity extends ActionBarActivity implements SimpleGestureFilt
         }
 
         myDrawerList.setOnItemClickListener(new DrawerItemClickListener());
+
+        CloudApp.init("grjugmvctxmv", "7de6cb54-deb1-449b-91a8-b27d62e02690");
     }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+    }
+
     @Override
     public boolean dispatchTouchEvent(MotionEvent me){
         // Call onTouchEvent of SimpleGestureFilter class

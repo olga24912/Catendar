@@ -27,15 +27,14 @@ import java.util.GregorianCalendar;
 import java.util.Random;
 
 import ru.mit.au.spb.olga.catendar.R;
-import ru.mit.au.spb.olga.catendar.utils.CalendarToICSWriter;
-import ru.mit.au.spb.olga.catendar.utils.DataBaseUtils;
 import ru.mit.au.spb.olga.catendar.model.DatabaseHelper;
 import ru.mit.au.spb.olga.catendar.model.Event;
 import ru.mit.au.spb.olga.catendar.model.EventsGroup;
 import ru.mit.au.spb.olga.catendar.model.Week;
+import ru.mit.au.spb.olga.catendar.utils.CalendarToICSWriter;
+import ru.mit.au.spb.olga.catendar.utils.DataBaseUtils;
 import ru.mit.au.spb.olga.catendar.view.events.ChangeEventActivity;
 import ru.mit.au.spb.olga.catendar.view.events.CreateEventActivity;
-import ru.mit.au.spb.olga.catendar.view.FileSaveDialog;
 
 import static java.lang.Math.min;
 
@@ -79,7 +78,7 @@ public class CalendarFragment extends Fragment {
         mSQLiteDatabase = mDatabaseHelper.getWritableDatabase();
 
         Week tmpWeek = new Week(currentDate);
-        currentWeek = DataBaseUtils.getWeekFromDataBaseByDate(tmpWeek.getTimeInMS(),
+        currentWeek = DataBaseUtils.getWeekFromDataBaseByDate(tmpWeek.getTimeInSeconds(),
                 mSQLiteDatabase);
 
         View result = setCalendarView();
@@ -224,17 +223,15 @@ public class CalendarFragment extends Fragment {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.export:
-                System.err.println("Entered export processing");
-
-                FileSaveDialog fileSaveDialog = new FileSaveDialog(
-                        getActivity(), new FileSaveDialog.FileSaveDialogListener() {
-                    @Override
-                    public void onChosenDir(String chosenDir) {
-                        CalendarToICSWriter.exportWeekByDate(
-                                currentWeek.getStartDate(), chosenDir, mSQLiteDatabase);
-                    }
-                });
-                fileSaveDialog.chooseFile();
+//                FileSaveDialog fileSaveDialog = new FileSaveDialog(
+//                        getActivity(), new FileSaveDialog.FileSaveDialogListener() {
+//                    @Override
+//                    public void onChosenDir(String chosenDir) {
+                CalendarToICSWriter.exportWeekByDate(
+                        currentWeek.getStartDate(), getActivity().getFilesDir().getPath(), mSQLiteDatabase);
+//                    }
+//                });
+//                fileSaveDialog.chooseFile();
                 return true;
             default:
                 return false;
@@ -244,7 +241,7 @@ public class CalendarFragment extends Fragment {
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        currentWeek = DataBaseUtils.getWeekFromDataBaseByDate(currentWeek.getTimeInMS(),
+        currentWeek = DataBaseUtils.getWeekFromDataBaseByDate(currentWeek.getTimeInSeconds(),
                 mSQLiteDatabase);
         displaySampleTemplate(currentWeek);
 
