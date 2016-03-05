@@ -17,7 +17,6 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.net.SocketException;
 import java.util.ArrayList;
-import java.util.GregorianCalendar;
 import java.util.logging.Logger;
 
 import io.cloudboost.CloudException;
@@ -116,13 +115,11 @@ public class CalendarToICSWriter {
         }
     }
 
-    public static void exportWeekByTime(long weekStart, String filePath, SQLiteDatabase mSQLiteDatabase) {
+    public static void exportWeek(Week currentWeek, String filePath, SQLiteDatabase mSQLiteDatabase) {
 
         Calendar calendar = new Calendar();
         initCalendar(calendar);
 
-        Week currentWeek = DataBaseUtils.getWeekFromDataBaseByDate(weekStart,
-                mSQLiteDatabase);
         ArrayList<Event> events = currentWeek.getEvents();
 
         if(events.size() == 0) {
@@ -156,10 +153,5 @@ public class CalendarToICSWriter {
             System.err.println("Failed to save the file!");
             throw new RuntimeException(e.getMessage(), e);
         }
-    }
-
-    public static void exportWeekByDate (GregorianCalendar weekStart,
-                                         String filePath, SQLiteDatabase mSQLiteDatabase) {
-        exportWeekByTime(weekStart.getTimeInMillis(), filePath, mSQLiteDatabase);
     }
 }

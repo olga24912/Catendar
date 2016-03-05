@@ -227,8 +227,8 @@ public class CalendarFragment extends Fragment {
 //                        getActivity(), new FileSaveDialog.FileSaveDialogListener() {
 //                    @Override
 //                    public void onChosenDir(String chosenDir) {
-                CalendarToICSWriter.exportWeekByDate(
-                        currentWeek.getStartDate(), getActivity().getFilesDir().getPath(), mSQLiteDatabase);
+                CalendarToICSWriter.exportWeek(
+                        currentWeek, getActivity().getFilesDir().getPath(), mSQLiteDatabase);
 //                    }
 //                });
 //                fileSaveDialog.chooseFile();
