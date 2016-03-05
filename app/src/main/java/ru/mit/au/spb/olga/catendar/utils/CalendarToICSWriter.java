@@ -15,7 +15,6 @@ import org.jetbrains.annotations.NotNull;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
-import java.net.SocketException;
 import java.util.ArrayList;
 import java.util.logging.Logger;
 
@@ -44,11 +43,8 @@ public class CalendarToICSWriter {
                 new net.fortuna.ical4j.model.Date(event.getEndDate().getTime()),
                 event.getText());
         UidGenerator uidGen;
-        try {
-            uidGen = new UidGenerator("1");
-        } catch (SocketException e1) {
-            throw new RuntimeException(e1);
-        }
+        //XXX: hostInfo
+        uidGen = new UidGenerator(null, "1");
         e.getProperties().add(uidGen.generateUid());
         calendar.getComponents().add(e);
     }
@@ -95,14 +91,14 @@ public class CalendarToICSWriter {
                     } else if (x != null) {
                         cloudObject.set(FILE_URL_COLUMN, x.getFileUrl());
                         cloudObject.set(WEEK_DATE_COLUMN, weekStartTime);
-                        cloudObject.save(new CloudObjectCallback(){
+                        cloudObject.save(new CloudObjectCallback() {
                             @Override
                             public void done(CloudObject x, CloudException t) {
-                                if(x != null){
+                                if (x != null) {
                                     Logger logger = Logger.getLogger("SAVE_FILE");
                                     logger.info("File information was successfully saved to the cloud");
                                 }
-                                if(t != null){
+                                if (t != null) {
                                     throw new RuntimeException(t.getMessage(), t);
                                 }
                             }
