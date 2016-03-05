@@ -31,7 +31,7 @@ import ru.mit.au.spb.olga.catendar.utils.CalendarToICSWriter;
 import ru.mit.au.spb.olga.catendar.utils.DataBaseUtils;
 import ru.mit.au.spb.olga.catendar.model.DatabaseHelper;
 import ru.mit.au.spb.olga.catendar.model.Event;
-import ru.mit.au.spb.olga.catendar.model.Template;
+import ru.mit.au.spb.olga.catendar.model.EventsGroup;
 import ru.mit.au.spb.olga.catendar.model.Week;
 import ru.mit.au.spb.olga.catendar.view.events.ChangeEventActivity;
 import ru.mit.au.spb.olga.catendar.view.events.CreateEventActivity;
@@ -96,13 +96,13 @@ public class CalendarFragment extends Fragment {
 
 
     private void displaySampleTemplate(Week w) {
-        for(Template template : w.getTemplates()) {
-            displayTemplate(template);
+        for(EventsGroup eventsGroup : w.getEventsGroups()) {
+            displayTemplate(eventsGroup);
         }
     }
 
 
-    public void displayTemplate(Template t) {
+    public void displayTemplate(EventsGroup t) {
         ArrayList<Event> eventsToDisplay = t.getEvents();
         String name = t.getName();
         for(Event e: eventsToDisplay) {

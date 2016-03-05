@@ -1,32 +1,32 @@
 package ru.mit.au.spb.olga.catendar.model;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.util.GregorianCalendar;
 
 
 public abstract class CalendarPrimitive {
-    protected String text;
-    protected String comment;
-    protected GregorianCalendar startDate;
-    protected GregorianCalendar duration;
-    protected Long id;
+    @NotNull
+    protected String text = "";
+    @NotNull
+    protected String comment = "";
+    @NotNull
+    protected GregorianCalendar startDate = new GregorianCalendar();
+    @NotNull
+    protected GregorianCalendar duration = new GregorianCalendar();
+    @NotNull
+    protected Long id = -1L;
 
-    public void setId(Long newId) {
+    public void setId(@NotNull Long newId) {
         id = newId;
     }
-    public Long getId() {
-        return id;
-    }
-    public void setText(String newText) {
+
+    public void setText(@NotNull String newText) {
         text = newText;
     }
-    public String getText() {
-        return text;
-    }
-    public void setComment(String newComment) {
+
+    public void setComment(@NotNull String newComment) {
         comment = newComment;
-    }
-    public  String getComment() {
-        return comment;
     }
 
     public void setDuration(int seconds) {
@@ -34,15 +34,11 @@ public abstract class CalendarPrimitive {
         duration.setTimeInMillis(seconds * 1000L);
     }
 
-    public void setDuration(GregorianCalendar duration) {
+    public void setDuration(@NotNull GregorianCalendar duration) {
         this.duration = duration;
     }
 
-    public long getDurationTimeInSeconds() {
-        return (duration.getTimeInMillis() / 1000);
-    }
-
-    public void setStartDate(GregorianCalendar startDate) {
+    public void setStartDate(@NotNull GregorianCalendar startDate) {
         this.startDate = startDate;
     }
 
@@ -51,6 +47,26 @@ public abstract class CalendarPrimitive {
         startDate.setTimeInMillis(seconds * 1000L);
     }
 
+    @NotNull
+    public Long getId() {
+        return id;
+    }
+
+    @NotNull
+    public String getText() {
+        return text;
+    }
+
+    @NotNull
+    public  String getComment() {
+        return comment;
+    }
+
+    public long getDurationTimeInSeconds() {
+        return (duration.getTimeInMillis() / 1000);
+    }
+
+    @NotNull
     public GregorianCalendar getStartDate() {
         return startDate;
     }
@@ -58,5 +74,4 @@ public abstract class CalendarPrimitive {
     public long getStartDateInSeconds() {
         return startDate.getTimeInMillis() / 1000;
     }
-
 }

@@ -12,11 +12,11 @@ public class Week {
     @NotNull
     private transient GregorianCalendar startDate;
     @NotNull
-    private ArrayList<Template> templates;
+    private ArrayList<EventsGroup> eventsGroups;
 
     private static final int WEEK_START = Calendar.SUNDAY;
-    private final Template TEMPLATE_FOR_SINGLE_EVENTS;
-    public static final String SINGLE_EVENTS = "singleEvents";
+    private final EventsGroup EVENTS_GROUP_FOR_SINGLE_EVENTS;
+    public static final String SINGLE_EVENTS = "";
 
     private static void toWeekStart(GregorianCalendar g) {
         g.add(Calendar.DAY_OF_WEEK, WEEK_START - g.get(Calendar.DAY_OF_WEEK));
@@ -33,27 +33,27 @@ public class Week {
     public Week() {
         this.startDate = new GregorianCalendar();
 
-        this.templates = new ArrayList<>();
-        templates.add(new Template(SINGLE_EVENTS));
+        this.eventsGroups = new ArrayList<>();
+        eventsGroups.add(new EventsGroup(SINGLE_EVENTS));
 
-        TEMPLATE_FOR_SINGLE_EVENTS = templates.get(0);
+        EVENTS_GROUP_FOR_SINGLE_EVENTS = eventsGroups.get(0);
     }
 
     public Week (@NotNull GregorianCalendar startDate) {
         this.startDate = formDate(startDate);
 
-        this.templates = new ArrayList<>();
-        templates.add(new Template(SINGLE_EVENTS));
+        this.eventsGroups = new ArrayList<>();
+        eventsGroups.add(new EventsGroup(SINGLE_EVENTS));
 
-        TEMPLATE_FOR_SINGLE_EVENTS = templates.get(0);
+        EVENTS_GROUP_FOR_SINGLE_EVENTS = eventsGroups.get(0);
     }
 
-    public void addTemplate(@NotNull Template newTemplate) {
-        templates.add(newTemplate);
+    public void addTemplate(@NotNull EventsGroup newEventsGroup) {
+        eventsGroups.add(newEventsGroup);
     }
 
     public void addEvent(@NotNull Event newEvent) {
-        TEMPLATE_FOR_SINGLE_EVENTS.addEvent(newEvent);
+        EVENTS_GROUP_FOR_SINGLE_EVENTS.addEvent(newEvent);
     }
 
     @NotNull
@@ -66,15 +66,15 @@ public class Week {
     }
 
     @NotNull
-    public ArrayList<Template> getTemplates() {
-        return templates;
+    public ArrayList<EventsGroup> getEventsGroups() {
+        return eventsGroups;
     }
 
     @NotNull
     public ArrayList<Event> getEvents() {
         ArrayList<Event> result = new ArrayList<>();
-        for(Template template: templates) {
-            result.addAll(template.getEvents());
+        for(EventsGroup eventsGroup : eventsGroups) {
+            result.addAll(eventsGroup.getEvents());
         }
         return result;
     }

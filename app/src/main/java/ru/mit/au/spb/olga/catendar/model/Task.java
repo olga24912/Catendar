@@ -16,22 +16,17 @@ public class Task extends CalendarPrimitive {
         this.isDone = isDone;
     }
 
+    public void setDeadlineTime(@NonNull GregorianCalendar deadlineTime) {
+        this.deadlineTime = deadlineTime;
+    }
+
+    public void setPriority(int priority) {
+        this.priority = priority;
+    }
+
     @NotNull
     public Boolean getIsDone() {
         return isDone;
-    }
-
-    public String getStringDuration() {
-        String res = "";
-        res += String.valueOf(duration.get(Calendar.HOUR));
-        res += "hours ";
-        res += String.valueOf(duration.get(Calendar.MINUTE));
-        res += "minutes";
-        return res;
-    }
-
-    public void setDeadlineTime(@NonNull GregorianCalendar deadlineTime) {
-        this.deadlineTime = deadlineTime;
     }
 
     @NotNull
@@ -45,15 +40,20 @@ public class Task extends CalendarPrimitive {
         return res;
     }
 
-    public void setPriority(int priority) {
-        this.priority = priority;
+    public long getDeadlineTimeInSecond() {
+        return (deadlineTime.getTimeInMillis()/1000);
+    }
+
+    public String getStringDuration() {
+        String res = "";
+        res += String.valueOf(duration.get(Calendar.HOUR));
+        res += "hours ";
+        res += String.valueOf(duration.get(Calendar.MINUTE));
+        res += "minutes";
+        return res;
     }
 
     public int getPriority() {
         return priority;
-    }
-
-    public long getDeadlineTimeInSecond() {
-        return (deadlineTime.getTimeInMillis()/1000);
     }
 }
