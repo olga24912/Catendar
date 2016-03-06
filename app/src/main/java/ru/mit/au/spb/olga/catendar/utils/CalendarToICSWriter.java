@@ -102,11 +102,11 @@ public class CalendarToICSWriter {
         calendar.getComponents().add(e);
     }
 
-    private static String getWeekDateFromFileName(String filename) {
+    private static Long getWeekDateFromFileName(String filename) {
         //the filename should necessarily be created by getDefaultFileName()
         String[] parts = filename.split("/");
         String suffix = parts[parts.length - 1];
-        return suffix.substring(FILENAME_PREFIX.length(), suffix.length() - FILENAME_SUFFIX.length());
+        return Long.parseLong(suffix.substring(FILENAME_PREFIX.length(), suffix.length() - FILENAME_SUFFIX.length()));
     }
 
     private static class CloudFileAsyncSave extends AsyncTask<CloudFile, Void, Void> {
