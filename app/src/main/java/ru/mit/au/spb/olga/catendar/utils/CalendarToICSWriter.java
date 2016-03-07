@@ -21,6 +21,7 @@ import java.util.logging.Logger;
 
 import io.cloudboost.CloudException;
 import io.cloudboost.CloudFile;
+import io.cloudboost.CloudFileArrayCallback;
 import io.cloudboost.CloudFileCallback;
 import io.cloudboost.CloudObject;
 import io.cloudboost.CloudObjectArrayCallback;
@@ -157,12 +158,38 @@ public class CalendarToICSWriter {
     private static void saveFileIntoCloudObject(final String fileName) throws CloudException {
         final File file = new File(fileName);
 
-        CloudObject cloudObject = new CloudObject(EXPORT_TABLE_NAME);
+        final CloudObject cloudObject = new CloudObject(EXPORT_TABLE_NAME);
         CloudFile cloudFileObj = new CloudFile(file, "txt");
         cloudFileObj.setFileName(fileName);
-        cloudObject.set(FILE_COLUMN, cloudFileObj);
         cloudObject.set(WEEK_DATE_COLUMN, getWeekDateFromFileName(fileName));
 
+        saveCloudObjectWithFile(cloudObject, fileName);
+
+        //now we should fetch this file, get its URL and set it in the DB
+        //get file
+        //fetch file
+        //set url
+        try {
+            getFileByDate(getWeekDateFromFileName(fileName)).fetch(new CloudFileArrayCallback() {
+                @Override
+                public void done(CloudFile[] x, CloudException t) throws CloudException {
+                    if(t != null) {
+                        throw new RuntimeException(t.getMessage(), t);
+                    }
+                    if(x != null && x.length > 0) {
+                        cloudObject.set(FILE_URL_COLUMN, x[0].getFileUrl());
+                        saveCloudObjectWithFile(cloudObject, fileName);
+                    }
+                }
+            });
+        } catch (ExecutionException | InterruptedException e) {
+            throw new RuntimeException(e.getMessage(), e);
+        }
+    }
+
+    private static 
+
+    private static void saveCloudObjectWithFile (CloudObject cloudObject, final String fileName) throws CloudException {
         cloudObject.save(new CloudObjectCallback() {
             @Override
             public void done(CloudObject x, CloudException t) {
@@ -176,12 +203,6 @@ public class CalendarToICSWriter {
                 }
             }
         });
-
-        //now we should fetch this file, get its URL and set it in the DB
-        //get file
-        //fetch file
-        //set url
-        getFileByDate(getWeekDateFromFileName(fileName));
     }
 
     private static CloudFile getFileByDate(long date) throws ExecutionException, InterruptedException {
