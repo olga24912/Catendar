@@ -56,7 +56,7 @@ public class CalendarToICSWriter {
 
         if(events.size() == 0) {
             //TODO: implement more intelligent handling
-            System.out.println("The week connot be empty!");
+            logger.info("The week connot be empty!");
             return;
         }
 
@@ -82,8 +82,7 @@ public class CalendarToICSWriter {
         try {
             saveWeekFiletoCloud(fileName);
         } catch(CloudException e) {
-            /// правильнее писать в логи
-            System.err.println("Failed to save the file!");
+            logger.warning("Failed to save the file!");
             throw new RuntimeException(e.getMessage(), e);
         }
     }
