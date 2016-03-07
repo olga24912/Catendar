@@ -176,32 +176,32 @@ public class MainActivity extends ActionBarActivity implements SimpleGestureFilt
             case CREATE_TASK_ITEM:
                 intent = new Intent(MainActivity.this, CreateTaskActivity.class);
 
-                startActivityForResult(intent, 2);
+                startActivityForResult(intent, position);
                 break;
             case CREATE_EVENT_ITEM:
                 intent = new Intent(MainActivity.this, CreateEventActivity.class);
 
-                startActivityForResult(intent, 3);
+                startActivityForResult(intent, position);
                 break;
             case CREATE_WEEK_ITEM:
                 intent = new Intent(MainActivity.this, CreateWeekActivity.class);
 
-                startActivityForResult(intent, 4);
+                startActivityForResult(intent, position);
                 break;
             case CREATE_TEMPLATE_ITEM:
                 intent = new Intent(MainActivity.this, CreateTemplateActivity.class);
 
-                startActivityForResult(intent, 5);
+                startActivityForResult(intent, position);
                 break;
             case DELETE_TEMPLATE_ITEM:
                 intent = new Intent(MainActivity.this, DeleteTemplateActivity.class);
 
-                startActivityForResult(intent, 6);
+                startActivityForResult(intent, position);
                 break;
             case CREATE_PLAN_ITEM:
                 intent = new Intent(MainActivity.this, CreatePlanActivity.class);
 
-                startActivityForResult(intent, 7);
+                startActivityForResult(intent, position);
                 break;
             default:
                 break;

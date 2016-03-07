@@ -16,8 +16,8 @@
         <item>Create task</item>
         <item>Create event</item>
         <item>Create week</item>
-        <item>Create eventsGroup</item>
-        <item>Delete eventsGroup</item>
+        <item>Create events group</item>
+        <item>Delete events group</item>
         <item>Create plan</item>
     </string-array>
     <string name="menu">Menu</string>

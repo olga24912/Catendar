@@ -157,7 +157,7 @@ public class CalendarFragment extends Fragment {
         calendar.setLayoutParams(calendarParams);
 
         TableRow topRow = new TableRow(context);
-        TableRow.LayoutParams rowParams = new TableRow.LayoutParams(/*TableRow.LayoutParams.MATCH_PARENT*/100,
+        TableRow.LayoutParams rowParams = new TableRow.LayoutParams(100,
                 TableRow.LayoutParams.WRAP_CONTENT);
         topRow.setLayoutParams(rowParams);
         topRow.addView(new TextView(context), rowParams);
