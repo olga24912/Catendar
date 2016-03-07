@@ -48,8 +48,8 @@ public class ChangeEventActivity extends AppCompatActivity
 
     private int duration;
 
-    private int eventId;
-    private int parentId;
+    private long eventId;
+    private long parentId;
 
     public final static String EVENT_NAME = "ru.mit.au.spb.olga.catendar.eventName";
 
@@ -65,7 +65,7 @@ public class ChangeEventActivity extends AppCompatActivity
         DatabaseHelper mDatabaseHelper = new DatabaseHelper(this);
         mSQLiteDatabase = mDatabaseHelper.getWritableDatabase();
 
-        eventId = getIntent().getIntExtra("id", 0);
+        eventId = getIntent().getLongExtra("id", 0);
 
         Cursor cursor = mSQLiteDatabase.query(DatabaseHelper.DATABASE_TABLE_EVENT, new String[]{DatabaseHelper._ID,
                         DatabaseHelper.EVENT_START_DATE, DatabaseHelper.EVENT_END_DATE,

@@ -4,6 +4,7 @@ import android.os.AsyncTask;
 
 import net.fortuna.ical4j.data.CalendarOutputter;
 import net.fortuna.ical4j.model.Calendar;
+import net.fortuna.ical4j.model.DateTime;
 import net.fortuna.ical4j.model.component.VEvent;
 import net.fortuna.ical4j.model.property.CalScale;
 import net.fortuna.ical4j.model.property.ProdId;
@@ -31,14 +32,18 @@ import ru.mit.au.spb.olga.catendar.model.Week;
 
 public class CalendarToICSWriter {
 
+    static final Logger logger = Logger.getLogger("EXPORT_WEEK");
+
+
     @NotNull
     public static String getDefaultFileName(Week currentWeek) {
-        long time = currentWeek == null ? System.currentTimeMillis() : currentWeek.getTimeInSeconds();
+        long time = currentWeek == null ? System.currentTimeMillis() : currentWeek.getStartDateInSeconds();
+        /// почему не просто дата начала недели?
         return FILENAME_PREFIX + Long.toString(time) + FILENAME_SUFFIX;
     }
 
     @NotNull
-    public static String getFileName(String path, Week currentWeek) {
+    private static String getFileName(String path, Week currentWeek) {
         return path + '/' + getDefaultFileName(currentWeek);
     }
 
@@ -77,6 +82,7 @@ public class CalendarToICSWriter {
         try {
             saveWeekFiletoCloud(fileName);
         } catch(CloudException e) {
+            /// правильнее писать в логи
             System.err.println("Failed to save the file!");
             throw new RuntimeException(e.getMessage(), e);
         }
@@ -96,11 +102,13 @@ public class CalendarToICSWriter {
     }
 
     private static void addEvent (Event event, Calendar calendar) {
-        VEvent e = new VEvent(new net.fortuna.ical4j.model.Date(event.getStartDate().getTime()),
-                new net.fortuna.ical4j.model.Date(event.getEndDate().getTime()),
+        VEvent e = new VEvent(new DateTime(event.getStartDate().getTime()),
+                new DateTime(event.getEndDate().getTime()),
                 event.getText());
         UidGenerator uidGen;
+        /// что значит XXX? :) имелось ввиду что-то типа TODO?
         //XXX: hostInfo
+        /// всегда 1? :)
         uidGen = new UidGenerator(null, "1");
         e.getProperties().add(uidGen.generateUid());
         calendar.getComponents().add(e);
@@ -130,12 +138,12 @@ public class CalendarToICSWriter {
     private static final CloudFileCallback cloudFileCallback = new CloudFileCallback() {
 
         @Override
-        public void done(CloudFile x, CloudException e) {
+        public void done(CloudFile file, CloudException e) {
             if (e != null) {
                 throw new RuntimeException(e.getMessage(), e);
-            } else if (x != null) {
+            } else if (file != null) {
                 try {
-                    saveFileToCloudObject(x);
+                    saveFileToCloudObject(file);
                 } catch (CloudException | ExecutionException | InterruptedException e1) {
                     throw new RuntimeException(e1.getMessage(), e1);
                 }
@@ -148,13 +156,12 @@ public class CalendarToICSWriter {
         object.set(FILE_COLUMN, file);
         object.save(new CloudObjectCallback() {
             @Override
-            public void done(CloudObject x, CloudException t) {
-                if (x != null) {
-                    Logger logger = Logger.getLogger("SAVE_FILE");
+            public void done(CloudObject cloudObject, CloudException e) {
+                if (cloudObject != null) {
                     logger.info("File information was successfully saved to the cloud");
                 }
-                if (t != null) {
-                    throw new RuntimeException(t.getMessage(), t);
+                if (e != null) {
+                    throw new RuntimeException(e.getMessage(), e);
                 }
             }
         });
@@ -173,17 +180,17 @@ public class CalendarToICSWriter {
                 try {
                     query.find(new CloudObjectArrayCallback(){
                         @Override
-                        public void done(CloudObject[] x, CloudException t) throws CloudException {
-                            if(x != null) {
-                                if(x.length > 0) {
-                                    res[0] = x[0];
+                        public void done(CloudObject[] cloudObjects, CloudException e) throws CloudException {
+                            if(cloudObjects != null) {
+                                if(cloudObjects.length > 0) {
+                                    res[0] = cloudObjects[0];
                                 } else {
                                     res[0] = new CloudObject(EXPORT_TABLE_NAME);
                                     initCloudObject(res[0], file);
                                 }
                                 return;
                             }
-                            throw new RuntimeException(t.getMessage(), t);
+                            throw new RuntimeException(e.getMessage(), e);
                         }
                     });
                 } catch (CloudException e) {

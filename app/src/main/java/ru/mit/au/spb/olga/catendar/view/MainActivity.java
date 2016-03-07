@@ -27,8 +27,18 @@ import ru.mit.au.spb.olga.catendar.view.template.CreateTemplateActivity;
 import ru.mit.au.spb.olga.catendar.view.template.CreateWeekActivity;
 import ru.mit.au.spb.olga.catendar.view.template.DeleteTemplateActivity;
 
-
+/// ActionBarActivity deprecated
 public class MainActivity extends ActionBarActivity implements SimpleGestureFilter.SimpleGestureListener{
+    private static final int ITEM_COUNT = 8;
+    private static final int CALENDAR_ITEM = 0;
+    private static final int TASK_LIST_ITEM = 1;
+    private static final int CREATE_TASK_ITEM = 2;
+    private static final int CREATE_EVENT_ITEM = 3;
+    private static final int CREATE_WEEK_ITEM = 4;
+    private static final int CREATE_TEMPLATE_ITEM = 5;
+    private static final int DELETE_TEMPLATE_ITEM = 6;
+    private static final int CREATE_PLAN_ITEM = 7;
+
     private SimpleGestureFilter detector;
 
     private int currentAdditionToWeek = 0;
@@ -36,11 +46,8 @@ public class MainActivity extends ActionBarActivity implements SimpleGestureFilt
     private DrawerLayout myDrawerLayout;
     private ListView myDrawerList;
     private ActionBarDrawerToggle myDrawerToggle;
-    private static final String APP_LOG = "CATENDAR_MAIN";
 
-    // navigation drawer title
     private CharSequence myDrawerTitle;
-    // used to store app title
     private CharSequence myTitle;
 
     private String[] viewsNames;
@@ -56,7 +63,6 @@ public class MainActivity extends ActionBarActivity implements SimpleGestureFilt
         myTitle =  getTitle();
         myDrawerTitle = getResources().getString(R.string.menu);
 
-        // load slide menu items
         viewsNames = getResources().getStringArray(R.array.views_array);
         myDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
         myDrawerList = (ListView) findViewById(R.id.left_drawer);
@@ -64,7 +70,6 @@ public class MainActivity extends ActionBarActivity implements SimpleGestureFilt
         myDrawerList.setAdapter(new ArrayAdapter<>(this,
                 R.layout.drawer_list_item, viewsNames));
 
-        // enabling action bar app icon and behaving it as toggle button
         android.support.v7.app.ActionBar actionBar = getSupportActionBar();
         if (actionBar != null) {
             actionBar.setDisplayHomeAsUpEnabled(true);
@@ -78,7 +83,7 @@ public class MainActivity extends ActionBarActivity implements SimpleGestureFilt
                 if (currentActionBar != null) {
                     setTitle(myTitle);
                 }
-                // calling onPrepareOptionsMenu() to show action bar icons
+
                 invalidateOptionsMenu();
             }
 
@@ -93,7 +98,6 @@ public class MainActivity extends ActionBarActivity implements SimpleGestureFilt
         myDrawerLayout.setDrawerListener(myDrawerToggle);
 
         if (savedInstanceState == null) {
-            // on first time display view for first nav item
             displayView(0);
         }
 
@@ -109,10 +113,10 @@ public class MainActivity extends ActionBarActivity implements SimpleGestureFilt
 
     @Override
     public boolean dispatchTouchEvent(MotionEvent me){
-        // Call onTouchEvent of SimpleGestureFilter class
         this.detector.onTouchEvent(me);
         return super.dispatchTouchEvent(me);
     }
+
     @Override
     public void onSwipe(int direction) {
         if (currentPosition != 0) {
@@ -149,58 +153,52 @@ public class MainActivity extends ActionBarActivity implements SimpleGestureFilt
         public void onItemClick(
                 AdapterView<?> parent, View view, int position, long id
         ) {
-            // display view for selected nav drawer item
             displayView(position);
         }
     }
 
     private void displayView(int position) {
-        // update the main content by replacing fragments
         Fragment fragment = null;
         Intent intent;
+        /// мне страшно от этих захардкоженых цифр, константы сделили бы этот код на порядок читабельным и сопровождаемым
+        if (position >= 0 && position < ITEM_COUNT) {
+            currentPosition = position;
+        }
+        currentPosition = position;
         switch (position) {
-            case 0:
-                currentPosition = 0;
+            case CALENDAR_ITEM:
                 currentAdditionToWeek = 0;
                 fragment = new CalendarFragment();
                 break;
-            case 1:
-                currentPosition = 1;
+            case TASK_LIST_ITEM:
                 fragment = new TaskListFragment();
                 break;
-            case 2:
-                currentPosition = 2;
-
+            case CREATE_TASK_ITEM:
                 intent = new Intent(MainActivity.this, CreateTaskActivity.class);
 
                 startActivityForResult(intent, 2);
                 break;
-            case 3:
-                currentPosition = 3;
+            case CREATE_EVENT_ITEM:
                 intent = new Intent(MainActivity.this, CreateEventActivity.class);
 
                 startActivityForResult(intent, 3);
                 break;
-            case 4:
-                currentPosition = 4;
+            case CREATE_WEEK_ITEM:
                 intent = new Intent(MainActivity.this, CreateWeekActivity.class);
 
                 startActivityForResult(intent, 4);
                 break;
-            case 5:
-                currentPosition = 5;
+            case CREATE_TEMPLATE_ITEM:
                 intent = new Intent(MainActivity.this, CreateTemplateActivity.class);
 
                 startActivityForResult(intent, 5);
                 break;
-            case 6:
-                currentPosition = 6;
+            case DELETE_TEMPLATE_ITEM:
                 intent = new Intent(MainActivity.this, DeleteTemplateActivity.class);
 
                 startActivityForResult(intent, 6);
                 break;
-            case 7:
-                currentPosition = 7;
+            case CREATE_PLAN_ITEM:
                 intent = new Intent(MainActivity.this, CreatePlanActivity.class);
 
                 startActivityForResult(intent, 7);
@@ -212,7 +210,6 @@ public class MainActivity extends ActionBarActivity implements SimpleGestureFilt
             getSupportFragmentManager().beginTransaction().replace(R.id.content_frame, fragment).commit();
         }
 
-        // update selected item and title, then close the drawer
         myDrawerList.setItemChecked(position, true);
         myDrawerList.setSelection(position);
         setTitle(viewsNames[position]);
@@ -237,11 +234,9 @@ public class MainActivity extends ActionBarActivity implements SimpleGestureFilt
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // toggle nav drawer on selecting action bar app icon/title
         if (myDrawerToggle.onOptionsItemSelected(item)) {
             return true;
         }
-        // Handle action bar actions click
         if (currentPosition == 0) {
             switch(item.getItemId()) {
                 case R.id.export:
@@ -270,14 +265,8 @@ public class MainActivity extends ActionBarActivity implements SimpleGestureFilt
         }
     }
 
-    /**
-     * Called when invalidateOptionsMenu() is triggered
-     */
     @Override
     public boolean onPrepareOptionsMenu(Menu menu) {
-        // if navigation drawer is opened, hide the action items
-        //boolean drawerOpen = myDrawerLayout.isDrawerOpen(myDrawerList);
-        //menu.findItem(R.id.action_settings).setVisible(!drawerOpen);
         return super.onPrepareOptionsMenu(menu);
     }
 
@@ -290,21 +279,15 @@ public class MainActivity extends ActionBarActivity implements SimpleGestureFilt
         }
     }
 
-    /**
-     * When using the ActionBarDrawerToggle, you must call it during
-     * onPostCreate() and onConfigurationChanged()...
-     */
     @Override
     protected void onPostCreate(Bundle savedInstanceState) {
         super.onPostCreate(savedInstanceState);
-        // Sync the toggle state after onRestoreInstanceState has occurred.
         myDrawerToggle.syncState();
     }
 
     @Override
     public void onConfigurationChanged(Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
-        // Pass any configuration change to the drawer toggls
         myDrawerToggle.onConfigurationChanged(newConfig);
     }
 

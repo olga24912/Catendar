@@ -59,7 +59,7 @@ public class DataBaseUtils {
         cursorTemplateAndWeek.close();
 
         for (int i = 0; i < templatesInWeek.size(); i++) {
-            resultingWeek.addTemplate(getTemplateFromDataBase(templatesInWeek.get(i), mSQLiteDatabase));
+            resultingWeek.addEventsGroup(getTemplateFromDataBase(templatesInWeek.get(i), mSQLiteDatabase));
         }
 
         Cursor cursorEvent = mSQLiteDatabase.query(DatabaseHelper.DATABASE_TABLE_EVENT, new String[]{DatabaseHelper._ID,
@@ -74,15 +74,15 @@ public class DataBaseUtils {
             currentEvent.setTimeInMillis(msTime*1000);
             Week weekForEvent = new Week(currentEvent);
 
-            long weekTimeForEvent = weekForEvent.getTimeInSeconds();
+            long weekTimeForEvent = weekForEvent.getStartDateInSeconds();
 
-            if (weekTimeForEvent == resultingWeek.getTimeInSeconds()) {
+            if (weekTimeForEvent == resultingWeek.getStartDateInSeconds()) {
                 Event newEvent = new Event();
                 String name = cursorEvent.getString(cursorEvent.getColumnIndex(DatabaseHelper.EVENT_NAME));
                 newEvent.setText(name);
 
                 int startTime = cursorEvent.getInt(cursorEvent.getColumnIndex(DatabaseHelper.EVENT_START_DATE));
-                newEvent.setStartDate(startTime);
+                newEvent.setStartDateInSeconds(startTime);
 
                 int endTime = cursorEvent.getInt(cursorEvent.getColumnIndex(DatabaseHelper.EVENT_END_DATE));
                 newEvent.setDuration(endTime - startTime);
@@ -131,7 +131,7 @@ public class DataBaseUtils {
                 newEvent.setText(name);
 
                 int startTime = cursorEvent.getInt(cursorEvent.getColumnIndex(DatabaseHelper.EVENT_START_DATE));
-                newEvent.setStartDate(startTime);
+                newEvent.setStartDateInSeconds(startTime);
 
                 int endTime = cursorEvent.getInt(cursorEvent.getColumnIndex(DatabaseHelper.EVENT_END_DATE));
                 newEvent.setDuration(endTime - startTime);

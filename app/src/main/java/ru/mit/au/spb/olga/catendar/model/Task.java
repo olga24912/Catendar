@@ -1,7 +1,5 @@
 package ru.mit.au.spb.olga.catendar.model;
 
-import android.support.annotation.NonNull;
-
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Calendar;
@@ -12,11 +10,11 @@ public class Task extends CalendarPrimitive {
     private int priority;
     private GregorianCalendar deadlineTime;
 
-    public void changeIsDone(@NotNull Boolean isDone) {
+    public void setIsDone(@NotNull Boolean isDone) {
         this.isDone = isDone;
     }
 
-    public void setDeadlineTime(@NonNull GregorianCalendar deadlineTime) {
+    public void setDeadlineTime(@NotNull GregorianCalendar deadlineTime) {
         this.deadlineTime = deadlineTime;
     }
 
@@ -25,7 +23,7 @@ public class Task extends CalendarPrimitive {
     }
 
     @NotNull
-    public Boolean getIsDone() {
+    public Boolean IsDone() {
         return isDone;
     }
 
@@ -40,7 +38,7 @@ public class Task extends CalendarPrimitive {
         return res;
     }
 
-    public long getDeadlineTimeInSecond() {
+    public long getDeadlineTimeInSeconds() {
         return (deadlineTime.getTimeInMillis()/1000);
     }
 

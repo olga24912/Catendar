@@ -4,18 +4,12 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.GregorianCalendar;
 
-
 public abstract class CalendarPrimitive {
-    @NotNull
-    protected String text = "";
-    @NotNull
-    protected String comment = "";
-    @NotNull
-    protected GregorianCalendar startDate = new GregorianCalendar();
-    @NotNull
-    protected GregorianCalendar duration = new GregorianCalendar();
-    @NotNull
-    protected Long id = -1L;
+    @NotNull protected String text = "";
+    @NotNull protected String comment = "";
+    @NotNull protected GregorianCalendar startDate = new GregorianCalendar();
+    @NotNull protected GregorianCalendar duration = new GregorianCalendar();
+    @NotNull protected Long id = -1L;
 
     public void setId(@NotNull Long newId) {
         id = newId;
@@ -42,7 +36,7 @@ public abstract class CalendarPrimitive {
         this.startDate = startDate;
     }
 
-    public void setStartDate(int seconds) {
+    public void setStartDateInSeconds(int seconds) {
         startDate = new GregorianCalendar();
         startDate.setTimeInMillis(seconds * 1000L);
     }

@@ -46,9 +46,9 @@ public class TaskListFragment extends Fragment implements CompoundButton.OnCheck
     private class cmpDeadline implements Comparator<Task> {
         @Override
         public int compare(Task lhs, Task rhs) {
-            if (lhs.getDeadlineTimeInSecond() - rhs.getDeadlineTimeInSecond() < 0) {
+            if (lhs.getDeadlineTimeInSeconds() - rhs.getDeadlineTimeInSeconds() < 0) {
                 return -1;
-            } else if (lhs.getDeadlineTimeInSecond() - rhs.getDeadlineTimeInSecond() == 0) {
+            } else if (lhs.getDeadlineTimeInSeconds() - rhs.getDeadlineTimeInSeconds() == 0) {
                 return 0;
             } else {
                 return 1;
@@ -257,10 +257,10 @@ public class TaskListFragment extends Fragment implements CompoundButton.OnCheck
 
             currentTask.setText(cursor.getString(cursor.getColumnIndex(DatabaseHelper.TASK_NAME_COLUMN)));
             currentTask.setComment(cursor.getString(cursor.getColumnIndex(DatabaseHelper.TASK_COMMENT)));
-            currentTask.changeIsDone(cursor.getInt(cursor.getColumnIndex(DatabaseHelper.TASK_IS_DONE)) == 1);
+            currentTask.setIsDone(cursor.getInt(cursor.getColumnIndex(DatabaseHelper.TASK_IS_DONE)) == 1);
             currentTask.setId(cursor.getLong(cursor.getColumnIndex(DatabaseHelper._ID)));
 
-            if (currentTask.getIsDone() && !showAll) {
+            if (currentTask.IsDone() && !showAll) {
                 continue;
             }
 

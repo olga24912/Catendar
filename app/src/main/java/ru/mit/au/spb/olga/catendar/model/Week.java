@@ -9,26 +9,12 @@ import java.util.Calendar;
 import java.util.GregorianCalendar;
 
 public class Week {
-    @NotNull
-    private transient GregorianCalendar startDate;
-    @NotNull
-    private ArrayList<EventsGroup> eventsGroups;
-
-    private static final int WEEK_START = Calendar.SUNDAY;
-    private final EventsGroup EVENTS_GROUP_FOR_SINGLE_EVENTS;
     public static final String SINGLE_EVENTS = "";
 
-    private static void toWeekStart(GregorianCalendar g) {
-        g.add(Calendar.DAY_OF_WEEK, WEEK_START - g.get(Calendar.DAY_OF_WEEK));
-        g.set(g.get(Calendar.YEAR), g.get(Calendar.MONTH), g.get(Calendar.DAY_OF_MONTH), 0, 0, 0);
-    }
-
-    @NotNull
-    private static GregorianCalendar formDate(@Nullable GregorianCalendar startDate) {
-        GregorianCalendar res = (startDate != null) ? startDate : new GregorianCalendar();
-        toWeekStart(res);
-        return res;
-    }
+    @NotNull private GregorianCalendar startDate;
+    @NotNull private ArrayList<EventsGroup> eventsGroups;
+    private static final int WEEK_START = Calendar.SUNDAY;
+    private final EventsGroup eventsGroupForSingleEvents;
 
     public Week() {
         this.startDate = new GregorianCalendar();
@@ -36,24 +22,36 @@ public class Week {
         this.eventsGroups = new ArrayList<>();
         eventsGroups.add(new EventsGroup(SINGLE_EVENTS));
 
-        EVENTS_GROUP_FOR_SINGLE_EVENTS = eventsGroups.get(0);
+        eventsGroupForSingleEvents = eventsGroups.get(0);
     }
 
     public Week (@NotNull GregorianCalendar startDate) {
-        this.startDate = formDate(startDate);
+        this.startDate = fromDate(startDate);
 
         this.eventsGroups = new ArrayList<>();
         eventsGroups.add(new EventsGroup(SINGLE_EVENTS));
 
-        EVENTS_GROUP_FOR_SINGLE_EVENTS = eventsGroups.get(0);
+        eventsGroupForSingleEvents = eventsGroups.get(0);
     }
 
-    public void addTemplate(@NotNull EventsGroup newEventsGroup) {
+    private static void toWeekStart(GregorianCalendar g) {
+        g.add(Calendar.DAY_OF_WEEK, WEEK_START - g.get(Calendar.DAY_OF_WEEK));
+        g.set(g.get(Calendar.YEAR), g.get(Calendar.MONTH), g.get(Calendar.DAY_OF_MONTH), 0, 0, 0);
+    }
+
+    @NotNull
+    private static GregorianCalendar fromDate(@Nullable GregorianCalendar startDate) {
+        GregorianCalendar res = (startDate != null) ? startDate : new GregorianCalendar();
+        toWeekStart(res);
+        return res;
+    }
+
+    public void addEventsGroup(@NotNull EventsGroup newEventsGroup) {
         eventsGroups.add(newEventsGroup);
     }
 
     public void addEvent(@NotNull Event newEvent) {
-        EVENTS_GROUP_FOR_SINGLE_EVENTS.addEvent(newEvent);
+        eventsGroupForSingleEvents.addEvent(newEvent);
     }
 
     @NotNull
@@ -61,7 +59,7 @@ public class Week {
         return startDate;
     }
 
-    public long getTimeInSeconds() {
+    public long getStartDateInSeconds() {
         return this.startDate.getTimeInMillis()/1000;
     }
 

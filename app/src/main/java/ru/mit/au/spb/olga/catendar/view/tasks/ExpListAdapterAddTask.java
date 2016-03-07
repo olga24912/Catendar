@@ -72,7 +72,7 @@ public class ExpListAdapterAddTask extends BaseExpandableListAdapter {
         TextView textGroup = (TextView) convertView.findViewById(R.id.textGroup);
         textGroup.setText(mGroups.get(groupPosition).getText());
 
-        if (mGroups.get(groupPosition).getIsDone()) {
+        if (mGroups.get(groupPosition).IsDone()) {
             textGroup.setBackgroundColor(0xffc5e384);
         }
 
