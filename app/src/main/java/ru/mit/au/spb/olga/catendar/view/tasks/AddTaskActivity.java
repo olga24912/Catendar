@@ -75,7 +75,7 @@ public class AddTaskActivity extends AppCompatActivity {
 
             currentTask.setText(cursor.getString(cursor.getColumnIndex(DatabaseHelper.TASK_NAME_COLUMN)));
             currentTask.setComment(cursor.getString(cursor.getColumnIndex(DatabaseHelper.TASK_COMMENT)));
-            currentTask.changeIsDone(cursor.getInt(cursor.getColumnIndex(DatabaseHelper.TASK_IS_DONE)) == 1);
+            currentTask.setIsDone(cursor.getInt(cursor.getColumnIndex(DatabaseHelper.TASK_IS_DONE)) == 1);
             currentTask.setId(cursor.getLong(cursor.getColumnIndex(DatabaseHelper._ID)));
 
             GregorianCalendar curDate = new GregorianCalendar();

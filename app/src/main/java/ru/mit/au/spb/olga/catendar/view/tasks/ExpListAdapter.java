@@ -82,7 +82,7 @@ public class ExpListAdapter extends BaseExpandableListAdapter {
         TextView textGroup = (TextView) convertView.findViewById(R.id.textGroup);
         textGroup.setText(mGroups.get(groupPosition).getText());
 
-        if (mGroups.get(groupPosition).getIsDone()) {
+        if (mGroups.get(groupPosition).IsDone()) {
             textGroup.setBackgroundColor(0xffc5e384);
         }
 
@@ -145,9 +145,9 @@ public class ExpListAdapter extends BaseExpandableListAdapter {
                 cv.put(DatabaseHelper.TASK_NAME_COLUMN, currentTask.getText());
                 cv.put(DatabaseHelper.TASK_COMMENT, currentTask.getComment());
                 cv.put(DatabaseHelper.TASK_START_TIME, currentTask.getStartDateInSeconds());
-                cv.put(DatabaseHelper.TASK_DEADLINE, currentTask.getDeadlineTimeInSecond());
+                cv.put(DatabaseHelper.TASK_DEADLINE, currentTask.getDeadlineTimeInSeconds());
                 cv.put(DatabaseHelper.TASK_DURATION, currentTask.getDurationTimeInSeconds());
-                cv.put(DatabaseHelper.TASK_IS_DONE, !currentTask.getIsDone());
+                cv.put(DatabaseHelper.TASK_IS_DONE, !currentTask.IsDone());
                 cv.put(DatabaseHelper.TASK_PRIORITY, currentTask.getPriority());
 
                 mSQLiteDatabase.update(DatabaseHelper.DATABASE_TABLE_TASK, cv, DatabaseHelper._ID + " = " + dataBaseId, null);
