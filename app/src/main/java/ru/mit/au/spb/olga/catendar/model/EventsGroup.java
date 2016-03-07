@@ -12,10 +12,10 @@ public class EventsGroup {
     @NotNull
     private String name;
 
+    /// почему "new"?
     public EventsGroup(@NonNull String newName) {
         name = newName;
     }
-
     public void addEvent(Event newEvent) {
         events.add(newEvent);
     }

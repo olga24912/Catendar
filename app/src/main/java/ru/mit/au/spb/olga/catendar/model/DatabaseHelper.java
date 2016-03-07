@@ -119,6 +119,7 @@ public class DatabaseHelper extends SQLiteOpenHelper implements BaseColumns {
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
+        /// вроде DATABASE_VERSION = 1, зачем код для миграции?
         if (oldVersion == 1 && newVersion == 2) {
             db.execSQL("DROP TABLE IF IT EXISTS " + DATABASE_TABLE_TEMPLATE + ";");
             db.execSQL("DROP TABLE IF IT EXISTS " + DATABASE_TABLE_EVENT + ";");

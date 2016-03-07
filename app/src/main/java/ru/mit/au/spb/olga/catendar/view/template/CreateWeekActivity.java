@@ -193,7 +193,7 @@ public class CreateWeekActivity extends AppCompatActivity {
         GregorianCalendar gc = new GregorianCalendar(year, month, day);
 
         nw = new Week(gc);
-        long sTime = nw.getTimeInSeconds();
+        long sTime = nw.getStartDateInSeconds();
 
         if (findIdWithThisTime(sTime) == null) {
             ContentValues newValues = new ContentValues();
@@ -249,8 +249,8 @@ public class CreateWeekActivity extends AppCompatActivity {
                 GregorianCalendar endGC = new GregorianCalendar();
                 endGC.setTimeInMillis(endTime * 1000);
 
-                startTime = nw.getTimeInSeconds() + startTime - startOfLife.getTimeInMillis()/1000;
-                endTime = nw.getTimeInSeconds() + endTime - startOfLife.getTimeInMillis()/1000;
+                startTime = nw.getStartDateInSeconds() + startTime - startOfLife.getTimeInMillis()/1000;
+                endTime = nw.getStartDateInSeconds() + endTime - startOfLife.getTimeInMillis()/1000;
 
                 ContentValues tValues = new ContentValues();
 

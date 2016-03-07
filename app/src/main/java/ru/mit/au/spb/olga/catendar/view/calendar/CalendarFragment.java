@@ -78,7 +78,7 @@ public class CalendarFragment extends Fragment {
         mSQLiteDatabase = mDatabaseHelper.getWritableDatabase();
 
         Week tmpWeek = new Week(currentDate);
-        currentWeek = DataBaseUtils.getWeekFromDataBaseByDate(tmpWeek.getTimeInSeconds(),
+        currentWeek = DataBaseUtils.getWeekFromDataBaseByDate(tmpWeek.getStartDateInSeconds(),
                 mSQLiteDatabase);
 
         View result = setCalendarView();
@@ -241,7 +241,7 @@ public class CalendarFragment extends Fragment {
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        currentWeek = DataBaseUtils.getWeekFromDataBaseByDate(currentWeek.getTimeInSeconds(),
+        currentWeek = DataBaseUtils.getWeekFromDataBaseByDate(currentWeek.getStartDateInSeconds(),
                 mSQLiteDatabase);
         displaySampleTemplate(currentWeek);
 

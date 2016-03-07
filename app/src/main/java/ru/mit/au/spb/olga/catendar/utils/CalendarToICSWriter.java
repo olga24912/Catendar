@@ -38,12 +38,15 @@ public class CalendarToICSWriter {
         calendar.getProperties().add(CalScale.GREGORIAN);
     }
 
-    private static void addEvent (Event event, Calendar calendar) {
+    private static void addEvent(Event event, Calendar calendar) {
+        /// специально используете полное имя net.fortuna.ical4j.model.Date?
         VEvent e = new VEvent(new net.fortuna.ical4j.model.Date(event.getStartDate().getTime()),
                 new net.fortuna.ical4j.model.Date(event.getEndDate().getTime()),
                 event.getText());
         UidGenerator uidGen;
+        /// что значит XXX? :) имелось ввиду что-то типа TODO?
         //XXX: hostInfo
+        /// всегда 1? :)
         uidGen = new UidGenerator(null, "1");
         e.getProperties().add(uidGen.generateUid());
         calendar.getComponents().add(e);
@@ -51,20 +54,23 @@ public class CalendarToICSWriter {
 
     @NotNull
     public static String getDefaultFileName(Week currentWeek) {
-        long time = currentWeek == null ? System.currentTimeMillis() : currentWeek.getTimeInSeconds();
+        long time = currentWeek == null ? System.currentTimeMillis() : currentWeek.getStartDateInSeconds();
+        /// почему не просто дата начала недели?
         return "calendar" + Long.toString(time) + ".ics";
     }
 
     @NotNull
+    /// private
     public static String getFileName(String path, Week currentWeek) {
         return path + getDefaultFileName(currentWeek);
     }
 
+    ///typo: to -> To
     private static void saveWeekFiletoCloud(String fileName, final Week currentWeek) throws CloudException{
         File file = new File(fileName);
         final CloudFile cloudFileObj;
         final CloudObject cloudObject = new CloudObject(EXPORT_TABLE);
-        final long weekStartTime = currentWeek.getTimeInSeconds();
+        final long weekStartTime = currentWeek.getStartDateInSeconds();
 
 //TODO: check if the file for this week was saved before
 //        CloudQuery cloudQuery = new CloudQuery(EXPORT_TABLE);
@@ -93,8 +99,10 @@ public class CalendarToICSWriter {
                         cloudObject.set(WEEK_DATE_COLUMN, weekStartTime);
                         cloudObject.save(new CloudObjectCallback() {
                             @Override
+                            /// x, t? я бы переименовал
                             public void done(CloudObject x, CloudException t) {
                                 if (x != null) {
+                                    /// обычно логгер выносят в статическое поле
                                     Logger logger = Logger.getLogger("SAVE_FILE");
                                     logger.info("File information was successfully saved to the cloud");
                                 }
@@ -146,6 +154,7 @@ public class CalendarToICSWriter {
         try {
             saveWeekFiletoCloud(fileName, currentWeek);
         } catch(CloudException e) {
+            /// правильнее писать в логи
             System.err.println("Failed to save the file!");
             throw new RuntimeException(e.getMessage(), e);
         }

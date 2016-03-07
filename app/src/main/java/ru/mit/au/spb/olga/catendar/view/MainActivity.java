@@ -27,7 +27,7 @@ import ru.mit.au.spb.olga.catendar.view.template.CreateTemplateActivity;
 import ru.mit.au.spb.olga.catendar.view.template.CreateWeekActivity;
 import ru.mit.au.spb.olga.catendar.view.template.DeleteTemplateActivity;
 
-
+/// ActionBarActivity deprecated
 public class MainActivity extends ActionBarActivity implements SimpleGestureFilter.SimpleGestureListener{
     private SimpleGestureFilter detector;
 
@@ -158,10 +158,11 @@ public class MainActivity extends ActionBarActivity implements SimpleGestureFilt
         // update the main content by replacing fragments
         Fragment fragment = null;
         Intent intent;
+        /// мне страшно от этих захардкоженых цифр, константы сделили бы этот код на порядок читабельным и сопровождаемым
+        /// кажется что можно вынести currentPosition = position;
         switch (position) {
             case 0:
-                currentPosition = 0;
-                currentAdditionToWeek = 0;
+                currentPosition = 0;                currentAdditionToWeek = 0;
                 fragment = new CalendarFragment();
                 break;
             case 1:
