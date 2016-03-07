@@ -4,20 +4,12 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.GregorianCalendar;
 
-/// честно говоря, название мне не очень нравится, но пока ничего в замен не предлогаю
 public abstract class CalendarPrimitive {
-    @NotNull
-    /// title? (это только рекомендация, то что есть тоже ок)
-    protected String text = "";
-    @NotNull
-    /// note? (это только рекомендация, то что есть тоже ок)
-    protected String comment = "";
-    @NotNull
-    protected GregorianCalendar startDate = new GregorianCalendar();
-    @NotNull
-    protected GregorianCalendar duration = new GregorianCalendar();
-    @NotNull
-    protected Long id = -1L;
+    @NotNull protected String text = "";
+    @NotNull protected String comment = "";
+    @NotNull protected GregorianCalendar startDate = new GregorianCalendar();
+    @NotNull protected GregorianCalendar duration = new GregorianCalendar();
+    @NotNull protected Long id = -1L;
 
     public void setId(@NotNull Long newId) {
         id = newId;
@@ -44,8 +36,7 @@ public abstract class CalendarPrimitive {
         this.startDate = startDate;
     }
 
-    /// не консистентно с getStartDateInSeconds
-    public void setStartDate(int seconds) {
+    public void setStartDateInSeconds(int seconds) {
         startDate = new GregorianCalendar();
         startDate.setTimeInMillis(seconds * 1000L);
     }

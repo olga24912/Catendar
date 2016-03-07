@@ -82,7 +82,7 @@ public class DataBaseUtils {
                 newEvent.setText(name);
 
                 int startTime = cursorEvent.getInt(cursorEvent.getColumnIndex(DatabaseHelper.EVENT_START_DATE));
-                newEvent.setStartDate(startTime);
+                newEvent.setStartDateInSeconds(startTime);
 
                 int endTime = cursorEvent.getInt(cursorEvent.getColumnIndex(DatabaseHelper.EVENT_END_DATE));
                 newEvent.setDuration(endTime - startTime);
@@ -131,7 +131,7 @@ public class DataBaseUtils {
                 newEvent.setText(name);
 
                 int startTime = cursorEvent.getInt(cursorEvent.getColumnIndex(DatabaseHelper.EVENT_START_DATE));
-                newEvent.setStartDate(startTime);
+                newEvent.setStartDateInSeconds(startTime);
 
                 int endTime = cursorEvent.getInt(cursorEvent.getColumnIndex(DatabaseHelper.EVENT_END_DATE));
                 newEvent.setDuration(endTime - startTime);
