@@ -7,6 +7,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ListView;
@@ -26,11 +27,55 @@ public class CreateTemplateActivity extends AppCompatActivity {
     private SQLiteDatabase mSQLiteDatabase;
 
     private ArrayList<Event> eventList = new ArrayList<>();
-    private ListView listOfEvent;
 
+    private ListView listOfEvent;
     private EditText templateName;
 
-    private int templateId = -1;
+    private long templateId = -1;
+    private Boolean deleteOnCancel = false;
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
+        setContentView(R.layout.activity_create_template);
+
+        templateId = getIntent().getLongExtra("id", -1);
+        listOfEvent = (ListView) findViewById(R.id.listViewInCreateTemplate);
+
+        DatabaseHelper mDatabaseHelper = new DatabaseHelper(this);
+        mSQLiteDatabase = mDatabaseHelper.getWritableDatabase();
+
+        templateName = (EditText) findViewById(R.id.editTemplate);
+
+        String newTemplate = "unknownTemplate179";
+        if (templateId == -1) {
+            deleteOnCancel = true;
+            ContentValues newValues = new ContentValues();
+            newValues.put(DatabaseHelper.TEMPLATE_NAME, newTemplate);
+
+            templateId = mSQLiteDatabase.insert(DatabaseHelper.DATABASE_TABLE_TEMPLATE, null, newValues);
+        } else {
+            Cursor cursor = mSQLiteDatabase.query(DatabaseHelper.DATABASE_TABLE_TEMPLATE, new String[]{
+                            DatabaseHelper._ID, DatabaseHelper.TEMPLATE_NAME,
+                    },
+                    null, null,
+                    null, null, null) ;
+
+
+            while (cursor.moveToNext()) {
+                int idTmp = cursor.getInt(cursor.getColumnIndex(DatabaseHelper._ID));
+                String name = cursor.getString(cursor.getColumnIndex(DatabaseHelper.TEMPLATE_NAME));
+
+                if (idTmp == templateId) {
+                    templateName.setText(name);
+                }
+            }
+            cursor.close();
+        }
+        synchronizedWithDataBase();
+        drawEventList();
+    }
 
     @NotNull
     public String getDayOfWeekAndTime(Event event) {
@@ -55,6 +100,18 @@ public class CreateTemplateActivity extends AppCompatActivity {
                 android.R.layout.simple_list_item_1, myEventInString);
 
         listOfEvent.setAdapter(adapter);
+
+        listOfEvent.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+            @Override
+            public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
+                long delId = eventList.get(position).getId();
+                mSQLiteDatabase.delete(DatabaseHelper.DATABASE_TABLE_EVENT, DatabaseHelper._ID + "=" + delId, null);
+
+                synchronizedWithDataBase();
+                drawEventList();
+                return true;
+            }
+        });
     }
 
 
@@ -84,54 +141,19 @@ public class CreateTemplateActivity extends AppCompatActivity {
                     .getColumnIndex(DatabaseHelper.EVENT_END_DATE)) -
                     cursor.getInt(cursor
                             .getColumnIndex(DatabaseHelper.EVENT_START_DATE)));
+
+            int id = cursor.getInt(cursor.getColumnIndex(DatabaseHelper._ID));
+            currentEvent.setId((long)id);
             eventList.add(currentEvent);
         }
 
         cursor.close();
     }
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-
-        setContentView(R.layout.activity_create_template);
-
-        listOfEvent = (ListView) findViewById(R.id.listViewInCreateTemplate);
-
-        DatabaseHelper mDatabaseHelper = new DatabaseHelper(this);
-        mSQLiteDatabase = mDatabaseHelper.getWritableDatabase();
-
-        templateName = (EditText) findViewById(R.id.editTemplate);
-
-        ContentValues newValues = new ContentValues();
-
-        String newTemplate = "unknownTemplate179";
-        newValues.put(DatabaseHelper.TEMPLATE_NAME, newTemplate);
-
-        mSQLiteDatabase.insert(DatabaseHelper.DATABASE_TABLE_TEMPLATE, null, newValues);
-
-        Cursor cursor = mSQLiteDatabase.query(DatabaseHelper.DATABASE_TABLE_TEMPLATE, new String[]{
-                        DatabaseHelper._ID, DatabaseHelper.TEMPLATE_NAME,
-                      },
-                null, null,
-                null, null, null) ;
-
-
-        while (cursor.moveToNext()) {
-            int idTmp = cursor.getInt(cursor.getColumnIndex(DatabaseHelper._ID));
-            String name = cursor.getString(cursor.getColumnIndex(DatabaseHelper.TEMPLATE_NAME));
-
-            if (name.equals(newTemplate)) {
-                templateId = idTmp;
-            }
-        }
-        synchronizedWithDataBase();
-        drawEventList();
-        cursor.close();
-    }
-
     public void onCancelClick(View view) {
-        mSQLiteDatabase.delete(DatabaseHelper.DATABASE_TABLE_TEMPLATE, DatabaseHelper._ID + "=" + templateId, null);
+        if (deleteOnCancel) {
+            mSQLiteDatabase.delete(DatabaseHelper.DATABASE_TABLE_TEMPLATE, DatabaseHelper._ID + "=" + templateId, null);
+        }
         setResult(RESULT_CANCELED);
         finish();
     }

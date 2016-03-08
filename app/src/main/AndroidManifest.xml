@@ -23,11 +23,11 @@
             android:label="@string/create_event_title" >
         </activity>
         <activity
-            android:name=".view.eventsGroup.CreateWeekActivity"
+            android:name=".view.template.CreateWeekActivity"
             android:label="Create week">
         </activity>
         <activity
-            android:name=".view.eventsGroup.CreateTemplateActivity"
+            android:name=".view.template.CreateTemplateActivity"
             android:label="Create eventsGroup">
         </activity>
         <activity
@@ -43,7 +43,7 @@
             android:label="Change event">
         </activity>
         <activity
-            android:name=".view.eventsGroup.DeleteTemplateActivity"
+            android:name=".view.template.DeleteTemplateActivity"
             android:label="Delete eventsGroup">
         </activity>
         <activity
@@ -53,6 +53,10 @@
         <activity
             android:name=".view.tasks.AddTaskActivity"
             android:label="Add task">
+        </activity>
+        <activity
+            android:name=".view.template.ChangeTemplateActivity"
+            android:label="Change template">
         </activity>
     </application>
 </manifest>

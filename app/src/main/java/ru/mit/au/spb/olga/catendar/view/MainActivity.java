@@ -23,13 +23,14 @@ import ru.mit.au.spb.olga.catendar.view.events.CreateEventActivity;
 import ru.mit.au.spb.olga.catendar.view.tasks.CreatePlanActivity;
 import ru.mit.au.spb.olga.catendar.view.tasks.CreateTaskActivity;
 import ru.mit.au.spb.olga.catendar.view.tasks.TaskListFragment;
+import ru.mit.au.spb.olga.catendar.view.template.ChangeTemplateActivity;
 import ru.mit.au.spb.olga.catendar.view.template.CreateTemplateActivity;
 import ru.mit.au.spb.olga.catendar.view.template.CreateWeekActivity;
 import ru.mit.au.spb.olga.catendar.view.template.DeleteTemplateActivity;
 
 /// ActionBarActivity deprecated
 public class MainActivity extends ActionBarActivity implements SimpleGestureFilter.SimpleGestureListener{
-    private static final int ITEM_COUNT = 8;
+    private static final int ITEM_COUNT = 9;
     private static final int CALENDAR_ITEM = 0;
     private static final int TASK_LIST_ITEM = 1;
     private static final int CREATE_TASK_ITEM = 2;
@@ -38,6 +39,7 @@ public class MainActivity extends ActionBarActivity implements SimpleGestureFilt
     private static final int CREATE_TEMPLATE_ITEM = 5;
     private static final int DELETE_TEMPLATE_ITEM = 6;
     private static final int CREATE_PLAN_ITEM = 7;
+    private static final int CHANGE_TEMPLATE_ITEM = 8;
 
     private SimpleGestureFilter detector;
 
@@ -176,33 +178,39 @@ public class MainActivity extends ActionBarActivity implements SimpleGestureFilt
             case CREATE_TASK_ITEM:
                 intent = new Intent(MainActivity.this, CreateTaskActivity.class);
 
-                startActivityForResult(intent, 2);
+                startActivityForResult(intent, position);
                 break;
             case CREATE_EVENT_ITEM:
                 intent = new Intent(MainActivity.this, CreateEventActivity.class);
 
-                startActivityForResult(intent, 3);
+                startActivityForResult(intent, position);
                 break;
             case CREATE_WEEK_ITEM:
                 intent = new Intent(MainActivity.this, CreateWeekActivity.class);
 
-                startActivityForResult(intent, 4);
+                startActivityForResult(intent, position);
                 break;
             case CREATE_TEMPLATE_ITEM:
                 intent = new Intent(MainActivity.this, CreateTemplateActivity.class);
 
-                startActivityForResult(intent, 5);
+                startActivityForResult(intent, position);
                 break;
             case DELETE_TEMPLATE_ITEM:
                 intent = new Intent(MainActivity.this, DeleteTemplateActivity.class);
 
-                startActivityForResult(intent, 6);
+                startActivityForResult(intent, position);
                 break;
             case CREATE_PLAN_ITEM:
                 intent = new Intent(MainActivity.this, CreatePlanActivity.class);
 
-                startActivityForResult(intent, 7);
+                startActivityForResult(intent, position);
                 break;
+            case CHANGE_TEMPLATE_ITEM:
+                intent = new Intent(MainActivity.this, ChangeTemplateActivity.class);
+
+                startActivityForResult(intent, position);
+                break;
+
             default:
                 break;
         }
