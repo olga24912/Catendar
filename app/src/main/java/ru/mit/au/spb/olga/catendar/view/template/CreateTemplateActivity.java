@@ -31,6 +31,7 @@ public class CreateTemplateActivity extends AppCompatActivity {
     private EditText templateName;
 
     private long templateId = -1;
+    private Boolean deleteOnCancel = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,31 +47,33 @@ public class CreateTemplateActivity extends AppCompatActivity {
 
         templateName = (EditText) findViewById(R.id.editTemplate);
 
-        ContentValues newValues = new ContentValues();
-
         String newTemplate = "unknownTemplate179";
-        newValues.put(DatabaseHelper.TEMPLATE_NAME, newTemplate);
+        if (templateId == -1) {
+            deleteOnCancel = true;
+            ContentValues newValues = new ContentValues();
+            newValues.put(DatabaseHelper.TEMPLATE_NAME, newTemplate);
 
-        mSQLiteDatabase.insert(DatabaseHelper.DATABASE_TABLE_TEMPLATE, null, newValues);
+            templateId = mSQLiteDatabase.insert(DatabaseHelper.DATABASE_TABLE_TEMPLATE, null, newValues);
+        } else {
+            Cursor cursor = mSQLiteDatabase.query(DatabaseHelper.DATABASE_TABLE_TEMPLATE, new String[]{
+                            DatabaseHelper._ID, DatabaseHelper.TEMPLATE_NAME,
+                    },
+                    null, null,
+                    null, null, null) ;
 
-        Cursor cursor = mSQLiteDatabase.query(DatabaseHelper.DATABASE_TABLE_TEMPLATE, new String[]{
-                        DatabaseHelper._ID, DatabaseHelper.TEMPLATE_NAME,
-                },
-                null, null,
-                null, null, null) ;
 
+            while (cursor.moveToNext()) {
+                int idTmp = cursor.getInt(cursor.getColumnIndex(DatabaseHelper._ID));
+                String name = cursor.getString(cursor.getColumnIndex(DatabaseHelper.TEMPLATE_NAME));
 
-        while (cursor.moveToNext()) {
-            int idTmp = cursor.getInt(cursor.getColumnIndex(DatabaseHelper._ID));
-            String name = cursor.getString(cursor.getColumnIndex(DatabaseHelper.TEMPLATE_NAME));
-
-            if (name.equals(newTemplate)) {
-                templateId = idTmp;
+                if (idTmp == templateId) {
+                    templateName.setText(name);
+                }
             }
+            cursor.close();
         }
         synchronizedWithDataBase();
         drawEventList();
-        cursor.close();
     }
 
     @NotNull
@@ -132,7 +135,9 @@ public class CreateTemplateActivity extends AppCompatActivity {
     }
 
     public void onCancelClick(View view) {
-        mSQLiteDatabase.delete(DatabaseHelper.DATABASE_TABLE_TEMPLATE, DatabaseHelper._ID + "=" + templateId, null);
+        if (deleteOnCancel) {
+            mSQLiteDatabase.delete(DatabaseHelper.DATABASE_TABLE_TEMPLATE, DatabaseHelper._ID + "=" + templateId, null);
+        }
         setResult(RESULT_CANCELED);
         finish();
     }

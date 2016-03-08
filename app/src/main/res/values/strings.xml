@@ -19,6 +19,7 @@
         <item>Create events group</item>
         <item>Delete events group</item>
         <item>Create plan</item>
+        <item>Change events group</item>
     </string-array>
     <string name="menu">Menu</string>
     <string name="first_screen">Calendar</string>

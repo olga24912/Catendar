@@ -54,5 +54,9 @@
             android:name=".view.tasks.AddTaskActivity"
             android:label="Add task">
         </activity>
+        <activity
+            android:name=".view.template.ChangeTemplateActivity"
+            android:label="Change template">
+        </activity>
     </application>
 </manifest>

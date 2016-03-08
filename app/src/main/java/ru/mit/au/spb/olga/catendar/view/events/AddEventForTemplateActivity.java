@@ -35,7 +35,7 @@ public class AddEventForTemplateActivity  extends AppCompatActivity
     private final static int month = 0;
     private final static int day[] = {4, 5, 6, 7, 8, 9, 10};
 
-    private int idTemplate;
+    private long idTemplate;
 
     private int DIALOG_TIME = 2;
     private int hour = 14;
@@ -53,7 +53,7 @@ public class AddEventForTemplateActivity  extends AppCompatActivity
 
         setContentView(R.layout.add_event_in_temlate);
 
-        idTemplate = getIntent().getIntExtra("id", 0);
+        idTemplate = getIntent().getLongExtra("id", 0);
 
         eventText = (EditText)findViewById(R.id.editEventTextForTemplate);
         tvInfoStartTime = (TextView)findViewById(R.id.setTimeTextViewInTemplate);
