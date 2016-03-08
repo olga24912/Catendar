@@ -7,6 +7,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ListView;
@@ -99,6 +100,18 @@ public class CreateTemplateActivity extends AppCompatActivity {
                 android.R.layout.simple_list_item_1, myEventInString);
 
         listOfEvent.setAdapter(adapter);
+
+        listOfEvent.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+            @Override
+            public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
+                long delId = eventList.get(position).getId();
+                mSQLiteDatabase.delete(DatabaseHelper.DATABASE_TABLE_EVENT, DatabaseHelper._ID + "=" + delId, null);
+
+                synchronizedWithDataBase();
+                drawEventList();
+                return true;
+            }
+        });
     }
 
 
@@ -128,6 +141,9 @@ public class CreateTemplateActivity extends AppCompatActivity {
                     .getColumnIndex(DatabaseHelper.EVENT_END_DATE)) -
                     cursor.getInt(cursor
                             .getColumnIndex(DatabaseHelper.EVENT_START_DATE)));
+
+            int id = cursor.getInt(cursor.getColumnIndex(DatabaseHelper._ID));
+            currentEvent.setId((long)id);
             eventList.add(currentEvent);
         }
 
