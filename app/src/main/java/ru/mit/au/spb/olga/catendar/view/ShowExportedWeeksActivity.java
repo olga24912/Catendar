@@ -8,6 +8,7 @@ import android.widget.EditText;
 
 import java.util.ArrayList;
 
+import io.cloudboost.CloudException;
 import ru.mit.au.spb.olga.catendar.R;
 import ru.mit.au.spb.olga.catendar.utils.CalendarToICSWriter;
 
@@ -20,15 +21,20 @@ public class ShowExportedWeeksActivity extends AppCompatActivity {
 
         EditText urlsList = (EditText) findViewById(R.id.urlList);
 
-        ArrayList<String> urls = CalendarToICSWriter.getUrlsFromCloud();
-        urlsList.setText(urls == null ? "null" : urls.toString());
-//        StringBuilder text = new StringBuilder("");
-//        for (int i = 0; i < urls.size(); i++) {
-//            text.append(urls.get(i));
-//            text.append("\n");
-//        }
-//
-//        urlsList.setText(text);
+        ArrayList<String> urls = new ArrayList<>();
+        try {
+            urls = CalendarToICSWriter.getUrlsFromCloud();
+        } catch (InterruptedException | CloudException e) {
+            new RuntimeException(e.getMessage(), e);
+        }
+//        urlsList.setText(urls == null ? "null" : urls.toString());
+        StringBuilder text = new StringBuilder("");
+        for (int i = 0; i < urls.size(); i++) {
+            text.append(urls.get(i));
+            text.append("\n");
+        }
+
+        urlsList.setText(text);
     }
 
     @Override

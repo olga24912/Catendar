@@ -123,7 +123,7 @@ public class CalendarToICSWriter {
                 throw new RuntimeException(e.getMessage(), e);
             } else if (file != null) {
                 try {
-                    //Now we can create CloudObject with corresponding data and file url.
+                    //Here we can create CloudObject with corresponding data and file url.
                     //It might already exist.
                     //In that case I want to find it and rewrite.
                     //Otherwise I want to create a new one and set all two columns as I need.
@@ -159,6 +159,7 @@ public class CalendarToICSWriter {
 
         final CloudObject[] res = new CloudObject[1];
         final Object SYNC_OBJ = new Object();
+        res[0] = (CloudObject)SYNC_OBJ;
 
         try {
             query.find(new CloudObjectArrayCallback(){
@@ -182,6 +183,7 @@ public class CalendarToICSWriter {
                         return;
                     }
                     logger.warning("Error while find query");
+                    res[0] = null;
                     throw new RuntimeException(e.getMessage(), e);
                 }
             });
@@ -199,13 +201,6 @@ public class CalendarToICSWriter {
 
         return res[0];
     }
-/*
-    private static void initCloudObject(CloudObject object, CloudFile file) throws CloudException {
-        object.set(FILE_URL_COLUMN, file.getFileUrl());
-        object.set(WEEK_DATE_COLUMN, getWeekDateFromFileName(file.getFileName()));
-    }
-*/
-
 
     private static final String EXPORT_TABLE_NAME = "ExportedWeeks";
     private static final String WEEK_DATE_COLUMN = "weekStartDate";
@@ -236,9 +231,42 @@ public class CalendarToICSWriter {
         return Long.parseLong(suffix.substring(FILENAME_PREFIX.length(), suffix.length() - FILENAME_SUFFIX.length()));
     }
 
-    public static ArrayList<String> getUrlsFromCloud () {
-        final CloudObject object = new CloudObject(EXPORT_TABLE_NAME);
-        Object res = object.get(FILE_URL_COLUMN);
-        return (ArrayList<String>) res;
+    public static ArrayList<String> getUrlsFromCloud () throws InterruptedException, CloudException {
+
+        final ArrayList<String> res = new ArrayList<>();
+
+        new AsyncTask<Void, Void, Void>() {
+            @Override
+            protected Void doInBackground(Void... params) {
+                CloudQuery q = new CloudQuery(EXPORT_TABLE_NAME);
+                try {
+                    q.find(new CloudObjectArrayCallback() {
+                        @Override
+                        public void done (CloudObject[]rows, CloudException e)throws CloudException {
+                            if (e != null) {
+                                logger.warning("Error while getting rows with URL's");
+                            } else if (rows != null) {
+                                for (CloudObject row : rows) {
+                                    if (row == null) {
+                                        continue;
+                                    }
+
+                                    Object url = row.get(FILE_URL_COLUMN);
+                                    if (url instanceof String) {
+                                        res.add((String) url);
+                                    }
+                                }
+                            }
+                        }
+                    });
+                } catch (CloudException e) {
+                    logger.warning("Error in background while getting rows with urls");
+                }
+                return null;
+            }
+        }.execute();
+
+        return res;
     }
+
 }
