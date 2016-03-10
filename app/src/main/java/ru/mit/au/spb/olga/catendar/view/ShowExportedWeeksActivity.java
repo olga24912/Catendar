@@ -4,7 +4,8 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.EditText;
+import android.widget.ArrayAdapter;
+import android.widget.ListView;
 
 import java.util.ArrayList;
 
@@ -19,22 +20,18 @@ public class ShowExportedWeeksActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_show_exported_weeks);
 
-        EditText urlsList = (EditText) findViewById(R.id.urlList);
-
-        ArrayList<String> urls = new ArrayList<>();
+        ArrayList<String> urls;
         try {
             urls = CalendarToICSWriter.getUrlsFromCloud();
         } catch (InterruptedException | CloudException e) {
-            new RuntimeException(e.getMessage(), e);
-        }
-//        urlsList.setText(urls == null ? "null" : urls.toString());
-        StringBuilder text = new StringBuilder("");
-        for (int i = 0; i < urls.size(); i++) {
-            text.append(urls.get(i));
-            text.append("\n");
+            throw new RuntimeException(e.getMessage(), e);
         }
 
-        urlsList.setText(text);
+        ArrayAdapter adapter =
+                new ArrayAdapter<>(this, R.layout.activity_show_exported_weeks, urls);
+
+        ListView urlsList = (ListView) findViewById(R.id.urlList);
+        urlsList.setAdapter(adapter);
     }
 
     @Override
