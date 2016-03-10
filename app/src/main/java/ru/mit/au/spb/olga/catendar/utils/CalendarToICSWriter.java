@@ -80,17 +80,136 @@ public class CalendarToICSWriter {
         }
 
         try {
-            saveWeekFiletoCloud(fileName);
+            saveWeekFileToCloud(fileName);
         } catch(CloudException e) {
             logger.warning("Failed to save the file!");
             throw new RuntimeException(e.getMessage(), e);
         }
     }
 
+    private static void saveWeekFileToCloud(String fileName) throws CloudException{
+        File file = new File(fileName);
+        final CloudFile cloudFileObj;
+
+        try {
+            cloudFileObj = new CloudFile(file, "txt");
+            CloudFileAsyncSave asyncSave = new CloudFileAsyncSave();
+            asyncSave.execute(cloudFileObj);
+        } catch (Exception e) {
+            throw new RuntimeException(e.getMessage(), e);
+        }
+    }
+
+    private static class CloudFileAsyncSave extends AsyncTask<CloudFile, Void, Void> {
+
+        @Override
+        protected Void doInBackground(CloudFile... params) {
+            CloudFile cloudFile = params[0];
+            try {
+                cloudFile.save(cloudFileCallback);
+            } catch (Exception e) {
+                throw new RuntimeException(e.getMessage(), e);
+            }
+            return null;
+        }
+    }
+
+    private static final CloudFileCallback cloudFileCallback = new CloudFileCallback() {
+
+        @Override
+        public void done(CloudFile file, CloudException e) {
+            if (e != null) {
+                logger.warning("In file callback (returned null): " + e.getMessage());
+                throw new RuntimeException(e.getMessage(), e);
+            } else if (file != null) {
+                try {
+                    //Now we can create CloudObject with corresponding data and file url.
+                    //It might already exist.
+                    //In that case I want to find it and rewrite.
+                    //Otherwise I want to create a new one and set all two columns as I need.
+
+                    saveFileToCloudObject(file);
+
+                } catch (CloudException | ExecutionException | InterruptedException e1) {
+                    logger.warning("In file callback: " + e1.getMessage());
+                    throw new RuntimeException(e1.getMessage(), e1);
+                }
+            }
+        }
+    };
+
+    private static void saveFileToCloudObject(CloudFile file) throws CloudException, ExecutionException, InterruptedException {
+        CloudObject object = getCloudObject(file);
+        object.save(new CloudObjectCallback() {
+            @Override
+            public void done(CloudObject cloudObject, CloudException e) {
+                if (cloudObject != null) {
+                    logger.info("File information was successfully saved to the cloud");
+                }
+                if (e != null) {
+                    throw new RuntimeException(e.getMessage(), e);
+                }
+            }
+        });
+    }
+
+    private static CloudObject getCloudObject(final CloudFile file) throws ExecutionException, InterruptedException {
+        final CloudQuery query = new CloudQuery(EXPORT_TABLE_NAME);
+        query.equalTo(WEEK_DATE_COLUMN, getWeekDateFromFileName(file.getFileName()));
+
+        final CloudObject[] res = new CloudObject[1];
+        final Object SYNC_OBJ = new Object();
+
+        try {
+            query.find(new CloudObjectArrayCallback(){
+                @Override
+                public void done(CloudObject[] cloudObjects, CloudException e) throws CloudException {
+                    if(cloudObjects != null) {
+                        if(cloudObjects.length > 0) {
+                            synchronized (SYNC_OBJ) {
+                                res[0] = cloudObjects[0];
+                                res[0].set(FILE_URL_COLUMN, file.getFileUrl());
+                                SYNC_OBJ.notify();
+                            }
+                        } else {
+                            synchronized (SYNC_OBJ) {
+                                res[0] = new CloudObject(EXPORT_TABLE_NAME);
+                                res[0].set(FILE_URL_COLUMN, file.getFileUrl());
+                                res[0].set(WEEK_DATE_COLUMN, getWeekDateFromFileName(file.getFileName()));
+                                SYNC_OBJ.notify();
+                            }
+                        }
+                        return;
+                    }
+                    logger.warning("Error while find query");
+                    throw new RuntimeException(e.getMessage(), e);
+                }
+            });
+        } catch (CloudException e) {
+            e.printStackTrace();
+        }
+
+        synchronized (SYNC_OBJ) {
+            while (res[0] == SYNC_OBJ) {
+                if (res[0] == SYNC_OBJ) {
+                    SYNC_OBJ.wait();
+                }
+            }
+        }
+
+        return res[0];
+    }
+/*
+    private static void initCloudObject(CloudObject object, CloudFile file) throws CloudException {
+        object.set(FILE_URL_COLUMN, file.getFileUrl());
+        object.set(WEEK_DATE_COLUMN, getWeekDateFromFileName(file.getFileName()));
+    }
+*/
+
+
     private static final String EXPORT_TABLE_NAME = "ExportedWeeks";
     private static final String WEEK_DATE_COLUMN = "weekStartDate";
     private static final String FILE_URL_COLUMN = "fileUrl";
-    private static final String FILE_COLUMN = "file";
     private static final String FILENAME_PREFIX = "calendar";
     private static final String FILENAME_SUFFIX = ".ics";
 
@@ -117,149 +236,9 @@ public class CalendarToICSWriter {
         return Long.parseLong(suffix.substring(FILENAME_PREFIX.length(), suffix.length() - FILENAME_SUFFIX.length()));
     }
 
-    private static class CloudFileAsyncSave extends AsyncTask<CloudFile, Void, Void> {
-
-        @Override
-        protected Void doInBackground(CloudFile... params) {
-            CloudFile cloudFile = params[0];
-            try {
-                cloudFile.save(cloudFileCallback);
-            } catch (Exception e) {
-                throw new RuntimeException(e.getMessage(), e);
-            }
-            return null;
-        }
-    }
-
-    private static final CloudFileCallback cloudFileCallback = new CloudFileCallback() {
-
-        @Override
-        public void done(CloudFile file, CloudException e) {
-            if (e != null) {
-                throw new RuntimeException(e.getMessage(), e);
-            } else if (file != null) {
-                try {
-                    saveFileToCloudObject(file);
-                } catch (CloudException | ExecutionException | InterruptedException e1) {
-                    throw new RuntimeException(e1.getMessage(), e1);
-                }
-            }
-        }
-    };
-
-    private static void saveFileToCloudObject(CloudFile file) throws CloudException, ExecutionException, InterruptedException {
-        CloudObject object = getCloudObject(file);
-        object.set(FILE_COLUMN, file);
-        object.save(new CloudObjectCallback() {
-            @Override
-            public void done(CloudObject cloudObject, CloudException e) {
-                if (cloudObject != null) {
-                    logger.info("File information was successfully saved to the cloud");
-                }
-                if (e != null) {
-                    throw new RuntimeException(e.getMessage(), e);
-                }
-            }
-        });
-    }
-
     public static ArrayList<String> getUrlsFromCloud () {
         final CloudObject object = new CloudObject(EXPORT_TABLE_NAME);
         Object res = object.get(FILE_URL_COLUMN);
         return (ArrayList<String>) res;
-    }
-
-    private static CloudObject getCloudObject(final CloudFile file) throws ExecutionException, InterruptedException {
-        final CloudQuery query = new CloudQuery(EXPORT_TABLE_NAME);
-        query.include(FILE_COLUMN); //this will include the file in CloudObjects
-        query.equalTo(WEEK_DATE_COLUMN, getWeekDateFromFileName(file.getFileName()));
-
-        final CloudObject[] res = new CloudObject[1];
-        final Object SYNC_OBJ = new Object();
-
-        try {
-            query.find(new CloudObjectArrayCallback(){
-                @Override
-                public void done(CloudObject[] cloudObjects, CloudException e) throws CloudException {
-                    if(cloudObjects != null) {
-                        if(cloudObjects.length > 0) {
-                            synchronized (SYNC_OBJ) {
-                                res[0] = cloudObjects[0];
-                                SYNC_OBJ.notify();
-                            }
-                        } else {
-                            synchronized (SYNC_OBJ) {
-                                res[0] = new CloudObject(EXPORT_TABLE_NAME);
-                                initCloudObject(res[0], file);
-                                SYNC_OBJ.notify();
-                            }
-                        }
-                        return;
-                    }
-                    logger.warning("Error while find query");
-                    throw new RuntimeException(e.getMessage(), e);
-                }
-            });
-        } catch (CloudException e) {
-            e.printStackTrace();
-        }
-
-        synchronized (SYNC_OBJ) {
-            while (res[0] == SYNC_OBJ) {
-                if (res[0] == SYNC_OBJ) {
-                    SYNC_OBJ.wait();
-                }
-            }
-        }
-
-        return res[0];
-
-/*
-        return new AsyncTask<CloudQuery, Void, CloudObject>() {
-            @Override
-            protected CloudObject doInBackground(CloudQuery... params) {
-                final CloudObject[] res = new CloudObject[1];
-
-                try {
-                    query.find(new CloudObjectArrayCallback(){
-                        @Override
-                        public void done(CloudObject[] cloudObjects, CloudException e) throws CloudException {
-                            if(cloudObjects != null) {
-                                if(cloudObjects.length > 0) {
-                                    res[0] = cloudObjects[0];
-                                } else {
-                                    res[0] = new CloudObject(EXPORT_TABLE_NAME);
-                                    initCloudObject(res[0], file);
-                                }
-                                return;
-                            }
-                            throw new RuntimeException(e.getMessage(), e);
-                        }
-                    });
-                } catch (CloudException e) {
-                    e.printStackTrace();
-                }
-                return res[0];
-            }
-        }.execute(query).get();
-*/
-    }
-
-    private static void initCloudObject(CloudObject object, CloudFile file) throws CloudException {
-        object.set(FILE_URL_COLUMN, file.getFileUrl());
-        object.set(WEEK_DATE_COLUMN, getWeekDateFromFileName(file.getFileName()));
-    }
-
-    private static void saveWeekFiletoCloud(String fileName) throws CloudException{
-        File file = new File(fileName);
-        final CloudFile cloudFileObj;
-        
-        try {
-            cloudFileObj = new CloudFile(file, "txt");
-            CloudFileAsyncSave asyncSave = new CloudFileAsyncSave();
-            asyncSave.execute(cloudFileObj);
-        } catch (Exception e) {
-            throw new RuntimeException(e.getMessage(), e);
-        }
     }
 }
