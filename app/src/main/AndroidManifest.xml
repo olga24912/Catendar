@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="ru.mit.au.spb.olga.catendar" >
+
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 
@@ -24,39 +25,44 @@
         </activity>
         <activity
             android:name=".view.template.CreateWeekActivity"
-            android:label="Create week">
+            android:label="Create week" >
         </activity>
         <activity
             android:name=".view.template.CreateTemplateActivity"
-            android:label="Create eventsGroup">
+            android:label="Create eventsGroup" >
         </activity>
         <activity
             android:name=".view.events.AddEventForTemplateActivity"
-            android:label="Create event">
+            android:label="Create event" >
         </activity>
         <activity
             android:name=".view.tasks.CreateTaskActivity"
-            android:label="Create task">
+            android:label="Create task" >
         </activity>
         <activity
             android:name=".view.events.ChangeEventActivity"
-            android:label="Change event">
+            android:label="Change event" >
         </activity>
         <activity
             android:name=".view.template.DeleteTemplateActivity"
-            android:label="Delete eventsGroup">
+            android:label="Delete eventsGroup" >
         </activity>
         <activity
             android:name=".view.tasks.CreatePlanActivity"
-            android:label="Create Plan">
+            android:label="Create Plan" >
         </activity>
         <activity
             android:name=".view.tasks.AddTaskActivity"
-            android:label="Add task">
+            android:label="Add task" >
         </activity>
         <activity
             android:name=".view.template.ChangeTemplateActivity"
-            android:label="Change template">
+            android:label="Change template" >
+        </activity>
+        <activity
+            android:name=".view.ShowExportedWeeksActivity"
+            android:label="@string/title_activity_show_exported_weeks" >
         </activity>
     </application>
+
 </manifest>

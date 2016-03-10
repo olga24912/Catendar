@@ -33,6 +33,7 @@ import ru.mit.au.spb.olga.catendar.model.EventsGroup;
 import ru.mit.au.spb.olga.catendar.model.Week;
 import ru.mit.au.spb.olga.catendar.utils.CalendarToICSWriter;
 import ru.mit.au.spb.olga.catendar.utils.DataBaseUtils;
+import ru.mit.au.spb.olga.catendar.view.ShowExportedWeeksActivity;
 import ru.mit.au.spb.olga.catendar.view.events.ChangeEventActivity;
 import ru.mit.au.spb.olga.catendar.view.events.CreateEventActivity;
 
@@ -222,16 +223,13 @@ public class CalendarFragment extends Fragment {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
-            case R.id.export:
-//                FileSaveDialog fileSaveDialog = new FileSaveDialog(
-//                        getActivity(), new FileSaveDialog.FileSaveDialogListener() {
-//                    @Override
-//                    public void onChosenDir(String chosenDir) {
+            case R.id.action_export:
                 CalendarToICSWriter.exportWeek(
                         currentWeek, getActivity().getFilesDir().getPath());
-//                    }
-//                });
-//                fileSaveDialog.chooseFile();
+                return true;
+            case R.id.action_show_exported_weeks:
+                Intent intent = new Intent(getActivity(), ShowExportedWeeksActivity.class);
+                startActivity(intent);
                 return true;
             default:
                 return false;

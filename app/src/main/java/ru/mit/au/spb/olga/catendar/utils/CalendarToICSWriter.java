@@ -105,9 +105,6 @@ public class CalendarToICSWriter {
                 new DateTime(event.getEndDate().getTime()),
                 event.getText());
         UidGenerator uidGen;
-        /// что значит XXX? :) имелось ввиду что-то типа TODO?
-        //XXX: hostInfo
-        /// всегда 1? :)
         uidGen = new UidGenerator(null, "1");
         e.getProperties().add(uidGen.generateUid());
         calendar.getComponents().add(e);
@@ -166,11 +163,58 @@ public class CalendarToICSWriter {
         });
     }
 
+    public static ArrayList<String> getUrlsFromCloud () {
+        final CloudObject object = new CloudObject(EXPORT_TABLE_NAME);
+        Object res = object.get(FILE_URL_COLUMN);
+        return (ArrayList<String>) res;
+    }
+
     private static CloudObject getCloudObject(final CloudFile file) throws ExecutionException, InterruptedException {
         final CloudQuery query = new CloudQuery(EXPORT_TABLE_NAME);
         query.include(FILE_COLUMN); //this will include the file in CloudObjects
         query.equalTo(WEEK_DATE_COLUMN, getWeekDateFromFileName(file.getFileName()));
 
+        final CloudObject[] res = new CloudObject[1];
+        final Object SYNC_OBJ = new Object();
+
+        try {
+            query.find(new CloudObjectArrayCallback(){
+                @Override
+                public void done(CloudObject[] cloudObjects, CloudException e) throws CloudException {
+                    if(cloudObjects != null) {
+                        if(cloudObjects.length > 0) {
+                            synchronized (SYNC_OBJ) {
+                                res[0] = cloudObjects[0];
+                                SYNC_OBJ.notify();
+                            }
+                        } else {
+                            synchronized (SYNC_OBJ) {
+                                res[0] = new CloudObject(EXPORT_TABLE_NAME);
+                                initCloudObject(res[0], file);
+                                SYNC_OBJ.notify();
+                            }
+                        }
+                        return;
+                    }
+                    logger.warning("Error while find query");
+                    throw new RuntimeException(e.getMessage(), e);
+                }
+            });
+        } catch (CloudException e) {
+            e.printStackTrace();
+        }
+
+        synchronized (SYNC_OBJ) {
+            while (res[0] == SYNC_OBJ) {
+                if (res[0] == SYNC_OBJ) {
+                    SYNC_OBJ.wait();
+                }
+            }
+        }
+
+        return res[0];
+
+/*
         return new AsyncTask<CloudQuery, Void, CloudObject>() {
             @Override
             protected CloudObject doInBackground(CloudQuery... params) {
@@ -198,6 +242,7 @@ public class CalendarToICSWriter {
                 return res[0];
             }
         }.execute(query).get();
+*/
     }
 
     private static void initCloudObject(CloudObject object, CloudFile file) throws CloudException {
@@ -211,7 +256,8 @@ public class CalendarToICSWriter {
         
         try {
             cloudFileObj = new CloudFile(file, "txt");
-            new CloudFileAsyncSave().execute(cloudFileObj);
+            CloudFileAsyncSave asyncSave = new CloudFileAsyncSave();
+            asyncSave.execute(cloudFileObj);
         } catch (Exception e) {
             throw new RuntimeException(e.getMessage(), e);
         }

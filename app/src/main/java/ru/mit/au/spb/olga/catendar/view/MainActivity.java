@@ -247,7 +247,9 @@ public class MainActivity extends ActionBarActivity implements SimpleGestureFilt
         }
         if (currentPosition == 0) {
             switch(item.getItemId()) {
-                case R.id.export:
+                case R.id.action_export:
+                    return false;
+                case R.id.action_show_exported_weeks:
                     return false;
                 default:
                     return super.onOptionsItemSelected(item);
