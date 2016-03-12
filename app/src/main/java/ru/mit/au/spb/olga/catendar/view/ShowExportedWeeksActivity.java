@@ -28,7 +28,7 @@ public class ShowExportedWeeksActivity extends AppCompatActivity {
         }
 
         ArrayAdapter adapter =
-                new ArrayAdapter<>(this, R.layout.activity_show_exported_weeks, urls);
+                new ArrayAdapter<>(this, android.R.layout.simple_list_item_1/*R.layout.activity_show_exported_weeks*/, urls);
 
         ListView urlsList = (ListView) findViewById(R.id.urlList);
         urlsList.setAdapter(adapter);

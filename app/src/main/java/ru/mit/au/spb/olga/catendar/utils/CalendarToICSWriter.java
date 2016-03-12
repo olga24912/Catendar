@@ -158,8 +158,8 @@ public class CalendarToICSWriter {
         query.equalTo(WEEK_DATE_COLUMN, getWeekDateFromFileName(file.getFileName()));
 
         final CloudObject[] res = new CloudObject[1];
-        final Object SYNC_OBJ = new Object();
-        res[0] = (CloudObject)SYNC_OBJ;
+        final CloudObject SYNC_OBJ = new CloudObject("User");
+        res[0] = SYNC_OBJ;
 
         try {
             query.find(new CloudObjectArrayCallback(){
@@ -234,6 +234,9 @@ public class CalendarToICSWriter {
     public static ArrayList<String> getUrlsFromCloud () throws InterruptedException, CloudException {
 
         final ArrayList<String> res = new ArrayList<>();
+        final Object SYNC_OBJ = new Object();
+        final Object[] sync = new Object[1];
+        sync[0] = SYNC_OBJ;
 
         new AsyncTask<Void, Void, Void>() {
             @Override
@@ -242,30 +245,43 @@ public class CalendarToICSWriter {
                 try {
                     q.find(new CloudObjectArrayCallback() {
                         @Override
-                        public void done (CloudObject[]rows, CloudException e)throws CloudException {
-                            if (e != null) {
-                                logger.warning("Error while getting rows with URL's");
-                            } else if (rows != null) {
-                                for (CloudObject row : rows) {
-                                    if (row == null) {
-                                        continue;
-                                    }
+                        public void done (CloudObject[]rows, CloudException e) throws CloudException {
+                            synchronized (SYNC_OBJ) {
+                                if (e != null) {
+                                    logger.warning("Error while getting rows with URL's");
+                                } else if (rows != null) {
+                                    for (CloudObject row : rows) {
+                                        if (row == null) {
+                                            continue;
+                                        }
 
-                                    Object url = row.get(FILE_URL_COLUMN);
-                                    if (url instanceof String) {
-                                        res.add((String) url);
+                                        Object url = row.get(FILE_URL_COLUMN);
+                                        if (url instanceof String) {
+                                            res.add((String) url);
+                                        }
                                     }
                                 }
+                                sync[0] = null;
+                                SYNC_OBJ.notify();
                             }
                         }
                     });
                 } catch (CloudException e) {
-                    logger.warning("Error in background while getting rows with urls");
+                    synchronized (SYNC_OBJ) {
+                        logger.warning("Error in background while getting rows with urls");
+                        sync[0] = null;
+                        SYNC_OBJ.notify();
+                    }
                 }
                 return null;
             }
         }.execute();
 
+        synchronized (SYNC_OBJ) {
+            while (sync[0] == SYNC_OBJ) {
+                SYNC_OBJ.wait();
+            }
+        }
         return res;
     }
 
