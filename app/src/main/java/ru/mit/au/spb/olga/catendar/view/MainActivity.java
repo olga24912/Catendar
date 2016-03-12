@@ -30,6 +30,7 @@ import ru.mit.au.spb.olga.catendar.view.template.DeleteTemplateActivity;
 
 /// ActionBarActivity deprecated
 public class MainActivity extends ActionBarActivity implements SimpleGestureFilter.SimpleGestureListener{
+    /// может enum?
     private static final int ITEM_COUNT = 9;
     private static final int CALENDAR_ITEM = 0;
     private static final int TASK_LIST_ITEM = 1;
@@ -43,7 +44,9 @@ public class MainActivity extends ActionBarActivity implements SimpleGestureFilt
 
     private SimpleGestureFilter detector;
 
+    /// название не очень
     private int currentAdditionToWeek = 0;
+    /// название могло бы быть лучше
     private int currentPosition = 0;
     private DrawerLayout myDrawerLayout;
     private ListView myDrawerList;
@@ -120,25 +123,24 @@ public class MainActivity extends ActionBarActivity implements SimpleGestureFilt
     }
 
     @Override
-    public void onSwipe(int direction) {
+    public void onSwipe(SimpleGestureFilter.Swipe_direction direction) {
         if (currentPosition != 0) {
             return;
         }
         Fragment fragment = null;
         switch (direction) {
-            case SimpleGestureFilter.SWIPE_RIGHT :
+            case RIGHT:
                 currentAdditionToWeek--;
                 fragment = new CalendarFragment(currentAdditionToWeek);
                 break;
-            case SimpleGestureFilter.SWIPE_LEFT :
+            case LEFT:
                 currentAdditionToWeek++;
                 fragment = new CalendarFragment(currentAdditionToWeek);
                 break;
-            case SimpleGestureFilter.SWIPE_DOWN :
+            case DOWN:
                 break;
-            case SimpleGestureFilter.SWIPE_UP :
+            case UP:
                 break;
-
         }
         if (fragment != null) {
             getSupportFragmentManager().beginTransaction().replace(R.id.content_frame, fragment).commit();
@@ -162,14 +164,14 @@ public class MainActivity extends ActionBarActivity implements SimpleGestureFilt
     private void displayView(int position) {
         Fragment fragment = null;
         Intent intent;
-        /// мне страшно от этих захардкоженых цифр, константы сделили бы этот код на порядок читабельным и сопровождаемым
         if (position >= 0 && position < ITEM_COUNT) {
+            ///
             currentPosition = position;
         }
+        /// это лишнее?
         currentPosition = position;
         switch (position) {
-            case CALENDAR_ITEM:
-                currentAdditionToWeek = 0;
+            case CALENDAR_ITEM:                currentAdditionToWeek = 0;
                 fragment = new CalendarFragment();
                 break;
             case TASK_LIST_ITEM:
