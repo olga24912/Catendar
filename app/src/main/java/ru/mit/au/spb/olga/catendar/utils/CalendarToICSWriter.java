@@ -32,6 +32,9 @@ import ru.mit.au.spb.olga.catendar.model.Week;
 
 public class CalendarToICSWriter {
 
+    /// должен быть приватный конструктор, чтобы никто не смог создать инстанс.
+    /// аналогично в других утилитах
+
     static final Logger logger = Logger.getLogger("EXPORT_WEEK");
 
 
@@ -39,6 +42,7 @@ public class CalendarToICSWriter {
     public static String getDefaultFileName(Week currentWeek) {
         long time = currentWeek == null ? System.currentTimeMillis() : currentWeek.getStartDateInSeconds();
         /// почему не просто дата начала недели?
+        /// почему?
         return FILENAME_PREFIX + Long.toString(time) + FILENAME_SUFFIX;
     }
 

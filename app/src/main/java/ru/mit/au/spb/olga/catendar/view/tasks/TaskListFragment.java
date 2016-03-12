@@ -260,7 +260,7 @@ public class TaskListFragment extends Fragment implements CompoundButton.OnCheck
             currentTask.setIsDone(cursor.getInt(cursor.getColumnIndex(DatabaseHelper.TASK_IS_DONE)) == 1);
             currentTask.setId(cursor.getLong(cursor.getColumnIndex(DatabaseHelper._ID)));
 
-            if (currentTask.IsDone() && !showAll) {
+            if (currentTask.isDone() && !showAll) {
                 continue;
             }
 

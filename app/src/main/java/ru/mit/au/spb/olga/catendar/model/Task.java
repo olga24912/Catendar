@@ -23,7 +23,7 @@ public class Task extends CalendarPrimitive {
     }
 
     @NotNull
-    public Boolean IsDone() {
+    public Boolean isDone() {
         return isDone;
     }
 

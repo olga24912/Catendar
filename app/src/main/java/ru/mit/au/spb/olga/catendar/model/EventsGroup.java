@@ -4,12 +4,11 @@ import org.jetbrains.annotations.NotNull;
 import java.util.ArrayList;
 
 public class EventsGroup {
-    @NotNull private ArrayList<Event> events = new ArrayList<>();
-    @NotNull private String name = "";
+    @NotNull private final ArrayList<Event> events = new ArrayList<>();
+    @NotNull private final String name;
 
     public EventsGroup(@NotNull String name) {
-        this.name = name;
-    }
+        this.name = name;    }
 
     public void addEvent(Event newEvent) {
         events.add(newEvent);

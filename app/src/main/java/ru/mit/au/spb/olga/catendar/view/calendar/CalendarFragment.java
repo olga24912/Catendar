@@ -42,30 +42,25 @@ import static java.lang.Math.min;
 public class CalendarFragment extends Fragment {
     public static final int HOURS_PER_DAY = 24;
     public static final int DAYS_PER_WEEK = 7;
-    public static final long HOUR_LENGTH = 60 * 60;
-    public static final String[] days = {"Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"};
-    public static final String[] months = {"January","February","March", "April", "May", "June",
-            "July", "August", "September", "October", "November", "December"};
+    public static final int HOUR_LENGTH = 60 * 60;
+    public static final int SECONDS_PER_WEEK = DAYS_PER_WEEK*HOURS_PER_DAY*HOUR_LENGTH;
+    public static final String[] DAYS = (new java.text.DateFormatSymbols()).getShortWeekdays();
+    public static final String[] MONTHS = (new java.text.DateFormatSymbols()).getMonths();
 
-
-    public static TextView[][] table = new TextView[HOURS_PER_DAY][DAYS_PER_WEEK];
-
-    private static long[][] tableId = new long[HOURS_PER_DAY][DAYS_PER_WEEK];
-
-    private static Week currentWeek = null;
+    public TextView[][] table = new TextView[HOURS_PER_DAY][DAYS_PER_WEEK];
+    private long[][] tableId = new long[HOURS_PER_DAY][DAYS_PER_WEEK];
+    private Week currentWeek = null;
 
     private SQLiteDatabase mSQLiteDatabase;
 
     private GregorianCalendar currentDate = new GregorianCalendar();
 
     public CalendarFragment() {
-        // Required empty public constructor
     }
 
     @SuppressLint("ValidFragment")
-    public CalendarFragment(int add) {
-        currentDate = new GregorianCalendar();
-        currentDate.add(Calendar.SECOND, add*7*24*60*60);
+    public CalendarFragment(int weekShift) {
+        currentDate.add(Calendar.SECOND, weekShift*SECONDS_PER_WEEK);
     }
 
     @NotNull
@@ -87,7 +82,7 @@ public class CalendarFragment extends Fragment {
             displaySampleTemplate(currentWeek);
         }
 
-        getActivity().setTitle(months[(currentWeek != null ? currentWeek.getStartDate().get(Calendar.MONTH) : 0)] + ", " +
+        getActivity().setTitle(MONTHS[(currentWeek != null ? currentWeek.getStartDate().get(Calendar.MONTH) : 0)] + ", " +
                 String.valueOf(currentWeek != null ? currentWeek.getStartDate().get(Calendar.YEAR) : 0));
 
         setHasOptionsMenu(true);
@@ -168,7 +163,7 @@ public class CalendarFragment extends Fragment {
         }
         for(int i = 0; i < DAYS_PER_WEEK; i++) {
             TextView curDay = new TextView(context);
-            curDay.setText(days[i] + "\n" + Integer.toString(dayDate.get(Calendar.DAY_OF_MONTH)));
+            curDay.setText(DAYS[i] + "\n" + Integer.toString(dayDate.get(Calendar.DAY_OF_MONTH)));
             topRow.addView(curDay, rowParams);
             dayDate.add(Calendar.DAY_OF_MONTH, 1);
         }
@@ -249,5 +244,4 @@ public class CalendarFragment extends Fragment {
         fragTransaction.attach(currentFragment);
         fragTransaction.commit();
     }
-
 }

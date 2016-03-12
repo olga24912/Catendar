@@ -1,37 +1,34 @@
 package ru.mit.au.spb.olga.catendar.model;
 
-import android.support.annotation.Nullable;
-
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collections;
 import java.util.GregorianCalendar;
 
 public class Week {
     public static final String SINGLE_EVENTS = "";
-
-    @NotNull private GregorianCalendar startDate;
-    @NotNull private ArrayList<EventsGroup> eventsGroups;
     private static final int WEEK_START = Calendar.SUNDAY;
-    private final EventsGroup eventsGroupForSingleEvents;
 
+    @NotNull private final GregorianCalendar startDate;
+    private final EventsGroup eventsGroupForSingleEvents = new EventsGroup(SINGLE_EVENTS);
+    private final ArrayList<EventsGroup> eventsGroups = new ArrayList<>(Collections.singleton(eventsGroupForSingleEvents));
+
+    /// кажется не доконца поняты рекомендации в http://www.oracle.com/technetwork/java/javase/documentation/codeconventions-141855.html#1852
+    /// Думаю 1,2,3 в разъяснении не нуждаются.
+    /// 4. статические поля отсортированные по "access modifier" -- сначала public, protected, package level(ничего не написано), private
+    /// 5. обычные поля тоже отсортированные по "access modifier" -- сначала public, protected, package level(ничего не написано), private
+    /// 6. конструкторы
+    /// 7. методы предлогается групировать по функциональности
+    /// но самое главное единообразие, особенно когда над кодом работает несколько человек
     public Week() {
-        this.startDate = new GregorianCalendar();
-
-        this.eventsGroups = new ArrayList<>();
-        eventsGroups.add(new EventsGroup(SINGLE_EVENTS));
-
-        eventsGroupForSingleEvents = eventsGroups.get(0);
+        this.startDate = fromDate(new GregorianCalendar());
     }
 
     public Week (@NotNull GregorianCalendar startDate) {
         this.startDate = fromDate(startDate);
-
-        this.eventsGroups = new ArrayList<>();
-        eventsGroups.add(new EventsGroup(SINGLE_EVENTS));
-
-        eventsGroupForSingleEvents = eventsGroups.get(0);
     }
 
     private static void toWeekStart(GregorianCalendar g) {
