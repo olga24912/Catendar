@@ -5,8 +5,8 @@ import android.content.res.Configuration;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.DrawerLayout;
-import android.support.v7.app.ActionBarActivity;
 import android.support.v7.app.ActionBarDrawerToggle;
+import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
@@ -28,26 +28,15 @@ import ru.mit.au.spb.olga.catendar.view.template.CreateTemplateActivity;
 import ru.mit.au.spb.olga.catendar.view.template.CreateWeekActivity;
 import ru.mit.au.spb.olga.catendar.view.template.DeleteTemplateActivity;
 
-/// ActionBarActivity deprecated
-public class MainActivity extends ActionBarActivity implements SimpleGestureFilter.SimpleGestureListener{
-    /// может enum?
-    private static final int ITEM_COUNT = 9;
-    private static final int CALENDAR_ITEM = 0;
-    private static final int TASK_LIST_ITEM = 1;
-    private static final int CREATE_TASK_ITEM = 2;
-    private static final int CREATE_EVENT_ITEM = 3;
-    private static final int CREATE_WEEK_ITEM = 4;
-    private static final int CREATE_TEMPLATE_ITEM = 5;
-    private static final int DELETE_TEMPLATE_ITEM = 6;
-    private static final int CREATE_PLAN_ITEM = 7;
-    private static final int CHANGE_TEMPLATE_ITEM = 8;
+public class MainActivity extends AppCompatActivity implements SimpleGestureFilter.SimpleGestureListener{
+    enum Item {CALENDAR, TASK_LIST, CREATE_TASK, CREATE_EVENT, CREATE_WEEK,
+        CREATE_TEMPLATE, DELETE_TEMPLATE, CREATE_PLAN, CHANGE_TEMPLATE}
 
     private SimpleGestureFilter detector;
 
-    /// название не очень
-    private int currentAdditionToWeek = 0;
-    /// название могло бы быть лучше
-    private int currentPosition = 0;
+
+    private int weekShift = 0;
+    private Item currentOpenFragment = Item.CALENDAR;
     private DrawerLayout myDrawerLayout;
     private ListView myDrawerList;
     private ActionBarDrawerToggle myDrawerToggle;
@@ -124,18 +113,18 @@ public class MainActivity extends ActionBarActivity implements SimpleGestureFilt
 
     @Override
     public void onSwipe(SimpleGestureFilter.Swipe_direction direction) {
-        if (currentPosition != 0) {
+        if (currentOpenFragment != Item.CALENDAR) {
             return;
         }
         Fragment fragment = null;
         switch (direction) {
             case RIGHT:
-                currentAdditionToWeek--;
-                fragment = new CalendarFragment(currentAdditionToWeek);
+                weekShift--;
+                fragment = new CalendarFragment(weekShift);
                 break;
             case LEFT:
-                currentAdditionToWeek++;
-                fragment = new CalendarFragment(currentAdditionToWeek);
+                weekShift++;
+                fragment = new CalendarFragment(weekShift);
                 break;
             case DOWN:
                 break;
@@ -164,57 +153,41 @@ public class MainActivity extends ActionBarActivity implements SimpleGestureFilt
     private void displayView(int position) {
         Fragment fragment = null;
         Intent intent;
-        if (position >= 0 && position < ITEM_COUNT) {
-            ///
-            currentPosition = position;
-        }
-        /// это лишнее?
-        currentPosition = position;
-        switch (position) {
-            case CALENDAR_ITEM:                currentAdditionToWeek = 0;
-                fragment = new CalendarFragment();
-                break;
-            case TASK_LIST_ITEM:
-                fragment = new TaskListFragment();
-                break;
-            case CREATE_TASK_ITEM:
-                intent = new Intent(MainActivity.this, CreateTaskActivity.class);
-
-                startActivityForResult(intent, position);
-                break;
-            case CREATE_EVENT_ITEM:
-                intent = new Intent(MainActivity.this, CreateEventActivity.class);
-
-                startActivityForResult(intent, position);
-                break;
-            case CREATE_WEEK_ITEM:
-                intent = new Intent(MainActivity.this, CreateWeekActivity.class);
-
-                startActivityForResult(intent, position);
-                break;
-            case CREATE_TEMPLATE_ITEM:
-                intent = new Intent(MainActivity.this, CreateTemplateActivity.class);
-
-                startActivityForResult(intent, position);
-                break;
-            case DELETE_TEMPLATE_ITEM:
-                intent = new Intent(MainActivity.this, DeleteTemplateActivity.class);
-
-                startActivityForResult(intent, position);
-                break;
-            case CREATE_PLAN_ITEM:
-                intent = new Intent(MainActivity.this, CreatePlanActivity.class);
-
-                startActivityForResult(intent, position);
-                break;
-            case CHANGE_TEMPLATE_ITEM:
-                intent = new Intent(MainActivity.this, ChangeTemplateActivity.class);
-
-                startActivityForResult(intent, position);
-                break;
-
-            default:
-                break;
+        if (position == Item.CALENDAR.ordinal()) {
+            weekShift = 0;
+            currentOpenFragment = Item.CALENDAR;
+            fragment = new CalendarFragment();
+        } else if (position == Item.TASK_LIST.ordinal()) {
+            currentOpenFragment = Item.TASK_LIST;
+            fragment = new TaskListFragment();
+        } else if (position == Item.CREATE_TASK.ordinal()) {
+            currentOpenFragment = Item.CREATE_TASK;
+            intent = new Intent(MainActivity.this, CreateTaskActivity.class);
+            startActivityForResult(intent, position);
+        } else if (position == Item.CREATE_EVENT.ordinal()) {
+            currentOpenFragment = Item.CREATE_EVENT;
+            intent = new Intent(MainActivity.this, CreateEventActivity.class);
+            startActivityForResult(intent, position);
+        } else if (position == Item.CREATE_WEEK.ordinal()) {
+            currentOpenFragment = Item.CREATE_WEEK;
+            intent = new Intent(MainActivity.this, CreateWeekActivity.class);
+            startActivityForResult(intent, position);
+        } else if (position == Item.CREATE_TEMPLATE.ordinal()) {
+            currentOpenFragment = Item.CREATE_TEMPLATE;
+            intent = new Intent(MainActivity.this, CreateTemplateActivity.class);
+            startActivityForResult(intent, position);
+        } else if (position == Item.DELETE_TEMPLATE.ordinal()) {
+            currentOpenFragment = Item.DELETE_TEMPLATE;
+            intent = new Intent(MainActivity.this, DeleteTemplateActivity.class);
+            startActivityForResult(intent, position);
+        } else if (position == Item.CREATE_PLAN.ordinal()) {
+            currentOpenFragment = Item.CREATE_PLAN;
+            intent = new Intent(MainActivity.this, CreatePlanActivity.class);
+            startActivityForResult(intent, position);
+        } else if (position == Item.CHANGE_TEMPLATE.ordinal()) {
+            currentOpenFragment = Item.CHANGE_TEMPLATE;
+            intent = new Intent(MainActivity.this, ChangeTemplateActivity.class);
+            startActivityForResult(intent, position);
         }
         if (fragment != null) {
             getSupportFragmentManager().beginTransaction().replace(R.id.content_frame, fragment).commit();
@@ -228,11 +201,11 @@ public class MainActivity extends ActionBarActivity implements SimpleGestureFilt
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        switch(currentPosition) {
-            case 0:
+        switch(currentOpenFragment) {
+            case CALENDAR:
                 getMenuInflater().inflate(R.menu.calendar_fragment_menu, menu);
                 break;
-            case 1:
+            case TASK_LIST:
                 getMenuInflater().inflate(R.menu.menu_main, menu);
                 break;
             default:
@@ -247,7 +220,7 @@ public class MainActivity extends ActionBarActivity implements SimpleGestureFilt
         if (myDrawerToggle.onOptionsItemSelected(item)) {
             return true;
         }
-        if (currentPosition == 0) {
+        if (currentOpenFragment == Item.CALENDAR) {
             switch(item.getItemId()) {
                 case R.id.action_export:
                     return false;
@@ -256,7 +229,7 @@ public class MainActivity extends ActionBarActivity implements SimpleGestureFilt
                 default:
                     return super.onOptionsItemSelected(item);
             }
-        } else if (currentPosition == 1) {
+        } else if (currentOpenFragment == Item.TASK_LIST) {
             switch(item.getItemId()) {
                 case R.id.action_deadline:
                 case R.id.action_duration:
