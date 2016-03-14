@@ -130,6 +130,7 @@ public class TaskListFragment extends Fragment implements CompoundButton.OnCheck
                     mSQLiteDatabase.delete(DatabaseHelper.DATABASE_TABLE_HEAP,
                             DatabaseHelper._ID + " = " + heap_id, null);
                     heap_id = -1;
+                    planTitle.setText("All task");
                     initHeapList();
                     synchronizedWithDataBase();
                     drawTaskList();
@@ -171,6 +172,7 @@ public class TaskListFragment extends Fragment implements CompoundButton.OnCheck
             public boolean onMenuItemClick(MenuItem item) {
                 if (item.getItemId() == R.id.menu1) {
                     heap_id = -1;
+                    planTitle.setText("All task");
                     return true;
                 } else if (0 < item.getItemId() && item.getItemId() <= heapId.size()) {
                     heap_id = heapId.get(item.getItemId() - 1);
