@@ -17,6 +17,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.util.ArrayList;
+import java.util.GregorianCalendar;
 import java.util.concurrent.ExecutionException;
 import java.util.logging.Logger;
 
@@ -32,17 +33,22 @@ import ru.mit.au.spb.olga.catendar.model.Week;
 
 public class CalendarToICSWriter {
 
-    /// должен быть приватный конструктор, чтобы никто не смог создать инстанс.
-    /// аналогично в других утилитах
+    private static final String EXPORT_TABLE_NAME = "ExportedWeeks";
+    private static final String WEEK_DATE_COLUMN = "weekStartDate";
+    private static final String FILE_URL_COLUMN = "fileUrl";
+    private static final String FILENAME_PREFIX = "calendar";
+    private static final String FILENAME_SUFFIX = ".ics";
+    private CalendarToICSWriter() {
+    }
 
     static final Logger logger = Logger.getLogger("EXPORT_WEEK");
 
 
     @NotNull
     public static String getDefaultFileName(Week currentWeek) {
-        long time = currentWeek == null ? System.currentTimeMillis() : currentWeek.getStartDateInSeconds();
-        /// почему не просто дата начала недели?
-        /// почему?
+        //will use current date if no week is provided
+        long time = currentWeek == null ?
+                new GregorianCalendar().getTimeInMillis() / 1000 : currentWeek.getStartDateInSeconds();
         return FILENAME_PREFIX + Long.toString(time) + FILENAME_SUFFIX;
     }
 
@@ -51,20 +57,20 @@ public class CalendarToICSWriter {
         return path + '/' + getDefaultFileName(currentWeek);
     }
 
-    public static void exportWeek(Week currentWeek, String filePath) {
+    public static void exportWeek(@NotNull Week currentWeek, String filePath) {
 
         Calendar calendar = new Calendar();
         initCalendar(calendar);
 
         ArrayList<Event> events = currentWeek.getEvents();
 
-        if(events.size() == 0) {
+        if (events.size() == 0) {
             //TODO: implement more intelligent handling
             logger.info("The week connot be empty!");
             return;
         }
 
-        for(Event event: events) {
+        for (Event event : events) {
             addEvent(event, calendar);
         }
 
@@ -85,13 +91,13 @@ public class CalendarToICSWriter {
 
         try {
             saveWeekFileToCloud(fileName);
-        } catch(CloudException e) {
+        } catch (CloudException e) {
             logger.warning("Failed to save the file!");
             throw new RuntimeException(e.getMessage(), e);
         }
     }
 
-    private static void saveWeekFileToCloud(String fileName) throws CloudException{
+    private static void saveWeekFileToCloud(String fileName) throws CloudException {
         File file = new File(fileName);
         final CloudFile cloudFileObj;
 
@@ -166,11 +172,11 @@ public class CalendarToICSWriter {
         res[0] = SYNC_OBJ;
 
         try {
-            query.find(new CloudObjectArrayCallback(){
+            query.find(new CloudObjectArrayCallback() {
                 @Override
                 public void done(CloudObject[] cloudObjects, CloudException e) throws CloudException {
-                    if(cloudObjects != null) {
-                        if(cloudObjects.length > 0) {
+                    if (cloudObjects != null) {
+                        if (cloudObjects.length > 0) {
                             synchronized (SYNC_OBJ) {
                                 res[0] = cloudObjects[0];
                                 res[0].set(FILE_URL_COLUMN, file.getFileUrl());
@@ -206,19 +212,13 @@ public class CalendarToICSWriter {
         return res[0];
     }
 
-    private static final String EXPORT_TABLE_NAME = "ExportedWeeks";
-    private static final String WEEK_DATE_COLUMN = "weekStartDate";
-    private static final String FILE_URL_COLUMN = "fileUrl";
-    private static final String FILENAME_PREFIX = "calendar";
-    private static final String FILENAME_SUFFIX = ".ics";
-
     private static void initCalendar(Calendar calendar) {
         calendar.getProperties().add(new ProdId("-//Olga and Liza//Catendar 0.1//EN"));
         calendar.getProperties().add(Version.VERSION_2_0);
         calendar.getProperties().add(CalScale.GREGORIAN);
     }
 
-    private static void addEvent (Event event, Calendar calendar) {
+    private static void addEvent(Event event, Calendar calendar) {
         VEvent e = new VEvent(new DateTime(event.getStartDate().getTime()),
                 new DateTime(event.getEndDate().getTime()),
                 event.getText());
@@ -235,7 +235,7 @@ public class CalendarToICSWriter {
         return Long.parseLong(suffix.substring(FILENAME_PREFIX.length(), suffix.length() - FILENAME_SUFFIX.length()));
     }
 
-    public static ArrayList<String> getUrlsFromCloud () throws InterruptedException, CloudException {
+    public static ArrayList<String> getUrlsFromCloud() throws InterruptedException, CloudException {
 
         final ArrayList<String> res = new ArrayList<>();
         final Object SYNC_OBJ = new Object();
@@ -249,7 +249,7 @@ public class CalendarToICSWriter {
                 try {
                     q.find(new CloudObjectArrayCallback() {
                         @Override
-                        public void done (CloudObject[]rows, CloudException e) throws CloudException {
+                        public void done(CloudObject[] rows, CloudException e) throws CloudException {
                             synchronized (SYNC_OBJ) {
                                 if (e != null) {
                                     logger.warning("Error while getting rows with URL's");

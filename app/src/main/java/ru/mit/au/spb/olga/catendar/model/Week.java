@@ -31,16 +31,16 @@ public class Week {
         this.startDate = fromDate(startDate);
     }
 
-    private static void toWeekStart(GregorianCalendar g) {
-        g.add(Calendar.DAY_OF_WEEK, WEEK_START - g.get(Calendar.DAY_OF_WEEK));
-        g.set(g.get(Calendar.YEAR), g.get(Calendar.MONTH), g.get(Calendar.DAY_OF_MONTH), 0, 0, 0);
-    }
-
     @NotNull
     private static GregorianCalendar fromDate(@Nullable GregorianCalendar startDate) {
         GregorianCalendar res = (startDate != null) ? startDate : new GregorianCalendar();
         toWeekStart(res);
         return res;
+    }
+
+    private static void toWeekStart(GregorianCalendar g) {
+        g.add(Calendar.DAY_OF_WEEK, WEEK_START - g.get(Calendar.DAY_OF_WEEK));
+        g.set(g.get(Calendar.YEAR), g.get(Calendar.MONTH), g.get(Calendar.DAY_OF_MONTH), 0, 0, 0);
     }
 
     public void addEventsGroup(@NotNull EventsGroup newEventsGroup) {

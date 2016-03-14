@@ -16,6 +16,9 @@ import ru.mit.au.spb.olga.catendar.model.EventsGroup;
 import ru.mit.au.spb.olga.catendar.model.Week;
 
 public class DataBaseUtils {
+
+    private DataBaseUtils() {}
+
     @NotNull
     public static Week getWeekFromDataBase(Integer id, SQLiteDatabase mSQLiteDatabase) {
         Cursor cursorWeek = mSQLiteDatabase.query(DatabaseHelper.DATABASE_TABLE_WEEK, new String[]{DatabaseHelper._ID, DatabaseHelper.WEEK_START_DATE},
