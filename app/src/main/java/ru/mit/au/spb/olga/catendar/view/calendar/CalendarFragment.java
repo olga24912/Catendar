@@ -188,6 +188,12 @@ public class CalendarFragment extends Fragment {
                         if (table[globalI][globalJ].getText().equals("+\n ")) {
                             Intent intent = new Intent(context, CreateEventActivity.class);
 
+                            GregorianCalendar date = new GregorianCalendar();
+                            date.setTimeInMillis(currentWeek.getStartDateInSeconds()*1000);
+
+                            date.add(Calendar.HOUR, globalI);
+                            date.add(Calendar.DAY_OF_MONTH, globalJ - 7);
+                            intent.putExtra("startTime", date.getTimeInMillis()/1000);
                             startActivityForResult(intent, CREATE_EVENT);
                         } else {
                             Intent intent = new Intent(context, ChangeEventActivity.class);

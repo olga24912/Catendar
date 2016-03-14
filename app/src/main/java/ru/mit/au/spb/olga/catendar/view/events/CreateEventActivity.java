@@ -67,6 +67,17 @@ public class CreateEventActivity extends AppCompatActivity
         lenOfEvent = (TextView)findViewById(R.id.durationVal);
         lenOfEvent.setText("1");
 
+        long startTime = getIntent().getLongExtra("startTime", (new GregorianCalendar().getTimeInMillis()/1000));
+        GregorianCalendar currentTime = new GregorianCalendar();
+        currentTime.setTimeInMillis(startTime*1000);
+
+        hour = currentTime.get(Calendar.HOUR_OF_DAY);
+        minute = 0;
+
+        year = currentTime.get(Calendar.YEAR);
+        month = currentTime.get(Calendar.MONTH);
+        day = currentTime.get(Calendar.DAY_OF_MONTH);
+
         final SeekBar seekbar = (SeekBar)findViewById(R.id.seekBarOfEventLen);
         seekbar.setOnSeekBarChangeListener(this);
         seekbar.setMax(24);
@@ -77,10 +88,10 @@ public class CreateEventActivity extends AppCompatActivity
         DatabaseHelper mDatabaseHelper = new DatabaseHelper(this);
         mSQLiteDatabase = mDatabaseHelper.getWritableDatabase();
 
-        Calendar today = Calendar.getInstance();
+        /*Calendar today = Calendar.getInstance();
         year = today.get(Calendar.YEAR);
         month = today.get(Calendar.MONTH);
-        day = today.get(Calendar.DAY_OF_MONTH);
+        day = today.get(Calendar.DAY_OF_MONTH);*/
         tvInfoStartTime.setText("Start time is " + hour + " hours " + minute + " minutes");
         tvInfo.setText("Event day is " + day + "/" + (month + 1) + "/" + year);
     }
