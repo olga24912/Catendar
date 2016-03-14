@@ -19,6 +19,7 @@ import android.widget.PopupMenu;
 import android.widget.TextView;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Comparator;
 import java.util.GregorianCalendar;
 import java.util.HashSet;
@@ -273,6 +274,9 @@ public class TaskListFragment extends Fragment implements CompoundButton.OnCheck
 
             GregorianCalendar curDate = new GregorianCalendar();
             curDate.setTimeInMillis((long) cursor.getInt(cursor.getColumnIndex(DatabaseHelper.TASK_DEADLINE)) * 1000);
+            if (curDate.get(Calendar.YEAR) < 2000) {
+                curDate.set(Calendar.YEAR, (new GregorianCalendar()).get(Calendar.YEAR) + 100);
+            }
 
             currentTask.setDeadlineTime(curDate);
 

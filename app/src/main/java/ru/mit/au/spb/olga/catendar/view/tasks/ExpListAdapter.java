@@ -14,6 +14,7 @@ import android.widget.TextView;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
+import java.util.GregorianCalendar;
 
 import ru.mit.au.spb.olga.catendar.R;
 import ru.mit.au.spb.olga.catendar.model.DatabaseHelper;
@@ -103,7 +104,12 @@ public class ExpListAdapter extends BaseExpandableListAdapter {
         final TextView textComment = (TextView) convertView.findViewById(R.id.itemToDoTextViewComment);
 
         textComment.setText(mGroups.get(groupPosition).getComment());
-        textDeadlineTime.setText("Deadline time:" + mGroups.get(groupPosition).getStringDeadlineTime());
+        if (mGroups.get(groupPosition).getDeadlineTimeInSeconds() >
+                (new GregorianCalendar()).getTimeInMillis()/1000 + 50 * 365 * 24 * 60 * 60) {
+            textDeadlineTime.setText("Deadline time: -");
+        } else {
+            textDeadlineTime.setText("Deadline time:" + mGroups.get(groupPosition).getStringDeadlineTime());
+        }
         textPriority.setText("Priority: " + String.valueOf(mGroups.get(groupPosition).getPriority()));
         textDuration.setText("Duration: " + mGroups.get(groupPosition).getStringDuration());
 
