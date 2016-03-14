@@ -163,7 +163,7 @@ public class CalendarFragment extends Fragment {
         }
         for(int i = 0; i < DAYS_PER_WEEK; i++) {
             TextView curDay = new TextView(context);
-            curDay.setText(DAYS[i] + "\n" + Integer.toString(dayDate.get(Calendar.DAY_OF_MONTH)));
+            curDay.setText(DAYS[i + 1] + "\n" + Integer.toString(dayDate.get(Calendar.DAY_OF_MONTH)));
             topRow.addView(curDay, rowParams);
             dayDate.add(Calendar.DAY_OF_MONTH, 1);
         }
