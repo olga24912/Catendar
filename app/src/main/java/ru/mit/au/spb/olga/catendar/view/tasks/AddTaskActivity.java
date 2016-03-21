@@ -6,7 +6,9 @@ import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
-import android.widget.ExpandableListView;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.ListView;
 
 import java.util.ArrayList;
 import java.util.GregorianCalendar;
@@ -18,10 +20,9 @@ import ru.mit.au.spb.olga.catendar.model.Task;
 public class AddTaskActivity extends AppCompatActivity {
     private SQLiteDatabase mSQLiteDatabase;
 
-    private ExpandableListView listOfTask;
-
     private ArrayList<Task> taskList = new ArrayList<>();
     private ArrayList<Long> chooseTaskId = new ArrayList<>();
+    private ArrayList<String> taskListName = new ArrayList<>();
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -31,30 +32,24 @@ public class AddTaskActivity extends AppCompatActivity {
         DatabaseHelper mDatabaseHelper = new DatabaseHelper(this);
         mSQLiteDatabase = mDatabaseHelper.getWritableDatabase();
 
-        listOfTask = (ExpandableListView)findViewById(R.id.addTaskExpandableListViw);
+        synchronizedWithDataBase();
 
-        listOfTask.setOnChildClickListener(myOnChildClickListener);
+        ListView listOfTask = (ListView) findViewById(R.id.addTaskListViw);
 
-        listOfTask.setOnGroupExpandListener(new ExpandableListView.OnGroupExpandListener() {
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(this,
+                android.R.layout.simple_list_item_1, taskListName);
+
+        listOfTask.setAdapter(adapter);
+
+        listOfTask.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
             @Override
-            public void onGroupExpand(int groupPosition) {
-                chooseTaskId.add(taskList.get(groupPosition).getId());
+            public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
+                chooseTaskId.add(taskList.get(position).getId());
+                view.setBackgroundColor(0xffc5e384);
+                return true;
             }
         });
-
-        synchronizedWithDataBase();
-        drawTaskList();
     }
-
-    ExpandableListView.OnChildClickListener myOnChildClickListener = new ExpandableListView.OnChildClickListener() {
-        @Override
-        public boolean onChildClick(ExpandableListView parent, View v,
-                                    int groupPosition, int childPosition, long id) {
-            chooseTaskId.add(taskList.get(groupPosition).getId());
-            return true;
-        }
-    };
-
 
     private void synchronizedWithDataBase() {
         taskList.clear();
@@ -92,14 +87,9 @@ public class AddTaskActivity extends AppCompatActivity {
             currentTask.setStartDate(curDate);
 
             taskList.add(currentTask);
+            taskListName.add(currentTask.getText());
         }
         cursor.close();
-    }
-
-    private void drawTaskList() {
-        ExpListAdapterAddTask adapter;
-        adapter = new ExpListAdapterAddTask(this, taskList);
-        listOfTask.setAdapter(adapter);
     }
 
     private static final String ADD_TASK = "id";
