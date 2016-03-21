@@ -81,7 +81,7 @@ public class CreateTemplateActivity extends AppCompatActivity {
     public String getDayOfWeekAndTime(Event event) {
         String[] days = new DateFormatSymbols().getShortWeekdays();
 
-        return "(" + days[event.getStartDate().get(Calendar.DAY_OF_WEEK) - 1] + " "
+        return "(" + days[event.getStartDate().get(Calendar.DAY_OF_WEEK)] + " "
                 + event.getStartDate().get(Calendar.HOUR_OF_DAY) + ":"
                 + event.getStartDate().get(Calendar.MINUTE) + " - "
                 + event.getEndDate().get(Calendar.HOUR_OF_DAY) + ":"
