@@ -45,8 +45,8 @@ public class CalendarFragment extends Fragment {
     public static final int HOUR_LENGTH = 60 * 60;
     public static final int SECONDS_PER_WEEK = DAYS_PER_WEEK*HOURS_PER_DAY*HOUR_LENGTH;
     public static final String[] DAYS = (new java.text.DateFormatSymbols()).getShortWeekdays();
-    public static final String[] MONTHS = (new java.text.DateFormatSymbols()).getMonths();
-
+    public static final String[] MONTHS = {"JANUARY", "FEBRUARY", "MARCH", "APRIL", "MAY",
+            "JUNE", "JULY", "AUGUST", "SEPTEMBER", "OCTOBER", "NOVEMBER", "DECEMBER"};
     public TextView[][] table = new TextView[HOURS_PER_DAY][DAYS_PER_WEEK];
     private long[][] tableId = new long[HOURS_PER_DAY][DAYS_PER_WEEK];
     private Week currentWeek = null;
