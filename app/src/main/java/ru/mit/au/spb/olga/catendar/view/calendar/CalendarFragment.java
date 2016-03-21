@@ -100,6 +100,8 @@ public class CalendarFragment extends Fragment {
     public void displayTemplate(EventsGroup t) {
         ArrayList<Event> eventsToDisplay = t.getEvents();
         String name = t.getName();
+        int color = getColor();
+
         for(Event e: eventsToDisplay) {
             int day = e.getStartDate().get(java.util.Calendar.DAY_OF_WEEK);
             int hour = e.getStartDate().get(java.util.Calendar.HOUR_OF_DAY);
@@ -115,7 +117,6 @@ public class CalendarFragment extends Fragment {
             }
             table[i][j].setText(name + "\n" + nm2);
 
-            int color = getColor();
             for(int k = i; k < min(i + length, (long)HOURS_PER_DAY); k++) {
                 table[k][j].setBackgroundColor(color);
                 if(table[k][j].getText().equals("+\n ")) {
