@@ -5,6 +5,7 @@ import android.app.Dialog;
 import android.app.TimePickerDialog;
 import android.content.ContentValues;
 import android.content.Intent;
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -102,14 +103,43 @@ public class CreateEventActivity extends AppCompatActivity
     }
 
     private void createRadioButton() {
-        final RadioButton[] rb = new RadioButton[10];
+        Cursor cursor = mSQLiteDatabase.query(DatabaseHelper.DATABASE_TABLE_TEMPLATE, new String[]{DatabaseHelper._ID,
+                        DatabaseHelper.TEMPLATE_NAME,
+                        DatabaseHelper.TEMPLATE_FOR_WEEK},
+                null, null,
+                null, null, null) ;
+
+
+
         RadioGroup rg = new RadioGroup(this); //create the RadioGroup
         rg.setOrientation(RadioGroup.VERTICAL);//or RadioGroup.VERTICAL
-        for(int i=0; i<10; i++){
-            rb[i]  = new RadioButton(this);
-            rg.addView(rb[i]); //the RadioButtons are added to the radioGroup instead of the layout
-            rb[i].setText("Test");
+
+        RadioButton rbNon = new RadioButton(this);
+        rg.addView(rbNon);
+        rbNon.setText("");
+
+        while(cursor.moveToNext()) {
+            String name = cursor.getString(cursor
+                    .getColumnIndex(DatabaseHelper.TEMPLATE_NAME));
+
+            int id = cursor.getInt(cursor
+                    .getColumnIndex(DatabaseHelper._ID));
+
+            int ignored = cursor.getInt(cursor
+                    .getColumnIndex(DatabaseHelper.TEMPLATE_FOR_WEEK));
+
+            if (ignored == 1) {
+                continue;
+            }
+            if (name.equals("unknownTemplate179")) {
+                mSQLiteDatabase.delete(DatabaseHelper.DATABASE_TABLE_TEMPLATE, DatabaseHelper._ID + "=" + id, null);
+            } else {
+                RadioButton rb = new RadioButton(this);
+                rg.addView(rb);
+                rb.setText(name);
+            }
         }
+        cursor.close();
 
         ScrollView scrollView = (ScrollView)findViewById(R.id.scrollViewChoose);
 
