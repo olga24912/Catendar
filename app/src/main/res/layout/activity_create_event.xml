@@ -104,7 +104,28 @@
         android:text="@string/duration"
         android:textStyle="bold"
         android:layout_below="@+id/seekBarOfEventLen"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true">
+        android:layout_toLeftOf="@+id/OKinCreateEvent"
+        android:layout_toStartOf="@+id/OKinCreateEvent">
     </TextView>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:text="Choose event group:"
+        android:id="@+id/chooseEventGroup"
+        android:layout_below="@+id/durationVal"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true" />
+
+    <ScrollView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/scrollViewChoose"
+        android:layout_below="@+id/chooseEventGroup"
+        android:layout_toRightOf="@+id/StartTime"
+        android:layout_above="@+id/OKinCreateEvent"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true" />
+
 </RelativeLayout>

@@ -11,6 +11,9 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
+import android.widget.ScrollView;
 import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.TimePicker;
@@ -94,6 +97,23 @@ public class CreateEventActivity extends AppCompatActivity
         day = today.get(Calendar.DAY_OF_MONTH);*/
         tvInfoStartTime.setText("Start time is " + hour + " hours " + minute + " minutes");
         tvInfo.setText("Event day is " + day + "/" + (month + 1) + "/" + year);
+
+        createRadioButton();
+    }
+
+    private void createRadioButton() {
+        final RadioButton[] rb = new RadioButton[10];
+        RadioGroup rg = new RadioGroup(this); //create the RadioGroup
+        rg.setOrientation(RadioGroup.VERTICAL);//or RadioGroup.VERTICAL
+        for(int i=0; i<10; i++){
+            rb[i]  = new RadioButton(this);
+            rg.addView(rb[i]); //the RadioButtons are added to the radioGroup instead of the layout
+            rb[i].setText("Test");
+        }
+
+        ScrollView scrollView = (ScrollView)findViewById(R.id.scrollViewChoose);
+
+        scrollView.addView(rg);//you add the whole RadioGroup to the layout
     }
 
     public void onSetDateClick(View view) {
