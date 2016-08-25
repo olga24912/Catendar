@@ -214,8 +214,9 @@ public class CreateEventActivity extends AppCompatActivity
         ContentValues newValues = new ContentValues();
 
         GregorianCalendar startCal = new GregorianCalendar(year, month, day, hour, minute);
+        GregorianCalendar copyStart = new GregorianCalendar(year, month, day, hour, minute);
 
-        Week nw = new Week(startCal);
+        Week nw = new Week(copyStart);
         long sTime = nw.getStartDateInSeconds();
 
         weekId = DataBaseUtils.findIdBySpecifiedTime(sTime, mSQLiteDatabase);
@@ -229,7 +230,9 @@ public class CreateEventActivity extends AppCompatActivity
         GregorianCalendar endCal = new GregorianCalendar(year, month, day, hour, minute);
 
         newValues.put(DatabaseHelper.EVENT_NAME, String.valueOf(createEvent.getText()));
-        newValues.put(DatabaseHelper.EVENT_PARENT_TEMPLATE, 0);
+        if (oTemplateId == -1) {
+            newValues.put(DatabaseHelper.EVENT_PARENT_TEMPLATE, 0);
+        }
         newValues.put(DatabaseHelper.EVENT_START_DATE, startCal.getTimeInMillis()/1000);
         endCal.add(Calendar.HOUR_OF_DAY, duration);
         newValues.put(DatabaseHelper.EVENT_END_DATE, endCal.getTimeInMillis() / 1000);
