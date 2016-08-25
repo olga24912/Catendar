@@ -45,21 +45,23 @@ public class DataBaseUtils {
 
         ArrayList<Integer> templatesInWeek = new ArrayList<>();
 
-        Cursor cursorTemplateAndWeek = mSQLiteDatabase.query(DatabaseHelper.DATABASE_TABLE_TEMPLATES_IN_WEEKS, new String[]{
-                        DatabaseHelper._ID, DatabaseHelper.TEMPLATES_IN_WEEKS_WEEK_ID, DatabaseHelper.TEMPLATES_IN_WEEKS_TEMPLATE_ID},
+        Cursor cursorTemplate = mSQLiteDatabase.query(DatabaseHelper.DATABASE_TABLE_TEMPLATE, new String[]{
+                        DatabaseHelper._ID, DatabaseHelper.TEMPLATE_FOR_WEEK,
+                        DatabaseHelper.TEMPLATE_WEEK_ID, DatabaseHelper.TEMPLATE_ORIGIN_ID},
                 null, null,
                 null, null, null);
 
-        while (cursorTemplateAndWeek.moveToNext()) {
-            int weekId = cursorTemplateAndWeek.getInt(cursorTemplateAndWeek.getColumnIndex(DatabaseHelper.TEMPLATES_IN_WEEKS_WEEK_ID));
-            int templateId = cursorTemplateAndWeek.getInt(cursorTemplateAndWeek.getColumnIndex(DatabaseHelper.TEMPLATES_IN_WEEKS_TEMPLATE_ID));
+        while (cursorTemplate.moveToNext()) {
+            int weekId = cursorTemplate.getInt(cursorTemplate.getColumnIndex(DatabaseHelper.TEMPLATE_WEEK_ID));
+            int templateId = cursorTemplate.getInt(cursorTemplate.getColumnIndex(DatabaseHelper._ID));
+            int forWeek = cursorTemplate.getInt(cursorTemplate.getColumnIndex(DatabaseHelper.TEMPLATE_FOR_WEEK));
 
-            if (weekId == id) {
+            if (forWeek == 1 && weekId == id) {
                 templatesInWeek.add(templateId);
             }
         }
 
-        cursorTemplateAndWeek.close();
+        cursorTemplate.close();
 
         for (int i = 0; i < templatesInWeek.size(); i++) {
             resultingWeek.addEventsGroup(getTemplateFromDataBase(templatesInWeek.get(i), mSQLiteDatabase));
@@ -103,8 +105,10 @@ public class DataBaseUtils {
     public static EventsGroup getTemplateFromDataBase(int id, SQLiteDatabase mSQLiteDatabase) {
         EventsGroup tp = null;
 
-        Cursor cursorTemplate = mSQLiteDatabase.query(DatabaseHelper.DATABASE_TABLE_TEMPLATE, new String[]{DatabaseHelper._ID,
-                        DatabaseHelper.TEMPLATE_NAME},
+        Cursor cursorTemplate = mSQLiteDatabase.query(DatabaseHelper.DATABASE_TABLE_TEMPLATE,
+                new String[]{DatabaseHelper._ID,
+                        DatabaseHelper.TEMPLATE_NAME, DatabaseHelper.TEMPLATE_FOR_WEEK,
+                DatabaseHelper.TEMPLATE_WEEK_ID, DatabaseHelper.TEMPLATE_ORIGIN_ID},
                 null, null,
                 null, null, null);
 
@@ -188,4 +192,66 @@ public class DataBaseUtils {
         }
     }
 
+    public static void copyEmptyTemplateToWeek(long weekId, SQLiteDatabase  mSQLiteDatabase) {
+        Cursor cursor = mSQLiteDatabase.query(DatabaseHelper.DATABASE_TABLE_TEMPLATE, new String[]{
+                        DatabaseHelper._ID, DatabaseHelper.TEMPLATE_FOR_WEEK,
+                        DatabaseHelper.TEMPLATE_WEEK_ID,
+                        DatabaseHelper.TEMPLATE_ORIGIN_ID
+                },
+                null, null, null,
+                null, null);
+
+        while(cursor.moveToNext()) {
+            String name = cursor.getString(cursor.getColumnIndex(DatabaseHelper.TEMPLATE_NAME));
+            int id = cursor.getInt(cursor.getColumnIndex(DatabaseHelper._ID));
+            int forWeek = cursor.getInt(cursor.getColumnIndex(DatabaseHelper.TEMPLATE_FOR_WEEK));
+
+            if (forWeek == 0) {
+                ContentValues twValues = new ContentValues();
+
+                twValues.put(DatabaseHelper.TEMPLATE_NAME, name);
+                twValues.put(DatabaseHelper.TEMPLATE_FOR_WEEK, 1);
+                twValues.put(DatabaseHelper.TEMPLATE_WEEK_ID, weekId);
+                twValues.put(DatabaseHelper.TEMPLATE_ORIGIN_ID, id);
+
+                mSQLiteDatabase.insert(DatabaseHelper.DATABASE_TABLE_TEMPLATE, null, twValues);
+            }
+        }
+
+        cursor.close();
+    }
+
+    public static int findTIdWithThisOIdWId(int weekId, int originId, SQLiteDatabase mSQLiteDatabase) {
+        Cursor cursor = mSQLiteDatabase.query(DatabaseHelper.DATABASE_TABLE_TEMPLATE, new String[]{
+                        DatabaseHelper._ID, DatabaseHelper.TEMPLATE_FOR_WEEK,
+                        DatabaseHelper.TEMPLATE_WEEK_ID,
+                        DatabaseHelper.TEMPLATE_ORIGIN_ID
+                },
+                null, null, null,
+                null, null);
+
+        while(cursor.moveToNext()) {
+            int id = cursor.getInt(cursor.getColumnIndex(DatabaseHelper._ID));
+            int forWeek = cursor.getInt(cursor.getColumnIndex(DatabaseHelper.TEMPLATE_FOR_WEEK));
+            int wId = cursor.getInt(cursor.getColumnIndex(DatabaseHelper.TEMPLATE_WEEK_ID));
+            int oId = cursor.getInt(cursor.getColumnIndex(DatabaseHelper.TEMPLATE_ORIGIN_ID));
+
+            if (forWeek == 1 && wId == weekId && originId == oId) {
+                return id;
+            }
+        }
+
+        cursor.close();
+        return 0;
+    }
+
+    public static void createWeek(long sTime, SQLiteDatabase mSQLiteDatabase) {
+        ContentValues newValues = new ContentValues();
+
+        newValues.put(DatabaseHelper.WEEK_START_DATE, sTime);
+
+        long weekId = mSQLiteDatabase.insert(DatabaseHelper.DATABASE_TABLE_WEEK, null, newValues);
+
+        DataBaseUtils.copyEmptyTemplateToWeek(weekId, mSQLiteDatabase);
+    }
 }

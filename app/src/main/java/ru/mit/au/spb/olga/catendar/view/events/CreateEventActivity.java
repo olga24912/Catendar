@@ -105,14 +105,16 @@ public class CreateEventActivity extends AppCompatActivity
     private void createRadioButton() {
         Cursor cursor = mSQLiteDatabase.query(DatabaseHelper.DATABASE_TABLE_TEMPLATE, new String[]{DatabaseHelper._ID,
                         DatabaseHelper.TEMPLATE_NAME,
-                        DatabaseHelper.TEMPLATE_FOR_WEEK},
+                        DatabaseHelper.TEMPLATE_FOR_WEEK,
+                        DatabaseHelper.TEMPLATE_WEEK_ID,
+                        DatabaseHelper.TEMPLATE_ORIGIN_ID},
                 null, null,
                 null, null, null) ;
 
 
 
-        RadioGroup rg = new RadioGroup(this); //create the RadioGroup
-        rg.setOrientation(RadioGroup.VERTICAL);//or RadioGroup.VERTICAL
+        RadioGroup rg = new RadioGroup(this);
+        rg.setOrientation(RadioGroup.VERTICAL);
 
         RadioButton rbNon = new RadioButton(this);
         rg.addView(rbNon);
@@ -125,10 +127,10 @@ public class CreateEventActivity extends AppCompatActivity
             int id = cursor.getInt(cursor
                     .getColumnIndex(DatabaseHelper._ID));
 
-            int ignored = cursor.getInt(cursor
+            int forWeek = cursor.getInt(cursor
                     .getColumnIndex(DatabaseHelper.TEMPLATE_FOR_WEEK));
 
-            if (ignored == 1) {
+            if (forWeek == 1) {
                 continue;
             }
             if (name.equals("unknownTemplate179")) {
@@ -143,7 +145,7 @@ public class CreateEventActivity extends AppCompatActivity
 
         ScrollView scrollView = (ScrollView)findViewById(R.id.scrollViewChoose);
 
-        scrollView.addView(rg);//you add the whole RadioGroup to the layout
+        scrollView.addView(rg);
     }
 
     public void onSetDateClick(View view) {

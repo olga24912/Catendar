@@ -58,6 +58,8 @@ public class CreateTemplateActivity extends AppCompatActivity {
         } else {
             Cursor cursor = mSQLiteDatabase.query(DatabaseHelper.DATABASE_TABLE_TEMPLATE, new String[]{
                             DatabaseHelper._ID, DatabaseHelper.TEMPLATE_NAME,
+                            DatabaseHelper.TEMPLATE_FOR_WEEK, DatabaseHelper.TEMPLATE_WEEK_ID,
+                            DatabaseHelper.TEMPLATE_ORIGIN_ID
                     },
                     null, null,
                     null, null, null) ;

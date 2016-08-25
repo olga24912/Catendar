@@ -23,6 +23,7 @@ import java.util.GregorianCalendar;
 import ru.mit.au.spb.olga.catendar.R;
 import ru.mit.au.spb.olga.catendar.model.DatabaseHelper;
 import ru.mit.au.spb.olga.catendar.model.Week;
+import ru.mit.au.spb.olga.catendar.utils.DataBaseUtils;
 
 public class CreateWeekActivity extends AppCompatActivity {
     private SQLiteDatabase mSQLiteDatabase;
@@ -106,7 +107,10 @@ public class CreateWeekActivity extends AppCompatActivity {
     private void createCheckBox() {
         Cursor cursor = mSQLiteDatabase.query(DatabaseHelper.DATABASE_TABLE_TEMPLATE, new String[]{DatabaseHelper._ID,
                         DatabaseHelper.TEMPLATE_NAME,
-                        DatabaseHelper.TEMPLATE_FOR_WEEK},
+                        DatabaseHelper.TEMPLATE_FOR_WEEK,
+                        DatabaseHelper.TEMPLATE_WEEK_ID,
+                        DatabaseHelper.TEMPLATE_ORIGIN_ID
+                },
                 null, null,
                 null, null, null) ;
 
@@ -117,10 +121,10 @@ public class CreateWeekActivity extends AppCompatActivity {
             int id = cursor.getInt(cursor
                     .getColumnIndex(DatabaseHelper._ID));
 
-            int ignored = cursor.getInt(cursor
+            int forWeek = cursor.getInt(cursor
                     .getColumnIndex(DatabaseHelper.TEMPLATE_FOR_WEEK));
 
-            if (ignored == 1) {
+            if (forWeek == 1) {
                 continue;
             }
             if (name.equals("unknownTemplate179")) {
@@ -196,31 +200,15 @@ public class CreateWeekActivity extends AppCompatActivity {
         long sTime = nw.getStartDateInSeconds();
 
         if (findIdWithThisTime(sTime) == null) {
-            ContentValues newValues = new ContentValues();
-
-            newValues.put(DatabaseHelper.WEEK_START_DATE, sTime);
-
-            mSQLiteDatabase.insert(DatabaseHelper.DATABASE_TABLE_WEEK, null, newValues);
+            DataBaseUtils.createWeek(sTime, mSQLiteDatabase);
         }
 
         Integer id = findIdWithThisTime(sTime);
 
         for (int i = 0; i < existsTemplate.size(); i++) {
             if (existsTemplate.get(i).isChecked()) {
-                ContentValues tValues = new ContentValues();
-
-                tValues.put(DatabaseHelper.TEMPLATE_NAME, templateText.get(i));
-                tValues.put(DatabaseHelper.TEMPLATE_FOR_WEEK, 1);
-
-                int tId = (int) mSQLiteDatabase.insert(DatabaseHelper.DATABASE_TABLE_TEMPLATE, null, tValues);
+                int tId = DataBaseUtils.findTIdWithThisOIdWId(id, templateId.get(i), mSQLiteDatabase);
                 copyEvent(templateId.get(i), tId);
-
-                ContentValues twValues = new ContentValues();
-
-                twValues.put(DatabaseHelper.TEMPLATES_IN_WEEKS_TEMPLATE_ID, tId);
-                twValues.put(DatabaseHelper.TEMPLATES_IN_WEEKS_WEEK_ID, id);
-
-                mSQLiteDatabase.insert(DatabaseHelper.DATABASE_TABLE_TEMPLATES_IN_WEEKS, null, twValues);
             }
         }
 

@@ -7,7 +7,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 import android.provider.BaseColumns;
 
 public class DatabaseHelper extends SQLiteOpenHelper implements BaseColumns {
-    private static final String DATABASE_NAME = "mydatabase14.db";
+    private static final String DATABASE_NAME = "mydatabase15.db";
     private static final int DATABASE_VERSION = 1;
 
     public static final String DATABASE_TABLE_EVENT = "events";
@@ -20,6 +20,8 @@ public class DatabaseHelper extends SQLiteOpenHelper implements BaseColumns {
 
     public static final String TEMPLATE_NAME = "name";
     public static final String TEMPLATE_FOR_WEEK = "for_week";
+    public static final String TEMPLATE_WEEK_ID = "week_id";
+    public static final String TEMPLATE_ORIGIN_ID = "origin_id";
 
     public static final String WEEK_START_DATE = "start_date";
 
@@ -61,7 +63,9 @@ public class DatabaseHelper extends SQLiteOpenHelper implements BaseColumns {
                     DATABASE_TABLE_TEMPLATE + " ("
                     + BaseColumns._ID + " integer primary key autoincrement, "
                     + TEMPLATE_NAME + " text not null, "
-                    + TEMPLATE_FOR_WEEK + " integer);";
+                    + TEMPLATE_FOR_WEEK + " integer, "
+                    + TEMPLATE_WEEK_ID + " integer, "
+                    + TEMPLATE_ORIGIN_ID + " integer);";
 
     private static final String DATABASE_CREATE_EVENT_TABLE_SCRIPT = "create table " +
             DATABASE_TABLE_EVENT + " ("
