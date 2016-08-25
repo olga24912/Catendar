@@ -6,7 +6,6 @@ import android.content.ContentValues;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Gravity;
 import android.view.View;
@@ -171,39 +170,17 @@ public class CreateWeekActivity extends AppCompatActivity {
         }
     };
 
-    @Nullable
-    private Integer findIdWithThisTime(long ms) {
-        Cursor cursor = mSQLiteDatabase.query(DatabaseHelper.DATABASE_TABLE_WEEK, new String[]{
-                        DatabaseHelper._ID, DatabaseHelper.WEEK_START_DATE
-                },
-                null, null, null,
-                null, null);
-
-        while(cursor.moveToNext()) {
-            int id = cursor.getInt(cursor.getColumnIndex(DatabaseHelper._ID));
-            long time = cursor.getLong(cursor.getColumnIndex(DatabaseHelper.WEEK_START_DATE));
-
-            if (time == ms) {
-                cursor.close();
-                return id;
-            }
-        }
-
-        cursor.close();
-        return null;
-    }
-
     public void onOkWeekClick(View view) {
         GregorianCalendar gc = new GregorianCalendar(year, month, day);
 
         nw = new Week(gc);
         long sTime = nw.getStartDateInSeconds();
 
-        if (findIdWithThisTime(sTime) == null) {
+        if (DataBaseUtils.findIdBySpecifiedTime(sTime, mSQLiteDatabase) == null) {
             DataBaseUtils.createWeek(sTime, mSQLiteDatabase);
         }
 
-        Integer id = findIdWithThisTime(sTime);
+        Integer id = DataBaseUtils.findIdBySpecifiedTime(sTime, mSQLiteDatabase);
 
         for (int i = 0; i < existsTemplate.size(); i++) {
             if (existsTemplate.get(i).isChecked()) {

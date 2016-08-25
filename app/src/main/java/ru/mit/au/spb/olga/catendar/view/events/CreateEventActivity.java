@@ -21,12 +21,15 @@ import android.widget.TimePicker;
 
 import org.jetbrains.annotations.NotNull;
 
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 
 import ru.mit.au.spb.olga.catendar.R;
 import ru.mit.au.spb.olga.catendar.model.DatabaseHelper;
 import ru.mit.au.spb.olga.catendar.model.Event;
+import ru.mit.au.spb.olga.catendar.model.Week;
+import ru.mit.au.spb.olga.catendar.utils.DataBaseUtils;
 
 public class CreateEventActivity extends AppCompatActivity
         implements SeekBar.OnSeekBarChangeListener {
@@ -51,6 +54,9 @@ public class CreateEventActivity extends AppCompatActivity
     private int day;
 
     private int duration;
+
+    private ArrayList<Integer> templateId = new ArrayList<>();
+    private ArrayList<RadioButton> radioButtons = new ArrayList<>();
 
     public final static String EVENT_NAME = "ru.mit.au.spb.olga.catendar.eventName";
 
@@ -120,6 +126,9 @@ public class CreateEventActivity extends AppCompatActivity
         rg.addView(rbNon);
         rbNon.setText("");
 
+        templateId.add(-1);
+        radioButtons.add(rbNon);
+
         while(cursor.moveToNext()) {
             String name = cursor.getString(cursor
                     .getColumnIndex(DatabaseHelper.TEMPLATE_NAME));
@@ -139,6 +148,9 @@ public class CreateEventActivity extends AppCompatActivity
                 RadioButton rb = new RadioButton(this);
                 rg.addView(rb);
                 rb.setText(name);
+                radioButtons.add(rb);
+
+                templateId.add(id);
             }
         }
         cursor.close();
@@ -186,6 +198,14 @@ public class CreateEventActivity extends AppCompatActivity
     };
 
     public void onOkClick(View view) {
+        int oTemplateId = -1;
+        for (int i = 1; i < radioButtons.size(); ++i) {
+            if (radioButtons.get(i).isChecked()) {
+                oTemplateId = templateId.get(i);
+            }
+        }
+
+        Integer weekId;
         Intent answerIntent = new Intent();
 
         Event createEvent = new Event();
@@ -194,6 +214,18 @@ public class CreateEventActivity extends AppCompatActivity
         ContentValues newValues = new ContentValues();
 
         GregorianCalendar startCal = new GregorianCalendar(year, month, day, hour, minute);
+
+        Week nw = new Week(startCal);
+        long sTime = nw.getStartDateInSeconds();
+
+        weekId = DataBaseUtils.findIdBySpecifiedTime(sTime, mSQLiteDatabase);
+
+        if (weekId == null) {
+            DataBaseUtils.createWeek(sTime, mSQLiteDatabase);
+            weekId = DataBaseUtils.findIdBySpecifiedTime(sTime, mSQLiteDatabase);
+            assert (weekId != null);
+        }
+
         GregorianCalendar endCal = new GregorianCalendar(year, month, day, hour, minute);
 
         newValues.put(DatabaseHelper.EVENT_NAME, String.valueOf(createEvent.getText()));
@@ -201,6 +233,12 @@ public class CreateEventActivity extends AppCompatActivity
         newValues.put(DatabaseHelper.EVENT_START_DATE, startCal.getTimeInMillis()/1000);
         endCal.add(Calendar.HOUR_OF_DAY, duration);
         newValues.put(DatabaseHelper.EVENT_END_DATE, endCal.getTimeInMillis() / 1000);
+
+        if (oTemplateId != -1) {
+            int templateId = DataBaseUtils.findTIdWithThisOIdWId(weekId, oTemplateId, mSQLiteDatabase);
+
+            newValues.put(DatabaseHelper.EVENT_PARENT_TEMPLATE, templateId);
+        }
 
         mSQLiteDatabase.insert(DatabaseHelper.DATABASE_TABLE_EVENT, null, newValues);
 
