@@ -243,6 +243,35 @@ public class DataBaseUtils {
         }
 
         cursor.close();
+
+        cursor = mSQLiteDatabase.query(DatabaseHelper.DATABASE_TABLE_TEMPLATE, new String[]{
+                        DatabaseHelper._ID, DatabaseHelper.TEMPLATE_NAME,
+                        DatabaseHelper.TEMPLATE_FOR_WEEK,
+                        DatabaseHelper.TEMPLATE_WEEK_ID,
+                        DatabaseHelper.TEMPLATE_ORIGIN_ID
+                },
+                null, null, null,
+                null, null);
+
+        while(cursor.moveToNext()) {
+            int id = cursor.getInt(cursor.getColumnIndex(DatabaseHelper._ID));
+            int forWeek = cursor.getInt(cursor.getColumnIndex(DatabaseHelper.TEMPLATE_FOR_WEEK));
+            String name = cursor.getString(cursor.getColumnIndex(DatabaseHelper.TEMPLATE_NAME));
+
+            if (forWeek == 0 && originId == id) {
+                ContentValues twValues = new ContentValues();
+
+                twValues.put(DatabaseHelper.TEMPLATE_NAME, name);
+                twValues.put(DatabaseHelper.TEMPLATE_FOR_WEEK, 1);
+                twValues.put(DatabaseHelper.TEMPLATE_WEEK_ID, weekId);
+                twValues.put(DatabaseHelper.TEMPLATE_ORIGIN_ID, id);
+
+                long resultId = mSQLiteDatabase.insert(DatabaseHelper.DATABASE_TABLE_TEMPLATE, null, twValues);
+                return (int)resultId;
+            }
+        }
+
+        cursor.close();
         return 0;
     }
 
