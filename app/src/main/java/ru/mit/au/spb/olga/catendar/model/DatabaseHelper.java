@@ -14,7 +14,6 @@ public class DatabaseHelper extends SQLiteOpenHelper implements BaseColumns {
     public static final String DATABASE_TABLE_TASK = "tasks";
     public static final String DATABASE_TABLE_WEEK = "week";
     public static final String DATABASE_TABLE_TEMPLATE = "template";
-    public static final String DATABASE_TABLE_TEMPLATES_IN_WEEKS = "template_in_week";
     public static final String DATABASE_TABLE_TASK_HEAP = "task_heap";
     public static final String DATABASE_TABLE_HEAP = "heap";
 
@@ -24,9 +23,6 @@ public class DatabaseHelper extends SQLiteOpenHelper implements BaseColumns {
     public static final String TEMPLATE_ORIGIN_ID = "origin_id";
 
     public static final String WEEK_START_DATE = "start_date";
-
-    public static final String TEMPLATES_IN_WEEKS_WEEK_ID = "week_id";
-    public static final String TEMPLATES_IN_WEEKS_TEMPLATE_ID = "template_id";
 
     public static final String EVENT_NAME = "name";
     public static final String EVENT_PARENT_TEMPLATE = "template_id";
@@ -91,12 +87,6 @@ public class DatabaseHelper extends SQLiteOpenHelper implements BaseColumns {
             + BaseColumns._ID + " integer primary key autoincrement, "
             + WEEK_START_DATE + " integer);";
 
-    private static final String DATABASE_CREATE_TEMPLATES_IN_WEEK_SCRIPT = "create table " +
-            DATABASE_TABLE_TEMPLATES_IN_WEEKS + " ("
-            + BaseColumns._ID + " integer primary key autoincrement, "
-            + TEMPLATES_IN_WEEKS_WEEK_ID + " integer, "
-            + TEMPLATES_IN_WEEKS_TEMPLATE_ID + " integer);";
-
     public DatabaseHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
     }
@@ -113,7 +103,6 @@ public class DatabaseHelper extends SQLiteOpenHelper implements BaseColumns {
     @Override
     public void onCreate(SQLiteDatabase db) {
         db.execSQL(DATABASE_CREATE_WEEK_TABLE_SCRIPT);
-        db.execSQL(DATABASE_CREATE_TEMPLATES_IN_WEEK_SCRIPT);
         db.execSQL(DATABASE_CREATE_TEMPLATE_TABLE_SCRIPT);
         db.execSQL(DATABASE_CREATE_EVENT_TABLE_SCRIPT);
         db.execSQL(DATABASE_CREATE_TASK_TABLE_SCRIPT);

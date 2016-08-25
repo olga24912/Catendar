@@ -194,7 +194,8 @@ public class DataBaseUtils {
 
     public static void copyEmptyTemplateToWeek(long weekId, SQLiteDatabase  mSQLiteDatabase) {
         Cursor cursor = mSQLiteDatabase.query(DatabaseHelper.DATABASE_TABLE_TEMPLATE, new String[]{
-                        DatabaseHelper._ID, DatabaseHelper.TEMPLATE_FOR_WEEK,
+                        DatabaseHelper._ID, DatabaseHelper.TEMPLATE_NAME,
+                        DatabaseHelper.TEMPLATE_FOR_WEEK,
                         DatabaseHelper.TEMPLATE_WEEK_ID,
                         DatabaseHelper.TEMPLATE_ORIGIN_ID
                 },
